@@ -7,7 +7,7 @@
 class AnalogStick {
 
 public:
-    AnalogStick(uint8_t _stickXPin, uint8_t _stickYPin, int _pressTime = 100000, int _repeatPressTime = 500000);
+    AnalogStick(uint8_t _stickXPin, uint8_t _stickYPin, int _pressTime = 100000, int _repeatPressTime = 400000);
     bool update();
 
     bool wasPushedLeft() { return pushedLeft; };

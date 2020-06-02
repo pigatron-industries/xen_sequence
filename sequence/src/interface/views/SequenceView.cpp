@@ -19,6 +19,7 @@ SequenceView::SequenceView(AppData& _appData, Display& _display) :
     display(_display) {
     cursorChannel = 0;
     cursorBar = 0;
+    scrollBar = 0;
 }
 
 void SequenceView::render() {
@@ -64,14 +65,20 @@ void SequenceView::cursorDown() {
 void SequenceView::cursorLeft() {
     if(cursorBar > 0) {
         cursorBar--;
+        if(cursorBar == scrollBar-1) {
+            scrollBar--;
+        }
         render();
     }
 }
 
 void SequenceView::cursorRight() {
     // TODO find max sequence length
-    if(cursorBar < 6) {
+    if(cursorBar < 10) {
         cursorBar++;
+        if(cursorBar == scrollBar+VISIBLE_BARS-1) {
+            scrollBar++;
+        }
         render();
     }
 }
@@ -101,7 +108,7 @@ void SequenceView::renderSequence() {
     short top = 15;
     for(short channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         short left = 0;
-        for(short bar = 0; bar < VISIBLE_BARS; bar++) {
+        for(short bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
             SequencePattern* pattern = appData.sequence.channels[channel].patterns.get(bar);
             if(pattern != NULL) {
                 display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
@@ -116,7 +123,7 @@ void SequenceView::renderSequence() {
 
 void SequenceView::renderCursor() {
     short top = 15+(cursorChannel*CHANNEL_HEIGHT);
-    short left = cursorBar*BAR_WIDTH;
+    short left = (cursorBar-scrollBar)*BAR_WIDTH;
     display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
     display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
     //display.drawLine(left, 15, left, 128, CURSOR_COLOUR);

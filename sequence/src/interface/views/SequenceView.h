@@ -19,6 +19,7 @@ private:
     Display& display;
     uint8_t cursorChannel;
     uint8_t cursorBar;
+    uint8_t scrollBar;
 
     void renderStatusBar();
     void renderGrid();
