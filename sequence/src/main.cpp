@@ -3,13 +3,23 @@
 #include "hwconfig.h"
 
 #include "lib/task/TaskManager.h"
-#include "tasks/InputTask.h"
+#include "lib/drivers/Display.h"
+#include "model/AppData.h"
+#include "interface/InputTask.h"
+#include "interface/InterfaceController.h"
+
 
 
 // hardware
+Display display = Display();
 
+// data
+AppData appData = AppData();
 
-InputTask inputTask = InputTask();
+// user interface
+InterfaceController interfaceController = InterfaceController(appData, display);
+InputTask inputTask = InputTask(interfaceController, STICK_X_PIN, STICK_Y_PIN);
+
 
 
 void bootstrap() {
@@ -20,7 +30,11 @@ void bootstrap() {
     Serial.println("=========================================");
     Serial.println();
 
-    Task* tasks[] = {&inputTask};
-    TaskManager taskManager(tasks, 1);
-    taskManager.run();
+    appData.populateTestData();
+    inputTask.init();
+    interfaceController.init();
+
+    while(true) {
+        inputTask.execute();
+    }
 }
