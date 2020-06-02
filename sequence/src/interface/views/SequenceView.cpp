@@ -22,10 +22,58 @@ SequenceView::SequenceView(AppData& _appData, Display& _display) :
 }
 
 void SequenceView::render() {
+    display.fillScreen(Colour(0, 0, 0));
     renderStatusBar();
     renderGrid();
     renderSequence();
     renderCursor();
+    display.updateScreen();
+}
+
+void SequenceView::handleEvent(Event event) {
+    switch(event) {
+        case STICK_UP:
+            cursorUp();
+            break;
+        case STICK_DOWN:
+            cursorDown();
+            break;
+        case STICK_LEFT:
+            cursorLeft();
+            break;
+        case STICK_RIGHT:
+            cursorRight();
+            break;
+    }
+}
+
+void SequenceView::cursorUp() {
+    if(cursorChannel > 0) {
+        cursorChannel--;
+        render();
+    }
+}
+
+void SequenceView::cursorDown() {
+    if(cursorChannel < SEQUENCE_CHANNELS-1) {
+        cursorChannel++;
+        render();
+    }
+}
+
+void SequenceView::cursorLeft() {
+    if(cursorBar > 0) {
+        cursorBar--;
+        render();
+    }
+}
+
+void SequenceView::cursorRight() {
+    // TODO find max sequence length
+    if(cursorBar < 6) {
+        cursorBar++;
+        render();
+    }
 }
 
 void SequenceView::renderStatusBar() {
@@ -71,5 +119,5 @@ void SequenceView::renderCursor() {
     short left = cursorBar*BAR_WIDTH;
     display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
     display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
-    display.drawLine(left, 15, left, 128, CURSOR_COLOUR);
+    //display.drawLine(left, 15, left, 128, CURSOR_COLOUR);
 }

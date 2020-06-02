@@ -13,5 +13,9 @@ void InterfaceController::init() {
     display.init();
     display.fillScreen(Colour(0, 0, 0));
     sequenceView.render();
-    display.updateScreen();
+}
+
+void InterfaceController::handleEvent(Event event) {
+    //TODO forward to current page
+    sequenceView.handleEvent(event);
 }

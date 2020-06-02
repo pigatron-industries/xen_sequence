@@ -5,12 +5,14 @@
 
 #include "../../model/AppData.h"
 #include "../../lib/drivers/display.h"
+#include "../Events.h"
 
 class SequenceView {
 
 public:
     SequenceView(AppData& _appData, Display& _display);
     void render();
+    void handleEvent(Event event);
 
 private:
     AppData& appData;
@@ -22,6 +24,11 @@ private:
     void renderGrid();
     void renderSequence();
     void renderCursor();
+
+    void cursorUp();
+    void cursorDown();
+    void cursorLeft();
+    void cursorRight();
 
 };
 
