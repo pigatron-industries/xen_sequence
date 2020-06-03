@@ -7,12 +7,18 @@
 class AppData {
 
 public:
-    Sequence sequence;
-    LinkedList<SequencePattern*> patterns;
+    Sequence& getSequence() { return sequence; }
+    LinkedList<SequencePattern*>& getPatterns() { return patterns; }
 
+    SequencePattern* newPattern();
     uint8_t getUnusedPatternId();
+    SequencePattern* getPatternById(uint8_t id);
 
     void populateTestData();
+
+private:
+    Sequence sequence;
+    LinkedList<SequencePattern*> patterns;
 
 };
 

@@ -1,14 +1,17 @@
 #include "ParameterView.h"
 
+#include <Fonts/Org_01.h>
 
-ParameterView::ParameterView(AppData& _appData, Display& _display) :
+ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
-    display(_display) {
+    display(_display),
+    sequenceMatrixView(_sequenceMatrixView) {
 }
 
 void ParameterView::render() {
-    // display.begin();
-    // display.setTextSize(1);
-    // display.fillScreen(ssd1351::RGB(0, 50, 0));
-    // display.updateScreen();
+    display.fillScreen(Colour(0, 0, 0));
+    display.setFont(Org_01);
+    display.setTextSize(1);
+
+    display.updateScreen();
 }

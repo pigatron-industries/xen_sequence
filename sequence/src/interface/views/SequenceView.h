@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 
+#include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
 #include "../../lib/drivers/display.h"
 #include "../Events.h"
@@ -10,13 +11,15 @@
 class SequenceView {
 
 public:
-    SequenceView(AppData& _appData, Display& _display);
+    SequenceView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView);
     void render();
     void handleEvent(Event event);
 
 private:
     AppData& appData;
     Display& display;
+    SequenceMatrixView& sequenceMatrixView;
+
     uint8_t cursorChannel;
     uint8_t cursorBar;
     uint8_t scrollBar;

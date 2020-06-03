@@ -6,6 +6,9 @@
 class SequenceChannel {
 
 public:
+    LinkedList<SequencePattern*>& getPatterns() { return patterns; };
+
+private:
     LinkedList<SequencePattern*> patterns;
 
 };

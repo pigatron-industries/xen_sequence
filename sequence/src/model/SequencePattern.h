@@ -6,15 +6,19 @@
 
 #include "SequenceEvent.h"
 
+#define MAX_PATTERN_ID 255
+
 class SequencePattern {
 
 public:
+    SequencePattern(uint8_t _id) { id = _id; }
+    uint8_t getId() { return id; }
+    LinkedList<SequenceEvent*>& getEvents() { return events; }
+
+
+private:
     uint8_t id;
     LinkedList<SequenceEvent*> events;
-  
-    SequencePattern(uint8_t _id) {
-        id = _id;
-    }
 
 };
 

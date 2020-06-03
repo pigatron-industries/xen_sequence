@@ -1,0 +1,4 @@
+-I.
+-I/Applications/Teensyduino.app/Contents/Java/hardware/arduino/avr/cores/arduino
+-I/Applications/Teensyduino.app/Contents/Java/hardware/teensy/avr/libraries/FastLED
+-I/Users/rob/Documents/Arduino/libraries/LinkedList

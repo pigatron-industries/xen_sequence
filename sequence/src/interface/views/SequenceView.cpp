@@ -17,9 +17,10 @@
 #define DATA_TEXT_COLOUR Colour(255, 255, 255)
 #define CURSOR_COLOUR Colour(255, 0, 0)
 
-SequenceView::SequenceView(AppData& _appData, Display& _display) :
+SequenceView::SequenceView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
-    display(_display) {
+    display(_display),
+    sequenceMatrixView(_sequenceMatrixView) {
     cursorChannel = 0;
     cursorBar = 0;
     scrollBar = 0;
@@ -34,6 +35,8 @@ void SequenceView::render() {
     renderSequence();
     renderCursor();
     display.updateScreen();
+
+    sequenceMatrixView.displayBar(cursorBar);
 }
 
 void SequenceView::handleEvent(Event event) {
@@ -116,11 +119,11 @@ void SequenceView::renderSequence() {
     for(short channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         short left = 0;
         for(short bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
-            SequencePattern* pattern = appData.sequence.channels[channel].patterns.get(bar);
+            SequencePattern* pattern = appData.getSequence().getChannel(channel).getPatterns().get(bar);
             if(pattern != NULL) {
                 display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
                 display.setCursor(left+5, top+9);
-                display.print(pattern->id, HEX);
+                display.print(pattern->getId(), HEX);
             }
             left += BAR_WIDTH;
         }
@@ -133,5 +136,6 @@ void SequenceView::renderCursor() {
     short left = (cursorBar-scrollBar)*BAR_WIDTH;
     display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
     display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
-    //display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
+    display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
+    display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
 }

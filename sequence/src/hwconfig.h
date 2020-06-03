@@ -6,6 +6,9 @@
 #define SPI_SCLK_PIN 13
 #define OLED_RESET_PIN 14
 #define OLED_DC_PIN 15
+#define MATRIX_CLOCK_PIN 0
+#define MATRIX_DATA_PIN 1
+
 
 // Analog Pins
 #define STICK_X_PIN 2

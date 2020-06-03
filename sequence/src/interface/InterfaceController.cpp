@@ -2,11 +2,13 @@
 
 
 
-InterfaceController::InterfaceController(AppData& _appData, Display& _display) :
+InterfaceController::InterfaceController(AppData& _appData, Display& _display, Matrix& _matrix) :
     appData(_appData),
     display(_display),
-    sequenceView(_appData, _display),
-    parameterView(_appData, _display) {
+    matrix(_matrix),
+    sequenceMatrixView(_appData, _matrix),
+    sequenceView(_appData, _display, sequenceMatrixView),
+    parameterView(_appData, _display, sequenceMatrixView) {
 }
 
 void InterfaceController::init() {

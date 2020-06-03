@@ -8,6 +8,9 @@
 class Sequence {
 
 public:
+    SequenceChannel& getChannel(uint8_t index) { return channels[index]; }
+
+private:
     SequenceChannel channels[SEQUENCE_CHANNELS];
 
     void extendChannels();
