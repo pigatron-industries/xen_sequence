@@ -18,7 +18,8 @@ void ParameterView::render() {
 
     display.updateScreen();
 
-    sequenceMatrixView.setCursor(true);
+    sequenceMatrixView.setSelectCursor(true);
+    sequenceMatrixView.setPlayCursor(false);
     sequenceMatrixView.setBar(bar);
     sequenceMatrixView.render();
 }
