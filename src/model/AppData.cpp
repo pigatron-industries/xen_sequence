@@ -4,9 +4,7 @@
 
 void AppData::populateTestData() {
     SequencePattern* pattern1 = newPattern();
-    SequencePattern* pattern2 = newPattern();
     SequencePattern* pattern3 = newPattern();
-    SequencePattern* pattern4 = newPattern();
 
     pattern1->getEvents().add(new SequenceEvent());
     pattern1->getEvents().add(NULL);
@@ -16,7 +14,22 @@ void AppData::populateTestData() {
     pattern1->getEvents().add(NULL);
     pattern1->getEvents().add(new SequenceEvent());
     pattern1->getEvents().add(NULL);
+    pattern1->getEvents().add(new SequenceEvent());
+    pattern1->getEvents().add(NULL);
+    pattern1->getEvents().add(new SequenceEvent());
+    pattern1->getEvents().add(NULL);
+    pattern1->getEvents().add(new SequenceEvent());
+    pattern1->getEvents().add(NULL);
+    pattern1->getEvents().add(new SequenceEvent());
+    pattern1->getEvents().add(NULL);
 
+    pattern3->getEvents().add(NULL);
+    pattern3->getEvents().add(new SequenceEvent());
+    pattern3->getEvents().add(NULL);
+    pattern3->getEvents().add(new SequenceEvent());
+    pattern3->getEvents().add(NULL);
+    pattern3->getEvents().add(new SequenceEvent());
+    pattern3->getEvents().add(NULL);
     pattern3->getEvents().add(new SequenceEvent());
     pattern3->getEvents().add(NULL);
     pattern3->getEvents().add(new SequenceEvent());
@@ -25,14 +38,16 @@ void AppData::populateTestData() {
     pattern3->getEvents().add(NULL);
     pattern3->getEvents().add(new SequenceEvent());
     pattern3->getEvents().add(NULL);
+    pattern3->getEvents().add(new SequenceEvent());
+
 
     sequence.getChannel(0).getPatterns().add(pattern1);
     sequence.getChannel(0).getPatterns().add(NULL);
-    sequence.getChannel(0).getPatterns().add(pattern2);
+    sequence.getChannel(0).getPatterns().add(pattern1);
 
     sequence.getChannel(1).getPatterns().add(NULL);
     sequence.getChannel(1).getPatterns().add(pattern3);
-    sequence.getChannel(1).getPatterns().add(pattern4);
+    sequence.getChannel(1).getPatterns().add(pattern3);
 }
 
 SequencePattern* AppData::newPattern() {

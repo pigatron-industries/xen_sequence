@@ -4,7 +4,7 @@
 #include <FastLED.h>
 
 #define MATRIX_ROWS 8
-#define MATRIX_COLS 8
+#define MATRIX_COLS 16
 #define MATRIX_LEDS MATRIX_ROWS * MATRIX_COLS
 
 class Matrix {

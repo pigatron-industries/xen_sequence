@@ -4,6 +4,9 @@
 #include <inttypes.h>
 #include "Timer.h"
 
+#define THRESHOLD 300
+#define STICK_MAX_VALUE 1024
+
 class AnalogStick {
 
 public:
@@ -27,10 +30,10 @@ private:
     bool pushedUp;
     bool pushedDown;
 
-    int xLeftThreshold = 100;
-    int xRightThreshold = 900;
-    int yDownThreshold = 100;
-    int yUpThreshold = 900;
+    int xLeftThreshold = THRESHOLD;
+    int xRightThreshold = STICK_MAX_VALUE - THRESHOLD;
+    int yDownThreshold = THRESHOLD;
+    int yUpThreshold = STICK_MAX_VALUE - THRESHOLD;
     int pressTime;
     int repeatPressTime;
 
