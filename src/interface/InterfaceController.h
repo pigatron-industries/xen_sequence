@@ -15,6 +15,7 @@ class InterfaceController {
 public:
     InterfaceController(AppData& _appData, Display& _display, Matrix& _matrix);
     void init();
+    void render();
     void handleEvent(Event event);
 
 private:

@@ -15,6 +15,10 @@ InterfaceController::InterfaceController(AppData& _appData, Display& _display, M
 void InterfaceController::init() {
     display.init();
     display.fillScreen(Colour(0, 0, 0));
+    render();
+}
+
+void InterfaceController::render() {
     currentView->render();
 }
 
@@ -38,6 +42,7 @@ void InterfaceController::switchToParameterView() {
     currentView = &parameterView;
     uint16_t bar = sequenceView.getCursorBar();
     parameterView.setBar(bar);
+    currentView->render();
 }
 
 void InterfaceController::switchToSequenceView() {

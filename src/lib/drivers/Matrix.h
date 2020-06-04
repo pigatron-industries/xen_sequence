@@ -13,6 +13,7 @@ public:
     Matrix();
     void init();
     void setPixel(uint8_t x, uint8_t y, CRGB colour);
+    CRGB getPixel(uint8_t x, uint8_t y);
     void update();
 
     void test();

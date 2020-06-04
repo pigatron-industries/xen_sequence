@@ -27,6 +27,15 @@ void Matrix::setPixel(uint8_t x, uint8_t y, CRGB colour) {
     }
 }
 
+CRGB Matrix::getPixel(uint8_t x, uint8_t y) {
+    uint8_t led = xyToLedNum(x, y);
+    if(led >= 0 && led < MATRIX_LEDS) {
+        return leds[led];
+    } else {
+        return CRGB::Black;
+    }
+}
+
 uint8_t Matrix::xyToLedNum(uint8_t x, uint8_t y) {
     return (MATRIX_LEDS-1) - ((y * MATRIX_ROWS) + x);
 }

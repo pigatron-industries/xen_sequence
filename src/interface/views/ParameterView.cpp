@@ -8,6 +8,7 @@ ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatri
     appData(_appData),
     display(_display),
     sequenceMatrixView(_sequenceMatrixView) {
+
 }
 
 void ParameterView::render() {
@@ -16,17 +17,25 @@ void ParameterView::render() {
     display.setTextSize(1);
 
     display.updateScreen();
+
+    sequenceMatrixView.setCursor(true);
+    sequenceMatrixView.setBar(bar);
+    sequenceMatrixView.render();
 }
 
 void ParameterView::handleEvent(Event event) {
     switch(event) {
         case STICK_UP:
+            sequenceMatrixView.cursorUp();
             break;
         case STICK_DOWN:
+            sequenceMatrixView.cursorDown();
             break;
         case STICK_LEFT:
+            sequenceMatrixView.cursorLeft();
             break;
         case STICK_RIGHT:
+            sequenceMatrixView.cursorRight();
             break;
         default:
             break;
@@ -34,6 +43,5 @@ void ParameterView::handleEvent(Event event) {
 }
 
 void ParameterView::setBar(uint16_t _bar) {
-    _bar = bar;
-    render();
+    bar = _bar;
 };
