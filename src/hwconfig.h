@@ -9,6 +9,7 @@
 #define MATRIX_CLOCK_PIN 0
 #define MATRIX_DATA_PIN 1
 
+#define STICK_SWITCH_PIN 2
 
 // Analog Pins
 #define STICK_X_PIN 2

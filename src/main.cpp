@@ -20,7 +20,7 @@ AppData appData = AppData();
 
 // user interface
 InterfaceController interfaceController = InterfaceController(appData, display, matrix);
-InputTask inputTask = InputTask(interfaceController, STICK_X_PIN, STICK_Y_PIN);
+InputTask inputTask = InputTask(interfaceController, STICK_X_PIN, STICK_Y_PIN, STICK_SWITCH_PIN);
 
 
 

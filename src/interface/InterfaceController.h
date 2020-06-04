@@ -5,6 +5,7 @@
 
 #include "../model/AppData.h"
 #include "Events.h"
+#include "View.h"
 #include "./views/SequenceView.h"
 #include "./views/ParameterView.h"
 #include "./views/SequenceMatrixView.h"
@@ -21,9 +22,14 @@ private:
     Display& display;
     Matrix& matrix;
 
+    View* currentView;
+
+    SequenceMatrixView sequenceMatrixView;
     SequenceView sequenceView;
     ParameterView parameterView;
-    SequenceMatrixView sequenceMatrixView;
+
+    void switchToParameterView();
+    void switchToSequenceView();
 
 };
 

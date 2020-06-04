@@ -4,9 +4,11 @@
 #include "Events.h"
 
 
-InputTask::InputTask(InterfaceController& _interface, uint8_t _stickXPin, uint8_t _stickYPin) :
+InputTask::InputTask(InterfaceController& _interface, uint8_t _stickXPin, uint8_t _stickYPin, uint8_t _stickSwitchPin) :
     interface(_interface),
-    analogStick(_stickXPin, _stickYPin) {
+    analogStick(_stickXPin, _stickYPin),
+    analogStickSwitch(_stickSwitchPin, 100) {
+      pinMode(_stickSwitchPin, INPUT_PULLUP);
 }
 
 void InputTask::init() {
@@ -28,6 +30,12 @@ void InputTask::execute() {
         } else if(analogStick.wasPushedDown()) {
             Serial.println("Down");
             interface.handleEvent(STICK_DOWN);
+        }
+    }
+
+    if(analogStickSwitch.update()) {
+        if(analogStickSwitch.fell()) {
+            interface.handleEvent(STICK_PRESS);
         }
     }
 }

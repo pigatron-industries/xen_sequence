@@ -53,6 +53,8 @@ void SequenceView::handleEvent(Event event) {
         case STICK_RIGHT:
             cursorRight();
             break;
+        default:
+            break;
     }
 }
 

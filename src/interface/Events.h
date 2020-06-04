@@ -5,7 +5,8 @@ enum Event {
     STICK_LEFT,
     STICK_RIGHT,
     STICK_UP,
-    STICK_DOWN
+    STICK_DOWN,
+    STICK_PRESS
 };
 
 #endif

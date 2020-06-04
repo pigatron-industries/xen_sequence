@@ -1,6 +1,7 @@
 #ifndef InputTask_h
 #define InputTask_h
 
+#include <Bounce2.h>
 #include <inttypes.h>
 
 #include "../lib/task/Task.h"
@@ -11,7 +12,7 @@
 class InputTask : public Task {
 
 public:
-    InputTask(InterfaceController& _interface, uint8_t _stickXPin, uint8_t _stickYPin);
+    InputTask(InterfaceController& _interface, uint8_t _stickXPin, uint8_t _stickYPin, uint8_t _stickSwitchPin);
     void init();
     void execute();
 
@@ -19,6 +20,7 @@ private:
     InterfaceController& interface;
 
     AnalogStick analogStick;
+    Bounce analogStickSwitch;
 
 };
 

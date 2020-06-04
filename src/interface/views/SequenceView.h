@@ -3,17 +3,19 @@
 
 #include <inttypes.h>
 
+#include "../Events.h"
+#include "../View.h"
 #include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
 #include "../../lib/drivers/display.h"
-#include "../Events.h"
 
-class SequenceView {
+class SequenceView : public View {
 
 public:
     SequenceView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView);
-    void render();
-    void handleEvent(Event event);
+    virtual void render();
+    virtual void handleEvent(Event event);
+    uint16_t getCursorBar() { return cursorBar; }
 
 private:
     AppData& appData;
@@ -21,8 +23,8 @@ private:
     SequenceMatrixView& sequenceMatrixView;
 
     uint8_t cursorChannel;
-    uint8_t cursorBar;
-    uint8_t scrollBar;
+    uint16_t cursorBar;
+    uint16_t scrollBar;
 
     void renderStatusBar();
     void renderGrid();
