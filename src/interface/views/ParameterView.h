@@ -7,6 +7,7 @@
 #include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
 #include "../../lib/drivers/display.h"
+#include "../components/ParameterField.h"
 
 enum ParameterViewMode {
     PARAM_MODE_BAR, // Track length
@@ -42,14 +43,15 @@ private:
 
     uint16_t bar = 0;
     ParameterViewMode mode = PARAM_MODE_BAR;
-    Parameter selectedParameter = PARAM_SELECT;
-    int selectedParameterIndex = 0;
-    LinkedList<Parameter> visibleParameters;
 
-    void renderBarParameters();
-    void renderChannelParameters();
-    void renderEventParameters();
-    void renderTextField(uint8_t row, Parameter param, const char* name, const char* value);
+    int selectedFieldIndex = 0;
+    LinkedList<ParameterField*>* visibleFields;
+
+    LinkedList<ParameterField*> barFields;
+    LinkedList<ParameterField*> channelFields;
+    LinkedList<ParameterField*> eventFields;
+
+    void renderFields();
 
     void setMode(ParameterViewMode _mode);
     void nextParameter();

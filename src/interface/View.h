@@ -2,6 +2,7 @@
 #define View_h
 
 #include "Events.h"
+#include "../lib/drivers/Display.h"
 
 class View {
     public:
