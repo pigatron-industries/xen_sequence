@@ -1,17 +1,22 @@
 #include "IntegerParameterField.h"
 
-IntegerParameterField::IntegerParameterField(const char* _name, uint16_t _value) :
+IntegerParameterField::IntegerParameterField(const char* _name, uint16_t _value, uint16_t _min, uint16_t _max) :
     ParameterField(_name),
-    value(_value) {
+    value(_value),
+    min(_min),
+    max(_max) {
 }
 
 void IntegerParameterField::increment() {
-    Serial.println("increment");
-    value++;
+    if(value < max) {
+        value++;
+    }
 }
 
 void IntegerParameterField::decrement() {
-    value--;
+    if(value > min) {
+        value--;
+    }
 }
 
 void IntegerParameterField::render(Display& display, uint8_t row, bool selected) {

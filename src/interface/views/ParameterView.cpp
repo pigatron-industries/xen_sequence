@@ -14,13 +14,13 @@ ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatri
     appData(_appData),
     display(_display),
     sequenceMatrixView(_sequenceMatrixView) {
-    barFields.add(new IntegerParameterField("LENGTH", 16));
-    barFields.add(new IntegerParameterField("BPM", 120));
-    channelFields.add(new IntegerParameterField("MUTE", 0));
-    eventFields.add(new IntegerParameterField("NOTE", 84));
-    eventFields.add(new IntegerParameterField("GATE", 50));
-    eventFields.add(new IntegerParameterField("DELAY", 0));
-    eventFields.add(new IntegerParameterField("RATCHET", 0));
+    barFields.add(new IntegerParameterField("LENGTH", 16, 1, 128));
+    barFields.add(new IntegerParameterField("BPM", 120, 30, 480));
+    channelFields.add(new IntegerParameterField("MUTE", 0, 0, 0));
+    eventFields.add(new IntegerParameterField("NOTE", 84, 0, 128));
+    eventFields.add(new IntegerParameterField("GATE", 50, 0, 100));
+    eventFields.add(new IntegerParameterField("DELAY", 0, 0, 100));
+    // eventFields.add(new IntegerParameterField("RATCHET", 0));
     sequenceMatrixView.setPlayCursor(false);
     setParameterViewMode(PARAM_MODE_CHANNEL);
 }

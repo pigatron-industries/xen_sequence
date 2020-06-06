@@ -21,17 +21,13 @@ void InputTask::init() {
 void InputTask::execute() {
     if(analogStick.update()) {
         if(analogStick.wasPushedLeft()) {
-            Serial.println("Left");
             interface.handleEvent(STICK_LEFT);
         } else if(analogStick.wasPushedRight()) {
-            Serial.println("Right");
             interface.handleEvent(STICK_RIGHT);
         }
         if(analogStick.wasPushedUp()) {
-            Serial.println("Up");
             interface.handleEvent(STICK_UP);
         } else if(analogStick.wasPushedDown()) {
-            Serial.println("Down");
             interface.handleEvent(STICK_DOWN);
         }
     }
