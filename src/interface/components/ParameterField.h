@@ -6,7 +6,7 @@
 #define FIELD_HEIGHT 11
 #define TEXT_HEIGHT 7
 #define FIELD_NAME_WIDTH 45
-#define FIELD_VALUE_WIDTH 30
+#define FIELD_VALUE_WIDTH 45
 
 class ParameterField {
 

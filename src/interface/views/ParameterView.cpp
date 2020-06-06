@@ -4,11 +4,7 @@
 
 #include "../Events.h"
 #include "../components/IntegerParameterField.h"
-
-#define FIELD_HEIGHT 11
-#define TEXT_HEIGHT 7
-#define FIELD_NAME_WIDTH 45
-#define FIELD_VALUE_WIDTH 30
+#include "../components/BooleanParameterField.h"
 
 ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
@@ -16,7 +12,7 @@ ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatri
     sequenceMatrixView(_sequenceMatrixView) {
     barFields.add(new IntegerParameterField("LENGTH", 16, 1, 128));
     barFields.add(new IntegerParameterField("SPEED", 120, 30, 480, " BPM"));
-    channelFields.add(new IntegerParameterField("MUTE", 0, 0, 0));
+    channelFields.add(new BooleanParameterField("MUTE", false));
     eventFields.add(new IntegerParameterField("NOTE", 84, 0, 128));
     eventFields.add(new IntegerParameterField("GATE", 50, 0, 100, " %"));
     eventFields.add(new IntegerParameterField("DELAY", 0, 0, 100, " %"));
