@@ -12,13 +12,15 @@ class SequenceMatrixView {
 public:
     SequenceMatrixView(AppData& _appData, Matrix& _matrix);
     void render();
-    void setBar(int _bar);
-    void setSelectCursor(bool _showSelectCursor);
-    void setPlayCursor(bool _showPlayCursor);
     void cursorUp();
     void cursorDown();
     void cursorLeft();
     void cursorRight();
+
+    void setBar(int _bar);
+    void setSelectCursor(bool _showSelectCursor);
+    void setPlayCursor(bool _showPlayCursor);
+    void setSelectionActive(bool _selectionActive) { selectionActive = _selectionActive; }
 
 private:
     AppData& appData;
@@ -28,6 +30,7 @@ private:
     uint16_t bar;
     bool showSelectCursor = false;
     bool showPlayCursor = false;
+    bool selectionActive = false;
     uint8_t selectCursorChannel = 0;
     uint8_t selectCursorTick = 0;
     uint8_t playCursorTick = 0;

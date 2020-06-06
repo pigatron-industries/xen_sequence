@@ -150,7 +150,9 @@ void ParameterView::cycleSelectionMode() {
 void ParameterView::setSelectionMode(SelectionMode _selectionMode) {
     selectionMode = _selectionMode;
     if(selectionMode == SELECT_EVENT) {
-        sequenceMatrixView.setSelectCursor(true);
+        sequenceMatrixView.setSelectionActive(true);
+    } else {
+        sequenceMatrixView.setSelectionActive(false);
     }
 }
 
@@ -166,16 +168,19 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
     switch(parameterViewMode) {
         case PARAM_MODE_BAR:
             visibleFields = &barFields;
+            sequenceMatrixView.setSelectCursor(false);
             setSelectionMode(SELECT_PARAMETER);
             break;
         case PARAM_MODE_CHANNEL:
             visibleFields = &channelFields;
+            sequenceMatrixView.setSelectCursor(false);
             if(selectionMode != SELECT_PARAMETER) {
                 setSelectionMode(SELECT_CHANNEL);
             }
             break;
         case PARAM_MODE_EVENT:
             visibleFields = &eventFields;
+            sequenceMatrixView.setSelectCursor(true);
             if(selectionMode != SELECT_PARAMETER) {
                 setSelectionMode(SELECT_EVENT);
             }

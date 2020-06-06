@@ -2,7 +2,7 @@
 
 #include "../../hwconfig.h"
 
-#define BRIGHTNESS 1
+#define BRIGHTNESS 2
 
 Matrix::Matrix() {
 }

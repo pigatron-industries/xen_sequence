@@ -1,9 +1,10 @@
 #include "SequenceMatrixView.h"
 
 #define OFF_PIXEL CRGB::Black
-#define DATA_PIXEL CRGB::Blue
-#define SELECT_CURSOR_PIXEL CRGB::Red
-#define PLAY_CURSOR_PIXEL CRGB::Green
+#define DATA_PIXEL CRGB(0x000088)
+#define SELECT_CURSOR_PIXEL CRGB(0x880000)
+#define SELECT_CURSOR_ACTIVE_PIXEL CRGB(0xFF0000)
+#define PLAY_CURSOR_PIXEL CRGB(0x008800)
 
 
 
@@ -41,7 +42,7 @@ void SequenceMatrixView::renderData() {
 void SequenceMatrixView::renderSelectCursor() {
     if(showSelectCursor) {
         CRGB colour = matrix.getPixel(selectCursorChannel, selectCursorTick);
-        colour += SELECT_CURSOR_PIXEL;
+        colour += selectionActive ? SELECT_CURSOR_ACTIVE_PIXEL : SELECT_CURSOR_PIXEL;
         matrix.setPixel(selectCursorChannel, selectCursorTick, colour);
     }
 }
