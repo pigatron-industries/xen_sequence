@@ -6,11 +6,12 @@ IntegerParameterField::IntegerParameterField(const char* _name, uint16_t _value)
 }
 
 void IntegerParameterField::increment() {
-
+    Serial.println("increment");
+    value++;
 }
 
 void IntegerParameterField::decrement() {
-
+    value--;
 }
 
 void IntegerParameterField::render(Display& display, uint8_t row, bool selected) {

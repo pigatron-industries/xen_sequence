@@ -15,6 +15,12 @@ enum ParameterViewMode {
     PARAM_MODE_EVENT //Edit note parameters
 };
 
+enum SelectionMode {
+    SELECT_PARAMETER,
+    SELECT_CHANNEL,
+    SELECT_EVENT
+};
+
 enum Parameter {
     PARAM_SELECT,
     PARAM_BAR_LENGTH,
@@ -42,7 +48,8 @@ private:
     SequenceMatrixView& sequenceMatrixView;
 
     uint16_t bar = 0;
-    ParameterViewMode mode = PARAM_MODE_BAR;
+    ParameterViewMode parameterViewMode = PARAM_MODE_BAR;
+    SelectionMode selectionMode = SELECT_PARAMETER;
 
     int selectedFieldIndex = 0;
     LinkedList<ParameterField*>* visibleFields;
@@ -51,9 +58,14 @@ private:
     LinkedList<ParameterField*> channelFields;
     LinkedList<ParameterField*> eventFields;
 
+    void renderMode();
     void renderFields();
 
-    void setMode(ParameterViewMode _mode);
+    void cycleSelectionMode();
+    void setSelectionMode(SelectionMode _selectionMode);
+    void cycleParameterViewMode();
+    void setParameterViewMode(ParameterViewMode _parameterViewMode);
+    ParameterField* getSelectedField();
     void nextParameter();
     void prevParameter();
 };

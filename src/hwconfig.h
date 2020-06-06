@@ -10,6 +10,9 @@
 #define MATRIX_DATA_PIN 1
 
 #define STICK_SWITCH_PIN 2
+#define ENCODER_PIN1 3
+#define ENCODER_PIN2 4
+#define ENCODER_SWITCH_PIN 5
 
 // Analog Pins
 #define STICK_X_PIN 2

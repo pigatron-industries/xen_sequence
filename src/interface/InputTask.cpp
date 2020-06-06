@@ -3,12 +3,15 @@
 #include <Arduino.h>
 #include "Events.h"
 
+#include "../hwconfig.h"
 
-InputTask::InputTask(InterfaceController& _interface, uint8_t _stickXPin, uint8_t _stickYPin, uint8_t _stickSwitchPin) :
+InputTask::InputTask(InterfaceController& _interface) :
     interface(_interface),
-    analogStick(_stickXPin, _stickYPin),
-    analogStickSwitch(_stickSwitchPin, 100) {
-      pinMode(_stickSwitchPin, INPUT_PULLUP);
+    analogStick(STICK_X_PIN, STICK_Y_PIN),
+    analogStickSwitch(STICK_SWITCH_PIN),
+    encoder(ENCODER_PIN1, ENCODER_PIN2),
+    encoderSwitch(ENCODER_SWITCH_PIN) {
+      pinMode(STICK_SWITCH_PIN, INPUT_PULLUP);
 }
 
 void InputTask::init() {
@@ -37,5 +40,19 @@ void InputTask::execute() {
         if(analogStickSwitch.fell()) {
             interface.handleEvent(STICK_PRESS);
         }
+    }
+
+    if(encoder.update()) {
+        if(encoder.getMovement() > 0) {
+            interface.handleEvent(DATA_INCREMENT);
+        } else {
+            interface.handleEvent(DATA_DECREMENT);
+        }
+    }
+
+    if(encoderSwitch.update()) {
+      if(encoderSwitch.fell()) {
+          interface.handleEvent(DATA_PRESS);
+      }
     }
 }

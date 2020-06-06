@@ -6,7 +6,10 @@ enum Event {
     STICK_RIGHT,
     STICK_UP,
     STICK_DOWN,
-    STICK_PRESS
+    STICK_PRESS,
+    DATA_INCREMENT,
+    DATA_DECREMENT,
+    DATA_PRESS
 };
 
 #endif

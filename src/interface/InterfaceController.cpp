@@ -27,8 +27,6 @@ void InterfaceController::handleEvent(Event event) {
         case STICK_PRESS:
             if(currentView == &sequenceView) {
                 switchToParameterView();
-            } else {
-                switchToSequenceView();
             }
             break;
         default:
