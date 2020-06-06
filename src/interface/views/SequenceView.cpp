@@ -36,8 +36,7 @@ void SequenceView::render() {
     renderCursor();
     display.updateScreen();
 
-    sequenceMatrixView.setSelectCursor(false);
-    sequenceMatrixView.setPlayCursor(false);
+    sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
     sequenceMatrixView.setBar(cursorBar);
     sequenceMatrixView.render();
 }

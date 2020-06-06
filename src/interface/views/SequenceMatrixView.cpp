@@ -40,10 +40,16 @@ void SequenceMatrixView::renderData() {
 }
 
 void SequenceMatrixView::renderSelectCursor() {
-    if(showSelectCursor) {
+    if(selectionMode == SequenceMatrixSelectionMode::SELECT_EVENT) {
         CRGB colour = matrix.getPixel(selectCursorChannel, selectCursorTick);
         colour += selectionActive ? SELECT_CURSOR_ACTIVE_PIXEL : SELECT_CURSOR_PIXEL;
         matrix.setPixel(selectCursorChannel, selectCursorTick, colour);
+    } else if(selectionMode == SequenceMatrixSelectionMode::SELECT_CHANNEL) {
+        for(int i = 0; i < MATRIX_COLS; i++) {
+            CRGB colour = matrix.getPixel(selectCursorChannel, i);
+            colour += selectionActive ? SELECT_CURSOR_ACTIVE_PIXEL : SELECT_CURSOR_PIXEL;
+            matrix.setPixel(selectCursorChannel, i, colour);
+        }
     }
 }
 
@@ -59,10 +65,6 @@ void SequenceMatrixView::renderPlayCursor() {
 
 void SequenceMatrixView::setBar(int _bar) {
     bar = _bar;
-}
-
-void SequenceMatrixView::setSelectCursor(bool _showSelectCursor) {
-    showSelectCursor = _showSelectCursor;
 }
 
 void SequenceMatrixView::setPlayCursor(bool _showPlayCursor) {

@@ -6,6 +6,11 @@
 #include "../../model/AppData.h"
 #include "../../lib/drivers/Matrix.h"
 
+enum class SequenceMatrixSelectionMode {
+    SELECT_NONE,
+    SELECT_EVENT,
+    SELECT_CHANNEL
+};
 
 class SequenceMatrixView {
 
@@ -18,7 +23,7 @@ public:
     void cursorRight();
 
     void setBar(int _bar);
-    void setSelectCursor(bool _showSelectCursor);
+    void setSelectionMode(SequenceMatrixSelectionMode _selectionMode) { selectionMode = _selectionMode; }
     void setPlayCursor(bool _showPlayCursor);
     void setSelectionActive(bool _selectionActive) { selectionActive = _selectionActive; }
 
@@ -28,7 +33,7 @@ private:
     SequencePattern* patterns[SEQUENCE_CHANNELS];
 
     uint16_t bar;
-    bool showSelectCursor = false;
+    SequenceMatrixSelectionMode selectionMode = SequenceMatrixSelectionMode::SELECT_NONE;
     bool showPlayCursor = false;
     bool selectionActive = false;
     uint8_t selectCursorChannel = 0;

@@ -55,28 +55,26 @@ void ParameterView::handleEvent(Event event) {
     ParameterField* field = getSelectedField();
     switch(event) {
         case STICK_UP:
-            if(selectionMode == SELECT_EVENT) {
+            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT || selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
                 sequenceMatrixView.cursorUp();
-            } else if(selectionMode == SELECT_CHANNEL) {
             } else {
                 prevParameter();
             }
             break;
         case STICK_DOWN:
-            if(selectionMode == SELECT_EVENT) {
+            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT || selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
                 sequenceMatrixView.cursorDown();
-            } else if(selectionMode == SELECT_CHANNEL) {
             } else {
                 nextParameter();
             }
             break;
         case STICK_LEFT:
-            if(selectionMode == SELECT_EVENT) {
+            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
                 sequenceMatrixView.cursorLeft();
             }
             break;
         case STICK_RIGHT:
-            if(selectionMode == SELECT_EVENT) {
+            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
                 sequenceMatrixView.cursorRight();
             }
             break;
@@ -136,20 +134,22 @@ ParameterField* ParameterView::getSelectedField() {
 void ParameterView::cycleSelectionMode() {
     switch(parameterViewMode) {
         case PARAM_MODE_BAR:
-            setSelectionMode(SELECT_PARAMETER);
+            setSelectionMode(ParameterViewSelectionMode::SELECT_PARAMETER);
             break;
         case PARAM_MODE_CHANNEL:
-            setSelectionMode(selectionMode == SELECT_PARAMETER ? SELECT_CHANNEL : SELECT_PARAMETER);
+            setSelectionMode(selectionMode == ParameterViewSelectionMode::SELECT_PARAMETER ?
+                             ParameterViewSelectionMode::SELECT_CHANNEL : ParameterViewSelectionMode::SELECT_PARAMETER);
             break;
         case PARAM_MODE_EVENT:
-            setSelectionMode(selectionMode == SELECT_PARAMETER ? SELECT_EVENT : SELECT_PARAMETER);
+            setSelectionMode(selectionMode == ParameterViewSelectionMode::SELECT_PARAMETER ?
+                             ParameterViewSelectionMode::SELECT_EVENT : ParameterViewSelectionMode::SELECT_PARAMETER);
             break;
     }
 }
 
-void ParameterView::setSelectionMode(SelectionMode _selectionMode) {
+void ParameterView::setSelectionMode(ParameterViewSelectionMode _selectionMode) {
     selectionMode = _selectionMode;
-    if(selectionMode == SELECT_EVENT) {
+    if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT || selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
         sequenceMatrixView.setSelectionActive(true);
     } else {
         sequenceMatrixView.setSelectionActive(false);
@@ -168,21 +168,21 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
     switch(parameterViewMode) {
         case PARAM_MODE_BAR:
             visibleFields = &barFields;
-            sequenceMatrixView.setSelectCursor(false);
-            setSelectionMode(SELECT_PARAMETER);
+            sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
+            setSelectionMode(ParameterViewSelectionMode::SELECT_PARAMETER);
             break;
         case PARAM_MODE_CHANNEL:
             visibleFields = &channelFields;
-            sequenceMatrixView.setSelectCursor(false);
-            if(selectionMode != SELECT_PARAMETER) {
-                setSelectionMode(SELECT_CHANNEL);
+            sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_CHANNEL);
+            if(selectionMode != ParameterViewSelectionMode::SELECT_PARAMETER) {
+                setSelectionMode(ParameterViewSelectionMode::SELECT_CHANNEL);
             }
             break;
         case PARAM_MODE_EVENT:
             visibleFields = &eventFields;
-            sequenceMatrixView.setSelectCursor(true);
-            if(selectionMode != SELECT_PARAMETER) {
-                setSelectionMode(SELECT_EVENT);
+            sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_EVENT);
+            if(selectionMode != ParameterViewSelectionMode::SELECT_PARAMETER) {
+                setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
             }
             break;
     };

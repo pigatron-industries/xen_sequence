@@ -15,7 +15,7 @@ enum ParameterViewMode {
     PARAM_MODE_EVENT //Edit note parameters
 };
 
-enum SelectionMode {
+enum class ParameterViewSelectionMode {
     SELECT_PARAMETER,
     SELECT_CHANNEL,
     SELECT_EVENT
@@ -49,7 +49,7 @@ private:
 
     uint16_t bar = 0;
     ParameterViewMode parameterViewMode = PARAM_MODE_BAR;
-    SelectionMode selectionMode = SELECT_PARAMETER;
+    ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_PARAMETER;
 
     int selectedFieldIndex = 0;
     LinkedList<ParameterField*>* visibleFields;
@@ -62,7 +62,7 @@ private:
     void renderFields();
 
     void cycleSelectionMode();
-    void setSelectionMode(SelectionMode _selectionMode);
+    void setSelectionMode(ParameterViewSelectionMode _selectionMode);
     void cycleParameterViewMode();
     void setParameterViewMode(ParameterViewMode _parameterViewMode);
     ParameterField* getSelectedField();
