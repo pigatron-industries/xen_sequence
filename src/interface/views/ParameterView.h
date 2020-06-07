@@ -41,14 +41,15 @@ public:
     virtual void render();
     virtual void handleEvent(Event event);
 
-    void setBar(uint16_t _bar);
+    void setBar(uint16_t _barIndex);
 
 private:
     AppData& appData;
     Display& display;
     SequenceMatrixView& sequenceMatrixView;
 
-    uint16_t bar = 0;
+    uint16_t barIndex = 0;
+    SequenceBar* bar;
     ParameterViewMode parameterViewMode = PARAM_MODE_BAR;
     ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_PARAMETER;
 
@@ -56,15 +57,15 @@ private:
     LinkedList<ParameterField*>* visibleFields;
 
     LinkedList<ParameterField*> barFields;
-    IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 16, 1, 128);
-    IntegerParameterField barSpeedField = IntegerParameterField("SPEED", 120, 30, 480, " BPM");
+    IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
+    IntegerParameterField barSpeedField = IntegerParameterField("SPEED", 30, 480, " BPM");
     LinkedList<ParameterField*> channelFields;
-    BooleanParameterField channelMuteField = BooleanParameterField("MUTE", false);
+    BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
     LinkedList<ParameterField*> eventFields;
-    IntegerParameterField eventNoteField = IntegerParameterField("NOTE", 84, 0, 128);
-    IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 84, 0, 128);
-    IntegerParameterField eventGateField = IntegerParameterField("GATE", 50, 0, 100, " %");
-    IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 0, 100, " %");
+    IntegerParameterField eventNoteField = IntegerParameterField("NOTE", 0, 128);
+    IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
+    IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");
+    IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 100, " %");
 
     void renderMode();
     void renderFields();
@@ -77,7 +78,7 @@ private:
     void nextParameter();
     void prevParameter();
 
-    void updateFieldData();
+    void updateBarFieldData();
 };
 
 #endif

@@ -87,3 +87,7 @@ SequencePattern* AppData::getPattern(uint16_t barIndex, uint8_t channel) {
     }
     return NULL;
 }
+
+SequenceBar* AppData::getBar(int index) {
+    return sequence.getBar(index);
+}

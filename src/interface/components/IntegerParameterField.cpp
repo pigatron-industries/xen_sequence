@@ -1,8 +1,7 @@
 #include "IntegerParameterField.h"
 
-IntegerParameterField::IntegerParameterField(const char* _name, uint16_t _value, uint16_t _min, uint16_t _max, const char* _unit) :
+IntegerParameterField::IntegerParameterField(const char* _name, uint16_t _min, uint16_t _max, const char* _unit) :
     ParameterField(_name),
-    value(_value),
     min(_min),
     max(_max),
     unit(_unit)

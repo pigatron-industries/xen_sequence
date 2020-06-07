@@ -6,7 +6,7 @@
 class BooleanParameterField : public ParameterField {
 
 public:
-    BooleanParameterField(const char* _name, bool _value);
+    BooleanParameterField(const char* _name);
     void increment();
     void decrement();
     void render(Display& display, uint8_t row, bool selected);

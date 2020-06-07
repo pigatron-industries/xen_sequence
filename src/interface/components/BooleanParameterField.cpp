@@ -1,8 +1,7 @@
 #include "BooleanParameterField.h"
 
-BooleanParameterField::BooleanParameterField(const char* _name, bool _value) :
-    ParameterField(_name),
-    value(_value)
+BooleanParameterField::BooleanParameterField(const char* _name) :
+    ParameterField(_name)
      {
 }
 

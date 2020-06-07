@@ -11,8 +11,10 @@ public:
     LinkedList<SequencePattern*>& getPatterns() { return patterns; }
 
     SequencePattern* newPattern();
+
+    SequenceBar* getBar(int index);
     SequenceBar* newBar(int index);
-    uint8_t getUnusedPatternId();
+
     SequencePattern* getPatternById(uint8_t id);
     SequencePattern* getPattern(uint16_t barIndex, uint8_t channel);
 
@@ -21,6 +23,8 @@ public:
 private:
     Sequence sequence;
     LinkedList<SequencePattern*> patterns;
+
+    uint8_t getUnusedPatternId();
 
 };
 

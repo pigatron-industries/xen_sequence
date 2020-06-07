@@ -28,7 +28,6 @@ void ParameterView::render() {
     renderFields();
     display.updateScreen();
 
-    sequenceMatrixView.setBar(bar);
     sequenceMatrixView.render();
 }
 
@@ -115,8 +114,11 @@ void ParameterView::prevParameter() {
     render();
 }
 
-void ParameterView::setBar(uint16_t _bar) {
-    bar = _bar;
+void ParameterView::setBar(uint16_t _barIndex) {
+    barIndex = _barIndex;
+    bar = appData.getBar(barIndex);
+    sequenceMatrixView.setBar(barIndex);
+    updateBarFieldData();
 };
 
 ParameterField* ParameterView::getSelectedField() {
@@ -187,6 +189,7 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
     }
 }
 
-void ParameterView::updateFieldData() {
-
+void ParameterView::updateBarFieldData() {
+    barLengthField.setValue(bar->getLength());
+    barSpeedField.setValue(bar->getSpeed());
 }
