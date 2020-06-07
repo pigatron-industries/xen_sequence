@@ -22,7 +22,7 @@ void SequenceMatrixView::render() {
 
 void SequenceMatrixView::renderData() {
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
-        SequencePattern* pattern = appData.getSequence().getChannel(channel).getPatterns().get(bar);
+        SequencePattern* pattern = appData.getPattern(bar, channel);
         if(pattern != NULL) {
             for(uint8_t tick = 0; tick < MATRIX_COLS; tick++) {
                 if(pattern->getEvents().get(tick) != NULL) {

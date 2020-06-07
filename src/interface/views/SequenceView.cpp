@@ -97,8 +97,6 @@ void SequenceView::cursorRight() {
 
 void SequenceView::renderStatusBar() {
     display.setTextColour(Colour(255, 255, 255));
-    //display.setCursor(0, 12);
-    //display.print("SELECT");
 }
 
 void SequenceView::renderGrid() {
@@ -120,10 +118,10 @@ void SequenceView::renderGrid() {
 void SequenceView::renderSequence() {
     display.setTextColour(DATA_TEXT_COLOUR);
     short top = STATUS_HEIGHT;
-    for(short channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
+    for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         short left = 0;
-        for(short bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
-            SequencePattern* pattern = appData.getSequence().getChannel(channel).getPatterns().get(bar);
+        for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
+            SequencePattern* pattern = appData.getPattern(bar, channel);
             if(pattern != NULL) {
                 display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
                 display.setCursor(left+5, top+9);

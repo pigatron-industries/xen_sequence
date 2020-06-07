@@ -40,20 +40,26 @@ void AppData::populateTestData() {
     pattern3->getEvents().add(NULL);
     pattern3->getEvents().add(new SequenceEvent());
 
+    SequenceBar* bar1 = newBar(0);
+    SequenceBar* bar2 = newBar(0);
+    SequenceBar* bar3 = newBar(0);
 
-    sequence.getChannel(0).getPatterns().add(pattern1);
-    sequence.getChannel(0).getPatterns().add(NULL);
-    sequence.getChannel(0).getPatterns().add(pattern1);
-
-    sequence.getChannel(1).getPatterns().add(NULL);
-    sequence.getChannel(1).getPatterns().add(pattern3);
-    sequence.getChannel(1).getPatterns().add(pattern3);
+    bar1->setPattern(0, pattern1);
+    bar2->setPattern(1, pattern3);
+    bar3->setPattern(0, pattern1);
+    bar3->setPattern(1, pattern3);
 }
 
 SequencePattern* AppData::newPattern() {
     SequencePattern* pattern = new SequencePattern(getUnusedPatternId());
     patterns.add(pattern);
     return pattern;
+}
+
+SequenceBar* AppData::newBar(int index) {
+    SequenceBar* bar = new SequenceBar();
+    sequence.getBars().add(index, bar);
+    return bar;
 }
 
 uint8_t AppData::getUnusedPatternId() {
@@ -70,6 +76,14 @@ SequencePattern* AppData::getPatternById(uint8_t id) {
         if(pattern->getId() == id) {
             return pattern;
         }
+    }
+    return NULL;
+}
+
+SequencePattern* AppData::getPattern(uint16_t barIndex, uint8_t channel) {
+    SequenceBar* bar = sequence.getBar(barIndex);
+    if(bar != NULL) {
+        return bar->getPattern(channel);
     }
     return NULL;
 }

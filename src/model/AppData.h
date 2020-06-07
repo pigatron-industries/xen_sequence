@@ -11,8 +11,10 @@ public:
     LinkedList<SequencePattern*>& getPatterns() { return patterns; }
 
     SequencePattern* newPattern();
+    SequenceBar* newBar(int index);
     uint8_t getUnusedPatternId();
     SequencePattern* getPatternById(uint8_t id);
+    SequencePattern* getPattern(uint16_t barIndex, uint8_t channel);
 
     void populateTestData();
 

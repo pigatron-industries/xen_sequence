@@ -1,19 +1,16 @@
 #ifndef Sequence_h
 #define Sequence_h
 
-#include "SequenceChannel.h"
-
-#define SEQUENCE_CHANNELS 8
+#include "SequenceBar.h"
 
 class Sequence {
 
 public:
-    SequenceChannel& getChannel(uint8_t index) { return channels[index]; }
+    LinkedList<SequenceBar*>& getBars() { return bars; }
+    SequenceBar* getBar(uint16_t index) { return bars.get(index); }
 
 private:
-    SequenceChannel channels[SEQUENCE_CHANNELS];
-
-    void extendChannels();
+    LinkedList<SequenceBar*> bars;
 
 };
 
