@@ -11,6 +11,8 @@ public:
     void decrement();
     void render(Display& display, uint8_t row, bool selected);
 
+    void setValue(bool _value) { value = _value; }
+
 private:
     bool value;
 

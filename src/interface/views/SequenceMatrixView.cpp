@@ -74,27 +74,23 @@ void SequenceMatrixView::setPlayCursor(bool _showPlayCursor) {
 void SequenceMatrixView::cursorUp() {
     if(selectCursorChannel > 0) {
         selectCursorChannel--;
-        render();
     }
 }
 
 void SequenceMatrixView::cursorDown() {
     if(selectCursorChannel < SEQUENCE_CHANNELS-1) {
         selectCursorChannel++;
-        render();
     }
 }
 
 void SequenceMatrixView::cursorLeft() {
     if(selectCursorTick > 0) {
         selectCursorTick--;
-        render();
     }
 }
 
 void SequenceMatrixView::cursorRight() {
     if(selectCursorTick < MATRIX_COLS-1) {
         selectCursorTick++;
-        render();
     }
 }

@@ -50,6 +50,9 @@ private:
 
     uint16_t barIndex = 0;
     SequenceBar* bar;
+    SequencePattern* selectedPattern;
+    SequenceEvent* selectedEvent;
+
     ParameterViewMode parameterViewMode = PARAM_MODE_BAR;
     ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_PARAMETER;
 
@@ -67,8 +70,15 @@ private:
     IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");
     IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 100, " %");
 
+    // rendering
     void renderMode();
     void renderFields();
+
+    // events
+    void cursorUp();
+    void cursorDown();
+    void cursorLeft();
+    void cursorRight();
 
     void cycleSelectionMode();
     void setSelectionMode(ParameterViewSelectionMode _selectionMode);
@@ -78,7 +88,9 @@ private:
     void nextParameter();
     void prevParameter();
 
-    void updateBarFieldData();
+    void updateSelectedBar();
+    void updateSelectedChannel();
+    void updateSelectedEvent();
 };
 
 #endif

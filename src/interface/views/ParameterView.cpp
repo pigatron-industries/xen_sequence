@@ -49,29 +49,16 @@ void ParameterView::handleEvent(Event event) {
     ParameterField* field = getSelectedField();
     switch(event) {
         case STICK_UP:
-            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT || selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
-                sequenceMatrixView.cursorUp();
-
-            } else {
-                prevParameter();
-            }
+            cursorUp();
             break;
         case STICK_DOWN:
-            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT || selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
-                sequenceMatrixView.cursorDown();
-            } else {
-                nextParameter();
-            }
+            cursorDown();
             break;
         case STICK_LEFT:
-            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
-                sequenceMatrixView.cursorLeft();
-            }
+            cursorLeft();
             break;
         case STICK_RIGHT:
-            if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
-                sequenceMatrixView.cursorRight();
-            }
+            cursorRight();
             break;
         case STICK_PRESS:
             cycleSelectionMode();
@@ -98,12 +85,77 @@ void ParameterView::handleEvent(Event event) {
     }
 }
 
+void ParameterView::cursorUp() {
+    switch(selectionMode) {
+        case ParameterViewSelectionMode::SELECT_PARAMETER:
+            prevParameter();
+            render();
+            break;
+        case ParameterViewSelectionMode::SELECT_EVENT:
+            sequenceMatrixView.cursorUp();
+            updateSelectedEvent();
+            render();
+            break;
+        case ParameterViewSelectionMode::SELECT_CHANNEL:
+            sequenceMatrixView.cursorUp();
+            updateSelectedChannel();
+            render();
+            break;
+    }
+}
+
+void ParameterView::cursorDown() {
+    switch(selectionMode) {
+        case ParameterViewSelectionMode::SELECT_PARAMETER:
+            nextParameter();
+            render();
+            break;
+        case ParameterViewSelectionMode::SELECT_EVENT:
+            sequenceMatrixView.cursorDown();
+            updateSelectedEvent();
+            render();
+            break;
+        case ParameterViewSelectionMode::SELECT_CHANNEL:
+            sequenceMatrixView.cursorDown();
+            updateSelectedChannel();
+            render();
+            break;
+    }
+}
+
+void ParameterView::cursorLeft() {
+    switch(selectionMode) {
+        case ParameterViewSelectionMode::SELECT_PARAMETER:
+            break;
+        case ParameterViewSelectionMode::SELECT_EVENT:
+            sequenceMatrixView.cursorLeft();
+            updateSelectedEvent();
+            render();
+            break;
+        case ParameterViewSelectionMode::SELECT_CHANNEL:
+            break;
+    }
+}
+
+void ParameterView::cursorRight() {
+    switch(selectionMode) {
+        case ParameterViewSelectionMode::SELECT_PARAMETER:
+            break;
+        case ParameterViewSelectionMode::SELECT_EVENT:
+            sequenceMatrixView.cursorRight();
+            updateSelectedEvent();
+            render();
+            break;
+        case ParameterViewSelectionMode::SELECT_CHANNEL:
+            break;
+    }
+}
+
 void ParameterView::nextParameter() {
     selectedFieldIndex++;
     if(selectedFieldIndex >= visibleFields->size()) {
         selectedFieldIndex = 0;
     }
-    render();
 }
 
 void ParameterView::prevParameter() {
@@ -111,14 +163,12 @@ void ParameterView::prevParameter() {
     if(selectedFieldIndex < 0) {
         selectedFieldIndex = visibleFields->size()-1;
     }
-    render();
 }
 
 void ParameterView::setBar(uint16_t _barIndex) {
     barIndex = _barIndex;
-    bar = appData.getBar(barIndex);
     sequenceMatrixView.setBar(barIndex);
-    updateBarFieldData();
+    updateSelectedBar();
 };
 
 ParameterField* ParameterView::getSelectedField() {
@@ -189,7 +239,36 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
     }
 }
 
-void ParameterView::updateBarFieldData() {
+void ParameterView::updateSelectedBar() {
+    bar = appData.getBar(barIndex);
     barLengthField.setValue(bar->getLength());
     barSpeedField.setValue(bar->getSpeed());
+}
+
+void ParameterView::updateSelectedChannel() {
+    selectedPattern = bar->getPattern(sequenceMatrixView.getSelectCursorChannel());
+    SequenceChannel selectedChannel = appData.getChannel(sequenceMatrixView.getSelectCursorChannel());
+    channelMuteField.setValue(selectedChannel.getMute());
+}
+
+void ParameterView::updateSelectedEvent() {
+    updateSelectedChannel();
+    if(selectedPattern != NULL) {
+        selectedEvent = selectedPattern->getEvent(sequenceMatrixView.getSelectCursorTick());
+    } else {
+        selectedEvent = NULL;
+    }
+    if(selectedEvent != NULL) {
+        eventNoteField.setValue(selectedEvent->pitch);
+        eventVelocityField.setValue(selectedEvent->velocity);
+        eventGateField.setValue(selectedEvent->gate);
+        eventDelayField.setValue(selectedEvent->delay);
+        for(int i = 0; i < eventFields.size(); i++) {
+            eventFields.get(i)->setEnabled(true);
+        }
+    } else {
+        for(int i = 0; i < eventFields.size(); i++) {
+            eventFields.get(i)->setEnabled(false);
+        }
+    }
 }

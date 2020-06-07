@@ -18,6 +18,8 @@ public:
     SequencePattern* getPatternById(uint8_t id);
     SequencePattern* getPattern(uint16_t barIndex, uint8_t channel);
 
+    SequenceChannel& getChannel(uint8_t index);
+
     void populateTestData();
 
 private:

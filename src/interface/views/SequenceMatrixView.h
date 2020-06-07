@@ -27,6 +27,9 @@ public:
     void setPlayCursor(bool _showPlayCursor);
     void setSelectionActive(bool _selectionActive) { selectionActive = _selectionActive; }
 
+    uint8_t getSelectCursorChannel() { return selectCursorChannel; }
+    uint8_t getSelectCursorTick() { return selectCursorTick; }
+
 private:
     AppData& appData;
     Matrix& matrix;
