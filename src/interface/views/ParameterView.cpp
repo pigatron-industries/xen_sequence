@@ -3,20 +3,19 @@
 #include <Fonts/Org_01.h>
 
 #include "../Events.h"
-#include "../components/IntegerParameterField.h"
-#include "../components/BooleanParameterField.h"
 
 ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
     display(_display),
     sequenceMatrixView(_sequenceMatrixView) {
-    barFields.add(new IntegerParameterField("LENGTH", 16, 1, 128));
-    barFields.add(new IntegerParameterField("SPEED", 120, 30, 480, " BPM"));
-    channelFields.add(new BooleanParameterField("MUTE", false));
-    eventFields.add(new IntegerParameterField("NOTE", 84, 0, 128));
-    eventFields.add(new IntegerParameterField("GATE", 50, 0, 100, " %"));
-    eventFields.add(new IntegerParameterField("DELAY", 0, 0, 100, " %"));
-    // eventFields.add(new IntegerParameterField("RATCHET", 0));
+    barFields.add(&barLengthField);
+    barFields.add(&barSpeedField);
+    channelFields.add(&channelMuteField);
+    eventFields.add(&eventNoteField);
+    eventFields.add(&eventVelocityField);
+    eventFields.add(&eventGateField);
+    eventFields.add(&eventDelayField);
+
     sequenceMatrixView.setPlayCursor(false);
     setParameterViewMode(PARAM_MODE_CHANNEL);
 }
@@ -53,6 +52,7 @@ void ParameterView::handleEvent(Event event) {
         case STICK_UP:
             if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT || selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
                 sequenceMatrixView.cursorUp();
+
             } else {
                 prevParameter();
             }
@@ -185,4 +185,8 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
     if(visibleFields->size() == 0) {
         selectedFieldIndex = -1;
     }
+}
+
+void ParameterView::updateFieldData() {
+
 }

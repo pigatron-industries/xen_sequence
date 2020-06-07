@@ -7,7 +7,8 @@
 #include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
 #include "../../lib/drivers/display.h"
-#include "../components/ParameterField.h"
+#include "../components/IntegerParameterField.h"
+#include "../components/BooleanParameterField.h"
 
 enum ParameterViewMode {
     PARAM_MODE_BAR, // Track length
@@ -55,8 +56,15 @@ private:
     LinkedList<ParameterField*>* visibleFields;
 
     LinkedList<ParameterField*> barFields;
+    IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 16, 1, 128);
+    IntegerParameterField barSpeedField = IntegerParameterField("SPEED", 120, 30, 480, " BPM");
     LinkedList<ParameterField*> channelFields;
+    BooleanParameterField channelMuteField = BooleanParameterField("MUTE", false);
     LinkedList<ParameterField*> eventFields;
+    IntegerParameterField eventNoteField = IntegerParameterField("NOTE", 84, 0, 128);
+    IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 84, 0, 128);
+    IntegerParameterField eventGateField = IntegerParameterField("GATE", 50, 0, 100, " %");
+    IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 0, 100, " %");
 
     void renderMode();
     void renderFields();
@@ -68,6 +76,8 @@ private:
     ParameterField* getSelectedField();
     void nextParameter();
     void prevParameter();
+
+    void updateFieldData();
 };
 
 #endif
