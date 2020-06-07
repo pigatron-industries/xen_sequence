@@ -232,6 +232,7 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
             if(selectionMode != ParameterViewSelectionMode::SELECT_PARAMETER) {
                 setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
             }
+            updateSelectedEvent();
             break;
     };
     if(visibleFields->size() == 0) {

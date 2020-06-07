@@ -15,7 +15,7 @@ class SequenceEvent {
 public:
     SequenceEventType eventType = NOTE;
     uint8_t pitch;
-    uint8_t velocity ;
+    uint8_t velocity;
     uint8_t gate;
     uint8_t delay;
 

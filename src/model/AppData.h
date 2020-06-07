@@ -10,13 +10,14 @@ public:
     Sequence& getSequence() { return sequence; }
     LinkedList<SequencePattern*>& getPatterns() { return patterns; }
 
-    SequencePattern* newPattern();
-
     SequenceBar* getBar(int index);
     SequenceBar* newBar(int index);
 
     SequencePattern* getPatternById(uint8_t id);
     SequencePattern* getPattern(uint16_t barIndex, uint8_t channel);
+    SequencePattern* newPattern();
+
+    SequenceEvent* newEvent(uint8_t tick, SequencePattern* pattern);
 
     SequenceChannel& getChannel(uint8_t index);
 
