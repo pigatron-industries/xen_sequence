@@ -80,6 +80,9 @@ private:
     void cursorLeft();
     void cursorRight();
 
+    void fieldIncrement();
+    void fieldDecrement();
+
     void cycleSelectionMode();
     void setSelectionMode(ParameterViewSelectionMode _selectionMode);
     void cycleParameterViewMode();
@@ -91,6 +94,7 @@ private:
     void updateSelectedBar();
     void updateSelectedChannel();
     void updateSelectedEvent();
+    void updateDataFromField(ParameterField* field);
 
     void addEvent();
 };

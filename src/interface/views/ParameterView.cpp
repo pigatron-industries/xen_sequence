@@ -46,7 +46,6 @@ void ParameterView::renderFields() {
 }
 
 void ParameterView::handleEvent(Event event) {
-    ParameterField* field = getSelectedField();
     switch(event) {
         case Event::STICK_UP:
             cursorUp();
@@ -65,23 +64,16 @@ void ParameterView::handleEvent(Event event) {
             render();
             break;
         case Event::DATA_INCREMENT:
-            if(field != NULL) {
-                field->increment();
-                render();
-            }
+            fieldIncrement();
             break;
         case Event::DATA_DECREMENT:
-            if(field != NULL) {
-                field->decrement();
-                render();
-            }
+            fieldDecrement();
             break;
         case Event::DATA_PRESS:
             cycleParameterViewMode();
             render();
             break;
         case Event::KEY_ADD_DEL:
-            Serial.println("KEY_ADD_DEL");
             addEvent();
             render();
             break;
@@ -153,6 +145,24 @@ void ParameterView::cursorRight() {
             break;
         case ParameterViewSelectionMode::SELECT_CHANNEL:
             break;
+    }
+}
+
+void ParameterView::fieldIncrement() {
+    ParameterField* field = getSelectedField();
+    if(field != NULL) {
+        field->increment();
+        updateDataFromField(field);
+        render();
+    }
+}
+
+void ParameterView::fieldDecrement() {
+    ParameterField* field = getSelectedField();
+    if(field != NULL) {
+        field->decrement();
+        updateDataFromField(field);
+        render();
     }
 }
 
@@ -278,6 +288,19 @@ void ParameterView::updateSelectedEvent() {
             eventFields.get(i)->setEnabled(false);
         }
     }
+}
+
+void ParameterView::updateDataFromField(ParameterField* field) {
+    if(field == &eventNoteField) {
+        selectedEvent->pitch = eventNoteField.getValue();
+    } else if(field == &eventVelocityField) {
+        selectedEvent->velocity = eventVelocityField.getValue();
+    } else if(field == &eventGateField) {
+        selectedEvent->gate = eventGateField.getValue();
+    } else if(field == &eventDelayField) {
+        selectedEvent->delay = eventDelayField.getValue();
+    }
+
 }
 
 void ParameterView::addEvent() {

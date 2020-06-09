@@ -12,6 +12,7 @@ public:
     void render(Display& display, uint8_t row, bool selected);
 
     void setValue(uint16_t _value) { value = _value; }
+    uint16_t getValue() { return value; }
 
 private:
     uint16_t value;
