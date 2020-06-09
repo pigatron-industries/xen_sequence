@@ -74,7 +74,11 @@ void ParameterView::handleEvent(Event event) {
             render();
             break;
         case Event::KEY_ADD_DEL:
-            addEvent();
+            if(selectedEvent == NULL) {
+                addEvent();
+            } else {
+                deleteEvent();
+            }
             render();
             break;
         default:
@@ -305,5 +309,10 @@ void ParameterView::updateDataFromField(ParameterField* field) {
 
 void ParameterView::addEvent() {
     appData.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
+    updateSelectedEvent();
+}
+
+void ParameterView::deleteEvent() {
+    appData.deleteEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
     updateSelectedEvent();
 }

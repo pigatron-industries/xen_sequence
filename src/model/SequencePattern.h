@@ -16,6 +16,7 @@ public:
     LinkedList<SequenceEvent*>& getEvents() { return events; }
     SequenceEvent* getEvent(uint8_t index) { return events.get(index); };
     void addEvent(uint8_t index, SequenceEvent* event);
+    void deleteEvent(uint8_t index);
 
 private:
     uint8_t id;

@@ -106,6 +106,18 @@ SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_
     return event;
 }
 
+void AppData::deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
+    SequenceBar* bar = getBar(barIndex);
+    if(bar == NULL) {
+        return;
+    }
+    SequencePattern* pattern = bar->getPattern(channelIndex);
+    if(pattern == NULL) {
+        return;
+    }
+    pattern->deleteEvent(tickIndex);
+}
+
 SequenceChannel& AppData::getChannel(uint8_t index) {
     return sequence.getChannel(index);
 }

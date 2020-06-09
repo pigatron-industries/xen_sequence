@@ -97,6 +97,7 @@ private:
     void updateDataFromField(ParameterField* field);
 
     void addEvent();
+    void deleteEvent();
 };
 
 #endif
