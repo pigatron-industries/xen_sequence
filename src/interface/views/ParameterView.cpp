@@ -17,7 +17,7 @@ ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatri
     eventFields.add(&eventDelayField);
 
     sequenceMatrixView.setPlayCursor(false);
-    setParameterViewMode(PARAM_MODE_CHANNEL);
+    setParameterViewMode(PARAM_MODE_BAR);
 }
 
 void ParameterView::render() {
@@ -48,36 +48,41 @@ void ParameterView::renderFields() {
 void ParameterView::handleEvent(Event event) {
     ParameterField* field = getSelectedField();
     switch(event) {
-        case STICK_UP:
+        case Event::STICK_UP:
             cursorUp();
             break;
-        case STICK_DOWN:
+        case Event::STICK_DOWN:
             cursorDown();
             break;
-        case STICK_LEFT:
+        case Event::STICK_LEFT:
             cursorLeft();
             break;
-        case STICK_RIGHT:
+        case Event::STICK_RIGHT:
             cursorRight();
             break;
-        case STICK_PRESS:
+        case Event::STICK_PRESS:
             cycleSelectionMode();
             render();
             break;
-        case DATA_INCREMENT:
+        case Event::DATA_INCREMENT:
             if(field != NULL) {
                 field->increment();
                 render();
             }
             break;
-        case DATA_DECREMENT:
+        case Event::DATA_DECREMENT:
             if(field != NULL) {
                 field->decrement();
                 render();
             }
             break;
-        case DATA_PRESS:
+        case Event::DATA_PRESS:
             cycleParameterViewMode();
+            render();
+            break;
+        case Event::KEY_ADD_DEL:
+            Serial.println("KEY_ADD_DEL");
+            addEvent();
             render();
             break;
         default:
@@ -268,8 +273,14 @@ void ParameterView::updateSelectedEvent() {
             eventFields.get(i)->setEnabled(true);
         }
     } else {
+        setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(false);
         }
     }
+}
+
+void ParameterView::addEvent() {
+    appData.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
+    updateSelectedEvent();
 }

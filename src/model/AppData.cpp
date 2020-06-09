@@ -68,6 +68,16 @@ SequencePattern* AppData::newPattern() {
     return pattern;
 }
 
+SequencePattern* AppData::newPattern(uint16_t barIndex, uint8_t channelIndex) {
+    SequencePattern* pattern = newPattern();
+    SequenceBar* bar = getBar(barIndex);
+    if(bar == NULL) {
+        bar = newBar(barIndex);
+    }
+    bar->setPattern(channelIndex, pattern);
+    return pattern;
+}
+
 uint8_t AppData::getUnusedPatternId() {
     for(uint8_t id = 1; id < MAX_PATTERN_ID; id++) {
         if(getPatternById(id) == NULL) {
@@ -79,6 +89,20 @@ uint8_t AppData::getUnusedPatternId() {
 SequenceEvent* AppData::newEvent(uint8_t tick, SequencePattern* pattern) {
     SequenceEvent* event = new SequenceEvent();
     pattern->addEvent(tick, event);
+    return event;
+}
+
+SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
+    SequenceBar* bar = getBar(barIndex);
+    if(bar == NULL) {
+        bar = newBar(barIndex);
+    }
+    SequencePattern* pattern = bar->getPattern(channelIndex);
+    if(pattern == NULL) {
+        pattern = newPattern(barIndex, channelIndex);
+    }
+    SequenceEvent* event = new SequenceEvent();
+    pattern->addEvent(tickIndex, event);
     return event;
 }
 

@@ -2,11 +2,11 @@
 
 
 
-InterfaceController::InterfaceController(AppData& _appData, Display& _display, Matrix& _matrix) :
+InterfaceController::InterfaceController(AppData& _appData, Display& _display, LedMatrix& _ledMatrix) :
     appData(_appData),
     display(_display),
-    matrix(_matrix),
-    sequenceMatrixView(_appData, _matrix),
+    ledMatrix(_ledMatrix),
+    sequenceMatrixView(_appData, _ledMatrix),
     sequenceView(_appData, _display, sequenceMatrixView),
     parameterView(_appData, _display, sequenceMatrixView) {
       currentView = &sequenceView;

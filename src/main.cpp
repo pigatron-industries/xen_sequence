@@ -4,7 +4,7 @@
 
 #include "lib/task/TaskManager.h"
 #include "lib/drivers/Display.h"
-#include "lib/drivers/Matrix.h"
+#include "lib/drivers/LedMatrix.h"
 #include "model/AppData.h"
 #include "interface/InputTask.h"
 #include "interface/InterfaceController.h"
@@ -13,13 +13,13 @@
 
 // hardware
 Display display = Display();
-Matrix matrix = Matrix();
+LedMatrix ledMatrix = LedMatrix();
 
 // data
 AppData appData = AppData();
 
 // user interface
-InterfaceController interfaceController = InterfaceController(appData, display, matrix);
+InterfaceController interfaceController = InterfaceController(appData, display, ledMatrix);
 InputTask inputTask = InputTask(interfaceController);
 
 
@@ -33,7 +33,7 @@ void setup() {
     Serial.println();
 
     appData.populateTestData();
-    matrix.init();
+    ledMatrix.init();
     inputTask.init();
     interfaceController.init();
 }

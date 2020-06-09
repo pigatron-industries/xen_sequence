@@ -1,5 +1,5 @@
-#ifndef Matrix_h
-#define Matrix_h
+#ifndef LedMatrix_h
+#define LedMatrix_h
 
 #include <FastLED.h>
 
@@ -7,10 +7,10 @@
 #define MATRIX_COLS 16
 #define MATRIX_LEDS MATRIX_ROWS * MATRIX_COLS
 
-class Matrix {
+class LedMatrix {
 
 public:
-    Matrix();
+    LedMatrix();
     void init();
     void setPixel(uint8_t x, uint8_t y, CRGB colour);
     CRGB getPixel(uint8_t x, uint8_t y);

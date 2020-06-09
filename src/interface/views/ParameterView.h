@@ -91,6 +91,8 @@ private:
     void updateSelectedBar();
     void updateSelectedChannel();
     void updateSelectedEvent();
+
+    void addEvent();
 };
 
 #endif

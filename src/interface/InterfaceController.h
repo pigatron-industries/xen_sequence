@@ -13,7 +13,7 @@
 class InterfaceController {
 
 public:
-    InterfaceController(AppData& _appData, Display& _display, Matrix& _matrix);
+    InterfaceController(AppData& _appData, Display& _display, LedMatrix& _ledMatrix);
     void init();
     void render();
     void handleEvent(Event event);
@@ -21,7 +21,7 @@ public:
 private:
     AppData& appData;
     Display& display;
-    Matrix& matrix;
+    LedMatrix& ledMatrix;
 
     View* currentView;
 

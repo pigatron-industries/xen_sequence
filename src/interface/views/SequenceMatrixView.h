@@ -4,7 +4,7 @@
 #include <inttypes.h>
 
 #include "../../model/AppData.h"
-#include "../../lib/drivers/Matrix.h"
+#include "../../lib/drivers/LedMatrix.h"
 
 enum class SequenceMatrixSelectionMode {
     SELECT_NONE,
@@ -15,7 +15,7 @@ enum class SequenceMatrixSelectionMode {
 class SequenceMatrixView {
 
 public:
-    SequenceMatrixView(AppData& _appData, Matrix& _matrix);
+    SequenceMatrixView(AppData& _appData, LedMatrix& _ledMatrix);
     void render();
     void cursorUp();
     void cursorDown();
@@ -32,7 +32,7 @@ public:
 
 private:
     AppData& appData;
-    Matrix& matrix;
+    LedMatrix& ledMatrix;
     SequencePattern* patterns[SEQUENCE_CHANNELS];
 
     uint16_t bar;

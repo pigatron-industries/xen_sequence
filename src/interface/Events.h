@@ -9,7 +9,11 @@ enum Event {
     STICK_PRESS,
     DATA_INCREMENT,
     DATA_DECREMENT,
-    DATA_PRESS
+    DATA_PRESS,
+    KEY_BACK,
+    KEY_ADD_DEL,
+    KEY_COPY,
+    KEY_PASTE
 };
 
 #endif

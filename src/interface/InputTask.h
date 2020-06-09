@@ -8,6 +8,7 @@
 #include "../lib/drivers/Switch.h"
 #include "../lib/drivers/AnalogStick.h"
 #include "../lib/drivers/RotaryEncoder.h"
+#include "Keypad.h"
 
 
 class InputTask : public Task {
@@ -24,6 +25,7 @@ private:
     Switch analogStickSwitch;
     RotaryEncoder encoder;
     Switch encoderSwitch;
+    Keypad keypad;
 
 };
 

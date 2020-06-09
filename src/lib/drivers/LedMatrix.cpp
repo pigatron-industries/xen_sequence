@@ -1,13 +1,13 @@
-#include "Matrix.h"
+#include "LedMatrix.h"
 
 #include "../../hwconfig.h"
 
 #define BRIGHTNESS 2
 
-Matrix::Matrix() {
+LedMatrix::LedMatrix() {
 }
 
-void Matrix::init() {
+void LedMatrix::init() {
     FastLED.addLeds<APA102, MATRIX_DATA_PIN, MATRIX_CLOCK_PIN, BGR>(leds, MATRIX_LEDS);
     FastLED.setBrightness(BRIGHTNESS);
     for(int i = 0; i < MATRIX_LEDS; i++) {
@@ -16,18 +16,18 @@ void Matrix::init() {
     FastLED.show();
 }
 
-void Matrix::update() {
+void LedMatrix::update() {
     FastLED.show();
 }
 
-void Matrix::setPixel(uint8_t x, uint8_t y, CRGB colour) {
+void LedMatrix::setPixel(uint8_t x, uint8_t y, CRGB colour) {
     uint8_t led = xyToLedNum(x, y);
     if(led >= 0 && led < MATRIX_LEDS) {
         leds[led] = colour;
     }
 }
 
-CRGB Matrix::getPixel(uint8_t x, uint8_t y) {
+CRGB LedMatrix::getPixel(uint8_t x, uint8_t y) {
     uint8_t led = xyToLedNum(x, y);
     if(led >= 0 && led < MATRIX_LEDS) {
         return leds[led];
@@ -36,11 +36,11 @@ CRGB Matrix::getPixel(uint8_t x, uint8_t y) {
     }
 }
 
-uint8_t Matrix::xyToLedNum(uint8_t x, uint8_t y) {
+uint8_t LedMatrix::xyToLedNum(uint8_t x, uint8_t y) {
     return (MATRIX_LEDS-1) - ((y * MATRIX_ROWS) + x);
 }
 
-void Matrix::test() {
+void LedMatrix::test() {
     setPixel(7, 7, CRGB::Red);
     update();
 }
