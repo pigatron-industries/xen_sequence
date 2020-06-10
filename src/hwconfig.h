@@ -14,6 +14,11 @@
 #define ENCODER_PIN2 4
 #define ENCODER_SWITCH_PIN 5
 
+#define KEY_ROWS 1
+#define KEY_COLS 4
+#define KEY_ROW_PINS {28};
+#define KEY_COL_PINS {24, 25, 26, 27};
+
 // Analog Pins
 #define STICK_X_PIN 2
 #define STICK_Y_PIN 3

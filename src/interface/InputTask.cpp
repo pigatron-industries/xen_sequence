@@ -5,16 +5,11 @@
 
 #include "../hwconfig.h"
 
-#define KEY_ROWS 1
-#define KEY_COLS 4
-
+uint8_t rowPins[KEY_ROWS] = KEY_ROW_PINS;
+uint8_t colPins[KEY_COLS] = KEY_COL_PINS;
 char keys[KEY_ROWS][KEY_COLS] = {
     {KEY_BACK, KEY_ADD_DEL, KEY_COPY, KEY_PASTE}
 };
-
-uint8_t rowPins[KEY_ROWS] = {28};
-uint8_t colPins[KEY_COLS] = {24, 25, 26, 27};
-
 
 InputTask::InputTask(InterfaceController& _interface) :
     interface(_interface),
