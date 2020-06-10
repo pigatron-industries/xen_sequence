@@ -4,6 +4,7 @@
 #include <inttypes.h>
 
 #include "Clock.h"
+#include "SequencerEventListener.h"
 #include "../model/AppData.h"
 
 enum SequencePlayMode {
@@ -17,6 +18,7 @@ class Sequencer {
 
 public:
     Sequencer(AppData& _appData);
+    void addEventListener(SequencerEventListener* eventListener);
     void execute();
 
     void play();
@@ -26,10 +28,13 @@ public:
     bool isPlaying() { return playing; }
 
     void setBar(uint16_t _barIndex);
+    uint16_t getBarIndex() { return barIndex; }
+    uint8_t getTickIndex() { return tickIndex; }
 
 private:
     AppData& appData;
     Clock clock;
+    LinkedList<SequencerEventListener*> eventListeners;
 
     bool playing;
     SequencePlayMode playMode;
@@ -40,6 +45,7 @@ private:
 
     void tick();
     void executeTickEvents();
+    void notifyTickEvent();
 
 };
 

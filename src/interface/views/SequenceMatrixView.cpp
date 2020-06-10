@@ -3,13 +3,14 @@
 #define OFF_PIXEL CRGB::Black
 #define DATA_PIXEL CRGB(0x000088)
 #define SELECT_CURSOR_PIXEL CRGB(0x880000)
-#define SELECT_CURSOR_ACTIVE_PIXEL CRGB(0xFF0000)
+#define SELECT_CURSOR_ACTIVE_PIXEL CRGB(0x880000)
 #define PLAY_CURSOR_PIXEL CRGB(0x008800)
 
 
 
-SequenceMatrixView::SequenceMatrixView(AppData& _appData, LedMatrix& _ledMatrix):
+SequenceMatrixView::SequenceMatrixView(AppData& _appData, Sequencer& _sequencer, LedMatrix& _ledMatrix):
     appData(_appData),
+    sequencer(_sequencer),
     ledMatrix(_ledMatrix) {
 }
 
@@ -17,13 +18,12 @@ void SequenceMatrixView::render() {
     renderData();
     renderSelectCursor();
     renderPlayCursor();
-    Serial.println("SequenceMatrixView::render()");
     ledMatrix.update();
 }
 
 void SequenceMatrixView::renderData() {
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
-        SequencePattern* pattern = appData.getPattern(bar, channel);
+        SequencePattern* pattern = appData.getPattern(barIndex, channel);
         if(pattern != NULL) {
             for(uint8_t tick = 0; tick < MATRIX_COLS; tick++) {
                 if(pattern->getEvents().get(tick) != NULL) {
@@ -55,7 +55,9 @@ void SequenceMatrixView::renderSelectCursor() {
 }
 
 void SequenceMatrixView::renderPlayCursor() {
-    if(showPlayCursor) {
+    Serial.println("renderPlayCursor");
+    uint8_t playCursorTick = sequencer.getTickIndex();
+    if(sequencer.isPlaying() && sequencer.getBarIndex() == barIndex) {
         for(int channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
             CRGB colour = ledMatrix.getPixel(channel, playCursorTick);
             colour += PLAY_CURSOR_PIXEL;
@@ -64,8 +66,8 @@ void SequenceMatrixView::renderPlayCursor() {
     }
 }
 
-void SequenceMatrixView::setBar(int _bar) {
-    bar = _bar;
+void SequenceMatrixView::setBar(int _barIndex) {
+    barIndex = _barIndex;
 }
 
 void SequenceMatrixView::setPlayCursor(bool _showPlayCursor) {

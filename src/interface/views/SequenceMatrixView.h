@@ -5,6 +5,7 @@
 
 #include "../../model/AppData.h"
 #include "../../lib/drivers/LedMatrix.h"
+#include "../../modules/Sequencer.h"
 
 enum class SequenceMatrixSelectionMode {
     SELECT_NONE,
@@ -15,14 +16,14 @@ enum class SequenceMatrixSelectionMode {
 class SequenceMatrixView {
 
 public:
-    SequenceMatrixView(AppData& _appData, LedMatrix& _ledMatrix);
+    SequenceMatrixView(AppData& _appData, Sequencer& _sequencer, LedMatrix& _ledMatrix);
     void render();
     void cursorUp();
     void cursorDown();
     void cursorLeft();
     void cursorRight();
 
-    void setBar(int _bar);
+    void setBar(int _barIndex);
     void setSelectionMode(SequenceMatrixSelectionMode _selectionMode) { selectionMode = _selectionMode; }
     void setPlayCursor(bool _showPlayCursor);
     void setSelectionActive(bool _selectionActive) { selectionActive = _selectionActive; }
@@ -32,10 +33,11 @@ public:
 
 private:
     AppData& appData;
+    Sequencer& sequencer;
     LedMatrix& ledMatrix;
     SequencePattern* patterns[SEQUENCE_CHANNELS];
 
-    uint16_t bar;
+    uint16_t barIndex;
     SequenceMatrixSelectionMode selectionMode = SequenceMatrixSelectionMode::SELECT_NONE;
     bool showPlayCursor = false;
     bool selectionActive = false;

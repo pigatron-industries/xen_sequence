@@ -5,19 +5,21 @@
 
 #include "../model/AppData.h"
 #include "../modules/Sequencer.h"
+#include "../modules/SequencerEventListener.h"
 #include "Events.h"
 #include "View.h"
 #include "./views/SequenceView.h"
 #include "./views/ParameterView.h"
 #include "./views/SequenceMatrixView.h"
 
-class InterfaceController {
+class InterfaceController : public SequencerEventListener {
 
 public:
     InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix);
     void init();
     void render();
     void handleEvent(Event event);
+    virtual void onTick();
 
 private:
     AppData& appData;

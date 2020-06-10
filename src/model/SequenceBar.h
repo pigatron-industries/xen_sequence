@@ -17,7 +17,7 @@ public:
 
 private:
     SequencePattern* patterns[SEQUENCE_CHANNELS];
-    uint8_t length = 8;
+    uint8_t length = 16;
     uint8_t speed = 120;
 
 };

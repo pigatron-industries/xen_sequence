@@ -20,7 +20,9 @@ enum Event {
     KEY_PLAY_STOP,
     KEY_RECORD,
     KEY_PREV,
-    KEY_NEXT
+    KEY_NEXT,
+    //
+    SEQUENCER_TICK
 };
 
 #endif

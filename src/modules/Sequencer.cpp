@@ -9,6 +9,10 @@ Sequencer::Sequencer(AppData& _appData) :
     setBar(0);
 }
 
+void Sequencer::addEventListener(SequencerEventListener* eventListener) {
+    eventListeners.add(eventListener);
+}
+
 void Sequencer::execute() {
     if(clock.update()) {
         if(clock.tick()) {
@@ -22,6 +26,7 @@ void Sequencer::execute() {
 
 void Sequencer::executeTickEvents() {
     Serial.println(tickIndex);
+    notifyTickEvent();
 }
 
 void Sequencer::play() {
@@ -65,5 +70,11 @@ void Sequencer::tick() {
                 }
             }
         }
+    }
+}
+
+void Sequencer::notifyTickEvent() {
+    for(uint8_t i = 0; i < eventListeners.size(); i++) {
+        eventListeners.get(i)->onTick();
     }
 }

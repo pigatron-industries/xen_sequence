@@ -191,7 +191,7 @@ void ParameterView::setBar(uint16_t _barIndex) {
 };
 
 ParameterField* ParameterView::getSelectedField() {
-    if(selectedFieldIndex >= 0) {
+    if(selectedFieldIndex >= 0 && visibleFields->size() > selectedFieldIndex) {
         return visibleFields->get(selectedFieldIndex);
     } else {
         return NULL;
@@ -295,16 +295,17 @@ void ParameterView::updateSelectedEvent() {
 }
 
 void ParameterView::updateDataFromField(ParameterField* field) {
-    if(field == &eventNoteField) {
-        selectedEvent->pitch = eventNoteField.getValue();
-    } else if(field == &eventVelocityField) {
-        selectedEvent->velocity = eventVelocityField.getValue();
-    } else if(field == &eventGateField) {
-        selectedEvent->gate = eventGateField.getValue();
-    } else if(field == &eventDelayField) {
-        selectedEvent->delay = eventDelayField.getValue();
+    if(selectedEvent != NULL) {
+        if(field == &eventNoteField) {
+            selectedEvent->pitch = eventNoteField.getValue();
+        } else if(field == &eventVelocityField) {
+            selectedEvent->velocity = eventVelocityField.getValue();
+        } else if(field == &eventGateField) {
+            selectedEvent->gate = eventGateField.getValue();
+        } else if(field == &eventDelayField) {
+            selectedEvent->delay = eventDelayField.getValue();
+        }
     }
-
 }
 
 void ParameterView::addEvent() {

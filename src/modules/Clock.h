@@ -18,7 +18,7 @@ public:
     void setTicksPerMinute(float tpm);
 
 private:
-    float ticksPerMinute = 120;
+    float ticksPerMinute;
     uint16_t pulsesPerTick = 96;
     long pulseTime;
 

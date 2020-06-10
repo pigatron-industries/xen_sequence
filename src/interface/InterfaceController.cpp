@@ -7,10 +7,11 @@ InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequence
     sequencer(_sequencer),
     display(_display),
     ledMatrix(_ledMatrix),
-    sequenceMatrixView(_appData, _ledMatrix),
+    sequenceMatrixView(_appData, _sequencer, _ledMatrix),
     sequenceView(_appData, _display, sequenceMatrixView),
     parameterView(_appData, _display, sequenceMatrixView) {
       currentView = &sequenceView;
+      sequencer.addEventListener(this);
 }
 
 void InterfaceController::init() {
@@ -25,26 +26,32 @@ void InterfaceController::render() {
 
 void InterfaceController::handleEvent(Event event) {
     switch(event) {
-        case STICK_PRESS:
+        case Event::STICK_PRESS:
             if(currentView == &sequenceView) {
                 switchToParameterView();
             }
             break;
-        case KEY_BACK:
+        case Event::KEY_BACK:
             if(currentView == &parameterView) {
                 switchToSequenceView();
             }
-        case KEY_PLAY_STOP:
+        case Event::KEY_PLAY_STOP:
             if(sequencer.isPlaying()) {
                 sequencer.stop();
             } else {
                 sequencer.play();
             }
+        case Event::SEQUENCER_TICK:
+            sequenceMatrixView.render();
         default:
             break;
     }
 
     currentView->handleEvent(event);
+}
+
+void InterfaceController::onTick() {
+    handleEvent(Event::SEQUENCER_TICK);
 }
 
 void InterfaceController::switchToParameterView() {
