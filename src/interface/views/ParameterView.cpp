@@ -4,8 +4,9 @@
 
 #include "../Events.h"
 
-ParameterView::ParameterView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
+ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
+    sequencer(_sequencer),
     display(_display),
     sequenceMatrixView(_sequenceMatrixView) {
     barFields.add(&barLengthField);
@@ -304,6 +305,12 @@ void ParameterView::updateDataFromField(ParameterField* field) {
             selectedEvent->gate = eventGateField.getValue();
         } else if(field == &eventDelayField) {
             selectedEvent->delay = eventDelayField.getValue();
+        }
+    }
+    if(field == &barSpeedField) {
+        bar->setSpeed(barSpeedField.getValue());
+        if(sequencer.getBarIndex() == barIndex) {
+            sequencer.setBar(barIndex);
         }
     }
 }

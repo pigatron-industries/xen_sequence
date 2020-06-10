@@ -55,7 +55,6 @@ void SequenceMatrixView::renderSelectCursor() {
 }
 
 void SequenceMatrixView::renderPlayCursor() {
-    Serial.println("renderPlayCursor");
     uint8_t playCursorTick = sequencer.getTickIndex();
     if(sequencer.isPlaying() && sequencer.getBarIndex() == barIndex) {
         for(int channel = 0; channel < SEQUENCE_CHANNELS; channel++) {

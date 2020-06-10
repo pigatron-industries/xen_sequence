@@ -9,7 +9,7 @@ InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequence
     ledMatrix(_ledMatrix),
     sequenceMatrixView(_appData, _sequencer, _ledMatrix),
     sequenceView(_appData, _display, sequenceMatrixView),
-    parameterView(_appData, _display, sequenceMatrixView) {
+    parameterView(_appData, _sequencer, _display, sequenceMatrixView) {
       currentView = &sequenceView;
       sequencer.addEventListener(this);
 }

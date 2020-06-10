@@ -37,7 +37,7 @@ enum Parameter {
 class ParameterView : public View {
 
 public:
-    ParameterView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView);
+    ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView);
     virtual void render();
     virtual void handleEvent(Event event);
 
@@ -45,6 +45,7 @@ public:
 
 private:
     AppData& appData;
+    Sequencer& sequencer;
     Display& display;
     SequenceMatrixView& sequenceMatrixView;
 
@@ -61,7 +62,7 @@ private:
 
     LinkedList<ParameterField*> barFields;
     IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
-    IntegerParameterField barSpeedField = IntegerParameterField("SPEED", 30, 480, " BPM");
+    IntegerParameterField barSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
     LinkedList<ParameterField*> channelFields;
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
     LinkedList<ParameterField*> eventFields;

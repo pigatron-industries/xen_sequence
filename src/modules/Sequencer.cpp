@@ -25,7 +25,6 @@ void Sequencer::execute() {
 }
 
 void Sequencer::executeTickEvents() {
-    Serial.println(tickIndex);
     notifyTickEvent();
 }
 
@@ -53,6 +52,7 @@ void Sequencer::reset() {
 void Sequencer::setBar(uint16_t _barIndex) {
     barIndex = _barIndex;
     currentBar = appData.getBar(barIndex);
+    clock.setTicksPerMinute(currentBar->getSpeed());
 }
 
 void Sequencer::tick() {
