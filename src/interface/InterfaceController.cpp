@@ -2,8 +2,9 @@
 
 
 
-InterfaceController::InterfaceController(AppData& _appData, Display& _display, LedMatrix& _ledMatrix) :
+InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix) :
     appData(_appData),
+    sequencer(_sequencer),
     display(_display),
     ledMatrix(_ledMatrix),
     sequenceMatrixView(_appData, _ledMatrix),
@@ -32,6 +33,12 @@ void InterfaceController::handleEvent(Event event) {
         case KEY_BACK:
             if(currentView == &parameterView) {
                 switchToSequenceView();
+            }
+        case KEY_PLAY_STOP:
+            if(sequencer.isPlaying()) {
+                sequencer.stop();
+            } else {
+                sequencer.play();
             }
         default:
             break;

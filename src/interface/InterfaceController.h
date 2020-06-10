@@ -4,6 +4,7 @@
 #include <inttypes.h>
 
 #include "../model/AppData.h"
+#include "../modules/Sequencer.h"
 #include "Events.h"
 #include "View.h"
 #include "./views/SequenceView.h"
@@ -13,13 +14,15 @@
 class InterfaceController {
 
 public:
-    InterfaceController(AppData& _appData, Display& _display, LedMatrix& _ledMatrix);
+    InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix);
     void init();
     void render();
     void handleEvent(Event event);
 
 private:
     AppData& appData;
+    Sequencer& sequencer;
+
     Display& display;
     LedMatrix& ledMatrix;
 

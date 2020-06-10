@@ -8,7 +8,7 @@
 #include "model/AppData.h"
 #include "interface/InputTask.h"
 #include "interface/InterfaceController.h"
-
+#include "modules/Sequencer.h"
 
 
 // hardware
@@ -18,10 +18,12 @@ LedMatrix ledMatrix = LedMatrix();
 // data
 AppData appData = AppData();
 
-// user interface
-InterfaceController interfaceController = InterfaceController(appData, display, ledMatrix);
-InputTask inputTask = InputTask(interfaceController);
+// sequencer
+Sequencer sequencer = Sequencer(appData);
 
+// user interface
+InterfaceController interfaceController = InterfaceController(appData, sequencer, display, ledMatrix);
+InputTask inputTask = InputTask(interfaceController);
 
 
 void setup() {
@@ -32,12 +34,12 @@ void setup() {
     Serial.println("=========================================");
     Serial.println();
 
-    appData.populateTestData();
     ledMatrix.init();
     inputTask.init();
     interfaceController.init();
 }
 
 void loop() {
+    sequencer.execute();
     inputTask.execute();
 }

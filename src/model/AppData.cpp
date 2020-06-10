@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-void AppData::populateTestData() {
+AppData::AppData() {
     SequencePattern* pattern1 = newPattern();
     SequencePattern* pattern3 = newPattern();
 

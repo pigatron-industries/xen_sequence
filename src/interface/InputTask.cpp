@@ -8,7 +8,7 @@
 uint8_t rowPins[KEY_ROWS] = KEY_ROW_PINS;
 uint8_t colPins[KEY_COLS] = KEY_COL_PINS;
 char keys[KEY_ROWS][KEY_COLS] = {
-    {KEY_BACK, KEY_ADD_DEL, KEY_COPY, KEY_PASTE}
+    {KEY_BACK, KEY_ADD_DEL, KEY_PLAY_STOP, KEY_RECORD}
 };
 
 InputTask::InputTask(InterfaceController& _interface) :
@@ -60,7 +60,6 @@ void InputTask::execute() {
 
     char key = keypad.getKey();
     if (key != NO_KEY) {
-        Serial.println(static_cast<int>(key));
         interface.handleEvent(static_cast<Event>(key));
     }
 }

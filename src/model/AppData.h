@@ -7,6 +7,8 @@
 class AppData {
 
 public:
+    AppData();
+
     Sequence& getSequence() { return sequence; }
     LinkedList<SequencePattern*>& getPatterns() { return patterns; }
 

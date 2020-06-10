@@ -8,7 +8,9 @@ class Timer {
 
 public:
     Timer();
+    void setWaitTime(unsigned long waitTime) { _waitTime = waitTime; }
     void start(unsigned long waitTime);
+    void start();
     void stop();
     bool isRunning();
     bool isFinished();

@@ -12,6 +12,13 @@ void Timer::start(unsigned long waitTime) {
     _startTime = micros();
 }
 
+void Timer::start() {
+    _running = true;
+    _interrupted = true;
+    _startTime = micros();
+}
+
+
 void Timer::stop() {
     _running = false;
     _interrupted = true;
