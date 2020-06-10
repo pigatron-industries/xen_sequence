@@ -29,6 +29,10 @@ void InterfaceController::handleEvent(Event event) {
                 switchToParameterView();
             }
             break;
+        case KEY_BACK:
+            if(currentView == &parameterView) {
+                switchToSequenceView();
+            }
         default:
             break;
     }
