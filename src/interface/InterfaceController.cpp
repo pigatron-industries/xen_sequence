@@ -35,12 +35,14 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
             if(currentView == &parameterView) {
                 switchToSequenceView();
             }
+            break;
         case InterfaceEventType::KEY_PLAY_STOP:
             if(sequencer.isPlaying()) {
                 sequencer.stop();
             } else {
                 sequencer.play();
             }
+            break;
         case InterfaceEventType::SEQUENCER_TICK:
             sequenceMatrixView.render();
         default:
