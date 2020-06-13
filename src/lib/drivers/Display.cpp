@@ -2,7 +2,7 @@
 
 #include <ssd1351.h>
 
-ssd1351::SSD1351<ssd1351::HighColor, ssd1351::SingleBuffer, 128, 128> oled;
+ssd1351::SSD1351<ssd1351::HighColor, ssd1351::NoBuffer, 128, 128> oled;
 
 ssd1351::HighColor c(const Colour &colour) {
     return ssd1351::HighColor(colour.r, colour.g, colour.b);
@@ -69,7 +69,7 @@ void Display::setFont(const GFXfont &new_font) {
     oled.setFont(new_font);
 }
 
-void Display::drawText(const char *str, int16_t x, int16_t y, uint8_t align=ALIGN_LEFT) {
+void Display::drawText(const char *str, int16_t x, int16_t y, uint8_t align) {
     oled.drawText(str, x, y, align);
 }
 // uint16_t getTextWidth(const char *str);

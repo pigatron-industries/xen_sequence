@@ -5,11 +5,11 @@ BooleanParameterField::BooleanParameterField(const char* _name) :
      {
 }
 
-void BooleanParameterField::increment() {
+void BooleanParameterField::increment(int amount) {
     value = !value;
 }
 
-void BooleanParameterField::decrement() {
+void BooleanParameterField::decrement(int amount) {
     value = !value;
 }
 

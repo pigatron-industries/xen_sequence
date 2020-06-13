@@ -24,24 +24,24 @@ void InterfaceController::render() {
     currentView->render();
 }
 
-void InterfaceController::handleEvent(Event event) {
-    switch(event) {
-        case Event::STICK_PRESS:
+void InterfaceController::handleEvent(InterfaceEvent event) {
+    switch(event.eventType) {
+        case InterfaceEventType::STICK_PRESS:
             if(currentView == &sequenceView) {
                 switchToParameterView();
             }
             break;
-        case Event::KEY_BACK:
+        case InterfaceEventType::KEY_BACK:
             if(currentView == &parameterView) {
                 switchToSequenceView();
             }
-        case Event::KEY_PLAY_STOP:
+        case InterfaceEventType::KEY_PLAY_STOP:
             if(sequencer.isPlaying()) {
                 sequencer.stop();
             } else {
                 sequencer.play();
             }
-        case Event::SEQUENCER_TICK:
+        case InterfaceEventType::SEQUENCER_TICK:
             sequenceMatrixView.render();
         default:
             break;
@@ -51,7 +51,7 @@ void InterfaceController::handleEvent(Event event) {
 }
 
 void InterfaceController::onTick() {
-    handleEvent(Event::SEQUENCER_TICK);
+    handleEvent(InterfaceEvent(SEQUENCER_TICK));
 }
 
 void InterfaceController::switchToParameterView() {

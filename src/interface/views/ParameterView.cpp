@@ -2,8 +2,6 @@
 
 #include <Fonts/Org_01.h>
 
-#include "../Events.h"
-
 ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
     sequencer(_sequencer),
@@ -40,41 +38,45 @@ void ParameterView::renderMode() {
 }
 
 void ParameterView::renderFields() {
-    for(int row = 0; row < visibleFields->size(); row++) {
-        bool selected = selectedFieldIndex == row;
-        visibleFields->get(row)->render(display, row+1, selected);
+    for(uint8_t row = 0; row < visibleFields->size(); row++) {
+        renderField(row);
     }
 }
 
-void ParameterView::handleEvent(Event event) {
-    switch(event) {
-        case Event::STICK_UP:
+void ParameterView::renderField(uint8_t row) {
+    bool selected = selectedFieldIndex == row;
+    visibleFields->get(row)->render(display, row+1, selected);
+}
+
+void ParameterView::handleEvent(InterfaceEvent event) {
+    switch(event.eventType) {
+        case InterfaceEventType::STICK_UP:
             cursorUp();
             break;
-        case Event::STICK_DOWN:
+        case InterfaceEventType::STICK_DOWN:
             cursorDown();
             break;
-        case Event::STICK_LEFT:
+        case InterfaceEventType::STICK_LEFT:
             cursorLeft();
             break;
-        case Event::STICK_RIGHT:
+        case InterfaceEventType::STICK_RIGHT:
             cursorRight();
             break;
-        case Event::STICK_PRESS:
+        case InterfaceEventType::STICK_PRESS:
             cycleSelectionMode();
             render();
             break;
-        case Event::DATA_INCREMENT:
-            fieldIncrement();
+        case InterfaceEventType::DATA_INCREMENT:
+            fieldIncrement(event.data);
             break;
-        case Event::DATA_DECREMENT:
-            fieldDecrement();
+        case InterfaceEventType::DATA_DECREMENT:
+            fieldDecrement(event.data);
             break;
-        case Event::DATA_PRESS:
+        case InterfaceEventType::DATA_PRESS:
             cycleParameterViewMode();
             render();
             break;
-        case Event::KEY_ADD_DEL:
+        case InterfaceEventType::KEY_ADD_DEL:
             if(selectedEvent == NULL) {
                 addEvent();
             } else {
@@ -153,21 +155,21 @@ void ParameterView::cursorRight() {
     }
 }
 
-void ParameterView::fieldIncrement() {
+void ParameterView::fieldIncrement(int amount) {
     ParameterField* field = getSelectedField();
     if(field != NULL) {
-        field->increment();
+        field->increment(amount);
         updateDataFromField(field);
-        render();
+        renderField(selectedFieldIndex);
     }
 }
 
-void ParameterView::fieldDecrement() {
+void ParameterView::fieldDecrement(int amount) {
     ParameterField* field = getSelectedField();
     if(field != NULL) {
-        field->decrement();
+        field->decrement(amount);
         updateDataFromField(field);
-        render();
+        renderField(selectedFieldIndex);
     }
 }
 

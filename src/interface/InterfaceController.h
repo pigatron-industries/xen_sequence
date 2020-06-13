@@ -6,7 +6,7 @@
 #include "../model/AppData.h"
 #include "../modules/Sequencer.h"
 #include "../modules/SequencerEventListener.h"
-#include "Events.h"
+#include "InterfaceEvent.h"
 #include "View.h"
 #include "./views/SequenceView.h"
 #include "./views/ParameterView.h"
@@ -18,7 +18,7 @@ public:
     InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix);
     void init();
     void render();
-    void handleEvent(Event event);
+    void handleEvent(InterfaceEvent event);
     virtual void onTick();
 
 private:

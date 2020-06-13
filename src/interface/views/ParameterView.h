@@ -39,7 +39,7 @@ class ParameterView : public View {
 public:
     ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView);
     virtual void render();
-    virtual void handleEvent(Event event);
+    virtual void handleEvent(InterfaceEvent event);
 
     void setBar(uint16_t _barIndex);
 
@@ -74,6 +74,7 @@ private:
     // rendering
     void renderMode();
     void renderFields();
+    void renderField(uint8_t row);
 
     // events
     void cursorUp();
@@ -81,8 +82,8 @@ private:
     void cursorLeft();
     void cursorRight();
 
-    void fieldIncrement();
-    void fieldDecrement();
+    void fieldIncrement(int amount);
+    void fieldDecrement(int amount);
 
     void cycleSelectionMode();
     void setSelectionMode(ParameterViewSelectionMode _selectionMode);

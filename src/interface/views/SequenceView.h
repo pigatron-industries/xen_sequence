@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-#include "../Events.h"
+#include "../InterfaceEvent.h"
 #include "../View.h"
 #include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
@@ -14,7 +14,7 @@ class SequenceView : public View {
 public:
     SequenceView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView);
     virtual void render();
-    virtual void handleEvent(Event event);
+    virtual void handleEvent(InterfaceEvent event);
     uint16_t getCursorBar() { return cursorBar; }
 
 private:

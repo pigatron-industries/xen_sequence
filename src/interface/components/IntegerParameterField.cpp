@@ -8,15 +8,17 @@ IntegerParameterField::IntegerParameterField(const char* _name, uint16_t _min, u
      {
 }
 
-void IntegerParameterField::increment() {
-    if(value < max) {
-        value++;
+void IntegerParameterField::increment(int amount) {
+    value += amount;
+    if(value > max) {
+        value = max;
     }
 }
 
-void IntegerParameterField::decrement() {
-    if(value > min) {
-        value--;
+void IntegerParameterField::decrement(int amount) {
+    value -= amount;
+    if(value < min) {
+        value = min;
     }
 }
 

@@ -41,8 +41,8 @@ void SequenceView::render() {
     sequenceMatrixView.render();
 }
 
-void SequenceView::handleEvent(Event event) {
-    switch(event) {
+void SequenceView::handleEvent(InterfaceEvent event) {
+    switch(event.eventType) {
         case STICK_UP:
             cursorUp();
             break;

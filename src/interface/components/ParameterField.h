@@ -12,8 +12,8 @@ class ParameterField {
 
 public:
     ParameterField(const char* _name);
-    virtual void increment() = 0;
-    virtual void decrement() = 0;
+    virtual void increment(int amount) = 0;
+    virtual void decrement(int amount) = 0;
     virtual void render(Display& display, uint8_t row, bool selected);
 
     void setEnabled(bool _enabled) { enabled = _enabled; }

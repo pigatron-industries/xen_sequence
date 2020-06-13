@@ -1,7 +1,7 @@
 #include "InputTask.h"
 
 #include <Arduino.h>
-#include "Events.h"
+#include "InterfaceEvent.h"
 
 #include "../hwconfig.h"
 
@@ -27,39 +27,39 @@ void InputTask::init() {
 void InputTask::execute() {
     if(analogStick.update()) {
         if(analogStick.wasPushedLeft()) {
-            interface.handleEvent(Event::STICK_LEFT);
+            interface.handleEvent(InterfaceEvent(STICK_LEFT));
         } else if(analogStick.wasPushedRight()) {
-            interface.handleEvent(Event::STICK_RIGHT);
+            interface.handleEvent(InterfaceEvent(STICK_RIGHT));
         }
         if(analogStick.wasPushedUp()) {
-            interface.handleEvent(Event::STICK_UP);
+            interface.handleEvent(InterfaceEvent(STICK_UP));
         } else if(analogStick.wasPushedDown()) {
-            interface.handleEvent(Event::STICK_DOWN);
+            interface.handleEvent(InterfaceEvent(STICK_DOWN));
         }
     }
 
     if(analogStickSwitch.update()) {
         if(analogStickSwitch.fell()) {
-            interface.handleEvent(Event::STICK_PRESS);
+            interface.handleEvent(InterfaceEvent(STICK_PRESS));
         }
     }
 
     if(encoder.update()) {
         if(encoder.getMovement() > 0) {
-            interface.handleEvent(Event::DATA_INCREMENT);
+            interface.handleEvent(InterfaceEvent(DATA_INCREMENT, encoder.getMovement()));
         } else {
-            interface.handleEvent(Event::DATA_DECREMENT);
+            interface.handleEvent(InterfaceEvent(DATA_DECREMENT, -encoder.getMovement()));
         }
     }
 
     if(encoderSwitch.update()) {
         if(encoderSwitch.fell()) {
-            interface.handleEvent(Event::DATA_PRESS);
+            interface.handleEvent(InterfaceEvent(DATA_PRESS));
         }
     }
 
     char key = keypad.getKey();
     if (key != NO_KEY) {
-        interface.handleEvent(static_cast<Event>(key));
+        interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key)));
     }
 }

@@ -7,8 +7,8 @@ class IntegerParameterField : public ParameterField {
 
 public:
     IntegerParameterField(const char* _name, uint16_t _min, uint16_t _max, const char* _unit = "");
-    void increment();
-    void decrement();
+    void increment(int amount);
+    void decrement(int amount);
     void render(Display& display, uint8_t row, bool selected);
 
     void setValue(uint16_t _value) { value = _value; }
