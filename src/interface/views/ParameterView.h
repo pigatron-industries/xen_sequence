@@ -38,7 +38,7 @@ class ParameterView : public View {
 
 public:
     ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView);
-    virtual void render();
+    virtual void render(bool full = false);
     virtual void handleEvent(InterfaceEvent event);
 
     void setBar(uint16_t _barIndex);
@@ -49,6 +49,8 @@ private:
     Display& display;
     SequenceMatrixView& sequenceMatrixView;
 
+    bool dirtyScreen = true;
+
     uint16_t barIndex = 0;
     SequenceBar* bar;
     SequencePattern* selectedPattern;
@@ -57,7 +59,8 @@ private:
     ParameterViewMode parameterViewMode = PARAM_MODE_BAR;
     ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_PARAMETER;
 
-    int selectedFieldIndex = 0;
+    int8_t selectedFieldIndex = 0;
+    ParameterField* selectedField = NULL;
     LinkedList<ParameterField*>* visibleFields;
 
     LinkedList<ParameterField*> barFields;
@@ -75,6 +78,7 @@ private:
     void renderMode();
     void renderFields();
     void renderField(uint8_t row);
+    void setDirtyScreen();
 
     // events
     void cursorUp();
@@ -90,6 +94,7 @@ private:
     void cycleParameterViewMode();
     void setParameterViewMode(ParameterViewMode _parameterViewMode);
     ParameterField* getSelectedField();
+    void setSelectedField(int8_t fieldIndex);
     void nextParameter();
     void prevParameter();
 

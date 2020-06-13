@@ -60,10 +60,10 @@ void InterfaceController::switchToParameterView() {
     currentView = &parameterView;
     uint16_t bar = sequenceView.getCursorBar();
     parameterView.setBar(bar);
-    currentView->render();
+    currentView->render(true);
 }
 
 void InterfaceController::switchToSequenceView() {
     currentView = &sequenceView;
-    currentView->render();
+    currentView->render(true);
 }

@@ -26,7 +26,7 @@ SequenceView::SequenceView(AppData& _appData, Display& _display, SequenceMatrixV
     scrollBar = 0;
 }
 
-void SequenceView::render() {
+void SequenceView::render(bool full) {
     display.fillScreen(Colour(0, 0, 0));
     display.setFont(Org_01);
     display.setTextSize(1);

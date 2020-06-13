@@ -6,18 +6,18 @@
 class IntegerParameterField : public ParameterField {
 
 public:
-    IntegerParameterField(const char* _name, uint16_t _min, uint16_t _max, const char* _unit = "");
-    void increment(int amount);
-    void decrement(int amount);
-    void render(Display& display, uint8_t row, bool selected);
+    IntegerParameterField(const char* _name, int16_t _min, int16_t _max, const char* _unit = "");
+    void increment(int16_t amount);
+    void decrement(int16_t amount);
+    void render(Display& display, uint8_t row);
 
-    void setValue(uint16_t _value) { value = _value; }
+    void setValue(int16_t _value) { value = _value; }
     uint16_t getValue() { return value; }
 
 private:
-    uint16_t value;
-    uint16_t min;
-    uint16_t max;
+    int16_t value;
+    int16_t min;
+    int16_t max;
     const char* unit;
 
 };

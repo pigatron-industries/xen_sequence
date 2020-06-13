@@ -19,15 +19,21 @@ ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, Display& 
     setParameterViewMode(PARAM_MODE_BAR);
 }
 
-void ParameterView::render() {
-    display.fillScreen(Colour(0, 0, 0));
+void ParameterView::render(bool full) {
+    if(full) {
+        setDirtyScreen();
+    }
+    if(dirtyScreen) {
+        display.fillScreen(Colour(0, 0, 0));
+    }
     display.setFont(Org_01);
     display.setTextSize(1);
     renderMode();
     renderFields();
-    display.updateScreen();
 
     sequenceMatrixView.render();
+
+    dirtyScreen = false;
 }
 
 void ParameterView::renderMode() {
@@ -44,8 +50,14 @@ void ParameterView::renderFields() {
 }
 
 void ParameterView::renderField(uint8_t row) {
-    bool selected = selectedFieldIndex == row;
-    visibleFields->get(row)->render(display, row+1, selected);
+    visibleFields->get(row)->render(display, row+1);
+}
+
+void ParameterView::setDirtyScreen() {
+    dirtyScreen = true;
+    for(int i = 0; i < visibleFields->size(); i++) {
+        visibleFields->get(i)->setDirty();
+    }
 }
 
 void ParameterView::handleEvent(InterfaceEvent event) {
@@ -173,25 +185,18 @@ void ParameterView::fieldDecrement(int amount) {
     }
 }
 
-void ParameterView::nextParameter() {
-    selectedFieldIndex++;
-    if(selectedFieldIndex >= visibleFields->size()) {
-        selectedFieldIndex = 0;
+void ParameterView::setSelectedField(int8_t fieldIndex) {
+    selectedFieldIndex = fieldIndex;
+    if(selectedField != NULL) {
+        selectedField->setSelected(false);
+    }
+    if(selectedFieldIndex >= 0 && visibleFields->size() > selectedFieldIndex) {
+        selectedField = visibleFields->get(selectedFieldIndex);
+        selectedField->setSelected(true);
+    } else {
+        selectedField = NULL;
     }
 }
-
-void ParameterView::prevParameter() {
-    selectedFieldIndex--;
-    if(selectedFieldIndex < 0) {
-        selectedFieldIndex = visibleFields->size()-1;
-    }
-}
-
-void ParameterView::setBar(uint16_t _barIndex) {
-    barIndex = _barIndex;
-    sequenceMatrixView.setBar(barIndex);
-    updateSelectedBar();
-};
 
 ParameterField* ParameterView::getSelectedField() {
     if(selectedFieldIndex >= 0 && visibleFields->size() > selectedFieldIndex) {
@@ -200,6 +205,28 @@ ParameterField* ParameterView::getSelectedField() {
         return NULL;
     }
 }
+
+void ParameterView::nextParameter() {
+    int8_t newFieldIndex = selectedFieldIndex+1;
+    if(newFieldIndex >= visibleFields->size()) {
+        newFieldIndex = 0;
+    }
+    setSelectedField(newFieldIndex);
+}
+
+void ParameterView::prevParameter() {
+    int8_t newFieldIndex = selectedFieldIndex-1;
+    if(newFieldIndex < 0) {
+        newFieldIndex = visibleFields->size()-1;
+    }
+    setSelectedField(newFieldIndex);
+}
+
+void ParameterView::setBar(uint16_t _barIndex) {
+    barIndex = _barIndex;
+    sequenceMatrixView.setBar(barIndex);
+    updateSelectedBar();
+};
 
 void ParameterView::cycleSelectionMode() {
     switch(parameterViewMode) {
@@ -234,7 +261,6 @@ void ParameterView::cycleParameterViewMode() {
 
 void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
     parameterViewMode = _parameterViewMode;
-    selectedFieldIndex = 0;
     switch(parameterViewMode) {
         case PARAM_MODE_BAR:
             visibleFields = &barFields;
@@ -257,9 +283,8 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
             updateSelectedEvent();
             break;
     };
-    if(visibleFields->size() == 0) {
-        selectedFieldIndex = -1;
-    }
+    setSelectedField(visibleFields->size() == 0 ? -1 : 0);
+    setDirtyScreen();
 }
 
 void ParameterView::updateSelectedBar() {
@@ -294,6 +319,7 @@ void ParameterView::updateSelectedEvent() {
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(false);
         }
+        setDirtyScreen();
     }
 }
 

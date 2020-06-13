@@ -6,7 +6,7 @@
 
 class View {
     public:
-        virtual void render() = 0;
+        virtual void render(bool full = false) = 0;
         virtual void handleEvent(InterfaceEvent event) = 0;
 };
 
