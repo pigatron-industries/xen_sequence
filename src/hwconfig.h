@@ -25,3 +25,4 @@
 
 // Other config
 #define SERIAL_BAUD 115200
+#define MIDI_BAUD 31250

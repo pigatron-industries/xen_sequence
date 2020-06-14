@@ -16,6 +16,7 @@ public:
     void start();
     void reset();
     void setTicksPerMinute(float tpm);
+    uint16_t getPulseCount() { return pulseCount; }
 
 private:
     float ticksPerMinute;

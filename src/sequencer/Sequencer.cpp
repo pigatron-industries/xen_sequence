@@ -2,8 +2,9 @@
 
 #include <Arduino.h>
 
-Sequencer::Sequencer(AppData& _appData) :
-    appData(_appData) {
+Sequencer::Sequencer(AppData& _appData, EventOutputService& _eventOutputService) :
+    appData(_appData),
+    eventOutputService(_eventOutputService) {
     playing = false;
     playMode = PLAY_LOOP_BAR;
     setBar(0);
@@ -15,17 +16,27 @@ void Sequencer::addEventListener(SequencerEventListener* eventListener) {
 
 void Sequencer::execute() {
     if(clock.update()) {
-        if(clock.tick()) {
+        bool isTick = clock.tick();
+        if(isTick) {
             tick();
-            executeTickEvents();
         }
-
-        // TODO sub tick events
+        executeTickEvents();
+        if(isTick) {
+            notifyTickEvent();
+        }
     }
 }
 
 void Sequencer::executeTickEvents() {
-    notifyTickEvent();
+    for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
+        SequencePattern* pattern = currentBar->getPattern(channel);
+        if(pattern != NULL) {
+            SequenceEvent* event = pattern->getEvent(tickIndex);
+            if(event != NULL) {
+                eventOutputService.event(channel, clock.getPulseCount(), event);
+            }
+        }
+    }
 }
 
 void Sequencer::play() {

@@ -5,6 +5,7 @@
 
 #include "Clock.h"
 #include "SequencerEventListener.h"
+#include "EventOutputService.h"
 #include "../model/AppData.h"
 
 enum SequencePlayMode {
@@ -17,7 +18,7 @@ enum SequencePlayMode {
 class Sequencer {
 
 public:
-    Sequencer(AppData& _appData);
+    Sequencer(AppData& _appData, EventOutputService& _eventOutputService);
     void addEventListener(SequencerEventListener* eventListener);
     void execute();
 
@@ -33,6 +34,7 @@ public:
 
 private:
     AppData& appData;
+    EventOutputService& eventOutputService;
     Clock clock;
     LinkedList<SequencerEventListener*> eventListeners;
 

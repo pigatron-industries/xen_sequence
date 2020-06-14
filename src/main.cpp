@@ -9,7 +9,7 @@
 #include "interface/InputTask.h"
 #include "interface/InterfaceController.h"
 #include "sequencer/Sequencer.h"
-#include "lib/util/StopWatch.h"
+#include "sequencer/midi/MidiOutputService.h"
 
 // hardware
 Display display = Display();
@@ -19,7 +19,9 @@ LedMatrix ledMatrix = LedMatrix();
 AppData appData = AppData();
 
 // sequencer
-Sequencer sequencer = Sequencer(appData);
+MidiOutputService midiOutputSevice = MidiOutputService(Serial2);
+EventOutputService eventOutputService = EventOutputService(midiOutputSevice);
+Sequencer sequencer = Sequencer(appData, eventOutputService);
 
 // user interface
 InterfaceController interfaceController = InterfaceController(appData, sequencer, display, ledMatrix);
