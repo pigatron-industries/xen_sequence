@@ -5,7 +5,7 @@
 
 #include "../../model/AppData.h"
 #include "../../lib/drivers/LedMatrix.h"
-#include "../../modules/Sequencer.h"
+#include "../../sequencer/Sequencer.h"
 
 enum class SequenceMatrixSelectionMode {
     SELECT_NONE,

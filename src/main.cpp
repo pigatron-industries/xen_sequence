@@ -8,8 +8,8 @@
 #include "model/AppData.h"
 #include "interface/InputTask.h"
 #include "interface/InterfaceController.h"
-#include "modules/Sequencer.h"
-
+#include "sequencer/Sequencer.h"
+#include "lib/util/StopWatch.h"
 
 // hardware
 Display display = Display();

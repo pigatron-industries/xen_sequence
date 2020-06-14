@@ -4,8 +4,8 @@
 #include <inttypes.h>
 
 #include "../model/AppData.h"
-#include "../modules/Sequencer.h"
-#include "../modules/SequencerEventListener.h"
+#include "../sequencer/Sequencer.h"
+#include "../sequencer/SequencerEventListener.h"
 #include "InterfaceEvent.h"
 #include "View.h"
 #include "./views/SequenceView.h"
