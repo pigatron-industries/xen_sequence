@@ -33,6 +33,9 @@ void Sequencer::executeTickEvents() {
         if(pattern != NULL) {
             SequenceEvent* event = pattern->getEvent(tickIndex);
             if(event != NULL) {
+                if(clock.getPulseCount() == 0 && event->isCompileNeeded()) {
+                    eventCompiler.compileEvent(event, channel);
+                }
                 eventOutputService.event(channel, clock.getPulseCount(), event);
             }
         }

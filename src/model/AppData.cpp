@@ -7,13 +7,13 @@ AppData::AppData() {
     SequencePattern* pattern3 = newPattern();
 
     //newEvent(0, pattern1);
-    newEvent(2, pattern1)->pitch = 1;
-    newEvent(4, pattern1)->pitch = 2;
-    newEvent(6, pattern1)->pitch = 3;
-    newEvent(8, pattern1)->pitch = 4;
-    newEvent(10, pattern1)->pitch = 5;
-    newEvent(12, pattern1)->pitch = 6;
-    newEvent(14, pattern1)->pitch = 7;
+    newEvent(2, pattern1)->setPitch(1);
+    newEvent(4, pattern1)->setPitch(2);
+    newEvent(6, pattern1)->setPitch(3);
+    newEvent(8, pattern1)->setPitch(4);
+    newEvent(10, pattern1)->setPitch(5);
+    newEvent(12, pattern1)->setPitch(6);
+    newEvent(14, pattern1)->setPitch(7);
 
     newEvent(1, pattern3);
     newEvent(3, pattern3);

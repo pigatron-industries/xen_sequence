@@ -5,7 +5,8 @@
 
 #include "Clock.h"
 #include "SequencerEventListener.h"
-#include "EventOutputService.h"
+#include "midi/EventOutputService.h"
+#include "midi/EventCompiler.h"
 #include "../model/AppData.h"
 
 enum SequencePlayMode {
@@ -35,6 +36,7 @@ public:
 private:
     AppData& appData;
     EventOutputService& eventOutputService;
+    EventCompiler eventCompiler;
     Clock clock;
     LinkedList<SequencerEventListener*> eventListeners;
 

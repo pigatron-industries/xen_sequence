@@ -39,6 +39,7 @@ void setup() {
     ledMatrix.init();
     inputTask.init();
     interfaceController.init();
+    midiOutputSevice.init();
 }
 
 void loop() {

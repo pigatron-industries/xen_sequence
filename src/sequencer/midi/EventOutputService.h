@@ -2,8 +2,8 @@
 #define EventOutputService_h
 
 #include <inttypes.h>
-#include "midi/MidiOutputService.h"
-#include "../model/SequenceEvent.h"
+#include "MidiOutputService.h"
+#include "../../model/SequenceEvent.h"
 
 class EventOutputService {
 

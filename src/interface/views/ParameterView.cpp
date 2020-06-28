@@ -307,10 +307,10 @@ void ParameterView::updateSelectedEvent() {
         selectedEvent = NULL;
     }
     if(selectedEvent != NULL) {
-        eventNoteField.setValue(selectedEvent->pitch);
-        eventVelocityField.setValue(selectedEvent->velocity);
-        eventGateField.setValue(selectedEvent->gate);
-        eventDelayField.setValue(selectedEvent->delay);
+        eventNoteField.setValue(selectedEvent->getPitch());
+        eventVelocityField.setValue(selectedEvent->getVelocity());
+        eventGateField.setValue(selectedEvent->getGate());
+        eventDelayField.setValue(selectedEvent->getDelay());
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(true);
         }
@@ -326,13 +326,13 @@ void ParameterView::updateSelectedEvent() {
 void ParameterView::updateDataFromField(ParameterField* field) {
     if(selectedEvent != NULL) {
         if(field == &eventNoteField) {
-            selectedEvent->pitch = eventNoteField.getValue();
+            selectedEvent->setPitch(eventNoteField.getValue());
         } else if(field == &eventVelocityField) {
-            selectedEvent->velocity = eventVelocityField.getValue();
+            selectedEvent->setVelocity(eventVelocityField.getValue());
         } else if(field == &eventGateField) {
-            selectedEvent->gate = eventGateField.getValue();
+            selectedEvent->setGate(eventGateField.getValue());
         } else if(field == &eventDelayField) {
-            selectedEvent->delay = eventDelayField.getValue();
+            selectedEvent->setDelay(eventDelayField.getValue());
         }
     }
     if(field == &barSpeedField) {
