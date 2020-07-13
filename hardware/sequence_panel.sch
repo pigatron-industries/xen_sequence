@@ -142,6 +142,60 @@
 </layers>
 <schematic xreflabel="%F%N/%S.%C%R" xrefpart="/%S.%C%R">
 <libraries>
+<library name="connectors">
+<packages>
+<package name="HEADER/MALE/01">
+<pad name="1" x="0" y="0" drill="1.016" rot="R90"/>
+<text x="1.905" y="-0.254" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="21"/>
+<wire x1="-0.635" y1="1.27" x2="0.635" y2="1.27" width="0.127" layer="21"/>
+<wire x1="0.635" y1="1.27" x2="1.27" y2="0.635" width="0.127" layer="21"/>
+<wire x1="1.27" y1="0.635" x2="1.27" y2="-0.635" width="0.127" layer="21"/>
+<wire x1="1.27" y1="-0.635" x2="0.635" y2="-1.27" width="0.127" layer="21"/>
+<wire x1="0.635" y1="-1.27" x2="-0.635" y2="-1.27" width="0.127" layer="21"/>
+<wire x1="-0.635" y1="-1.27" x2="-1.27" y2="-0.635" width="0.127" layer="21"/>
+<wire x1="-1.27" y1="-0.635" x2="-1.27" y2="0.635" width="0.127" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-0.635" y2="1.27" width="0.127" layer="21"/>
+</package>
+<package name="HEADER/MALE/01/NOBORDER">
+<pad name="1" x="0" y="0" drill="1.016" rot="R90"/>
+<text x="1.905" y="-0.254" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="HEADER/MALE/01">
+<wire x1="-3.81" y1="0" x2="-2.54" y2="0" width="0.6096" layer="94"/>
+<pin name="3" x="2.54" y="0" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
+<text x="-13.716" y="-1.016" size="1.778" layer="96">&gt;NAME</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="HEADER/MALE/01">
+<gates>
+<gate name="HEADER" symbol="HEADER/MALE/01" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="HEADER/MALE/01">
+<connects>
+<connect gate="HEADER" pin="3" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="NOBORDER" package="HEADER/MALE/01/NOBORDER">
+<connects>
+<connect gate="HEADER" pin="3" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -152,16 +206,72 @@
 </class>
 </classes>
 <parts>
+<part name="U$19" library="connectors" deviceset="HEADER/MALE/01" device=""/>
+<part name="U$20" library="connectors" deviceset="HEADER/MALE/01" device=""/>
+<part name="U$21" library="connectors" deviceset="HEADER/MALE/01" device=""/>
+<part name="U$22" library="connectors" deviceset="HEADER/MALE/01" device=""/>
+<part name="U$23" library="connectors" deviceset="HEADER/MALE/01" device=""/>
+<part name="U$29" library="connectors" deviceset="HEADER/MALE/01" device=""/>
+<part name="U$30" library="connectors" deviceset="HEADER/MALE/01" device=""/>
+<part name="U$31" library="connectors" deviceset="HEADER/MALE/01" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 </plain>
 <instances>
+<instance part="U$19" gate="HEADER" x="20.32" y="71.12" smashed="yes">
+<attribute name="NAME" x="6.604" y="70.104" size="1.778" layer="96"/>
+</instance>
+<instance part="U$20" gate="HEADER" x="25.4" y="71.12" smashed="yes" rot="R180">
+<attribute name="NAME" x="39.116" y="72.136" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="U$21" gate="HEADER" x="20.32" y="66.04" smashed="yes">
+<attribute name="NAME" x="6.604" y="65.024" size="1.778" layer="96"/>
+</instance>
+<instance part="U$22" gate="HEADER" x="25.4" y="66.04" smashed="yes" rot="R180">
+<attribute name="NAME" x="39.116" y="67.056" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="U$23" gate="HEADER" x="20.32" y="60.96" smashed="yes">
+<attribute name="NAME" x="6.604" y="59.944" size="1.778" layer="96"/>
+</instance>
+<instance part="U$29" gate="HEADER" x="25.4" y="60.96" smashed="yes" rot="R180">
+<attribute name="NAME" x="39.116" y="61.976" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="U$30" gate="HEADER" x="20.32" y="55.88" smashed="yes">
+<attribute name="NAME" x="6.604" y="54.864" size="1.778" layer="96"/>
+</instance>
+<instance part="U$31" gate="HEADER" x="25.4" y="55.88" smashed="yes" rot="R180">
+<attribute name="NAME" x="39.116" y="56.896" size="1.778" layer="96" rot="R180"/>
+</instance>
 </instances>
 <busses>
 </busses>
 <nets>
+<net name="N$1" class="0">
+<segment>
+<pinref part="U$19" gate="HEADER" pin="3"/>
+<pinref part="U$20" gate="HEADER" pin="3"/>
+</segment>
+</net>
+<net name="N$2" class="0">
+<segment>
+<pinref part="U$21" gate="HEADER" pin="3"/>
+<pinref part="U$22" gate="HEADER" pin="3"/>
+</segment>
+</net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="U$23" gate="HEADER" pin="3"/>
+<pinref part="U$29" gate="HEADER" pin="3"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="U$30" gate="HEADER" pin="3"/>
+<pinref part="U$31" gate="HEADER" pin="3"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>

@@ -1,8 +1,7 @@
 #include "BooleanParameterField.h"
 
 BooleanParameterField::BooleanParameterField(const char* _name) :
-    ParameterField(_name)
-     {
+    ParameterField(_name) {
 }
 
 void BooleanParameterField::increment(int16_t amount) {

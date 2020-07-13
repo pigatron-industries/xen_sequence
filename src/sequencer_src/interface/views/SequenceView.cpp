@@ -1,6 +1,6 @@
 #include "SequenceView.h"
 
-#include <Fonts/Org_01.h>
+#include "Org_01.h"
 
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 128

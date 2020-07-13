@@ -1,6 +1,6 @@
 #include "ParameterView.h"
 
-#include <Fonts/Org_01.h>
+#include "Org_01.h"
 
 ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
