@@ -873,7 +873,7 @@ einem neuen Namen ab.</description>
 <attribute name="NAME" x="16.383" y="39.37" size="1.016" layer="25" ratio="10" rot="R90"/>
 <attribute name="VALUE" x="18.542" y="40.9702" size="1.778" layer="27" ratio="10"/>
 </element>
-<element name="R1" library="resistors" package="RESISTOR/7.5" value="" x="27.94" y="26.67" smashed="yes" rot="R270">
+<element name="R1" library="resistors" package="RESISTOR/7.5" value="620R" x="27.94" y="26.67" smashed="yes" rot="R270">
 <attribute name="NAME" x="27.432" y="29.21" size="1.016" layer="25" ratio="10" rot="R270"/>
 <attribute name="VALUE" x="29.2862" y="29.591" size="1.27" layer="27" ratio="10" rot="R270"/>
 </element>

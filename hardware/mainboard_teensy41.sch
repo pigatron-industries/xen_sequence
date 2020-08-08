@@ -1551,7 +1551,7 @@ USART&lt;p&gt;
 <attribute name="SPICEPREFIX" value="X"/>
 </part>
 <part name="IC1" library="atmega328" deviceset="ATMEGA328*P" device="" technology="-20"/>
-<part name="R1" library="resistors" deviceset="RESISTOR" device="RESISTOR/UPRIGHT/7.5"/>
+<part name="R1" library="resistors" deviceset="RESISTOR" device="RESISTOR/UPRIGHT/7.5" value="620R"/>
 <part name="R2" library="resistors" deviceset="RESISTOR" device="RESISTOR/UPRIGHT/7.5"/>
 <part name="R3" library="resistors" deviceset="RESISTOR" device="RESISTOR/UPRIGHT/7.5"/>
 <part name="R4" library="resistors" deviceset="RESISTOR" device="RESISTOR/UPRIGHT/7.5"/>
