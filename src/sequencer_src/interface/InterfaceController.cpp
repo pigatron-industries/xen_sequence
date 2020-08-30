@@ -2,11 +2,12 @@
 
 
 
-InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix) :
+InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix, Keyboard& _keyboard) :
     appData(_appData),
     sequencer(_sequencer),
     display(_display),
     ledMatrix(_ledMatrix),
+    keyboard(_keyboard),
     sequenceMatrixView(_appData, _sequencer, _ledMatrix),
     sequenceView(_appData, _display, sequenceMatrixView),
     parameterView(_appData, _sequencer, _display, sequenceMatrixView) {
@@ -39,8 +40,10 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::KEY_PLAY_STOP:
             if(sequencer.isPlaying()) {
                 sequencer.stop();
+                keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
             } else {
                 sequencer.play();
+                keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
             }
             break;
         case InterfaceEventType::SEQUENCER_TICK:

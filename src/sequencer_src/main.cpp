@@ -5,15 +5,18 @@
 #include "lib/task/TaskManager.h"
 #include "lib/drivers/Display.h"
 #include "lib/drivers/LedMatrix.h"
+#include "lib/drivers/KeyboardLedMatrix.h"
 #include "model/AppData.h"
 #include "interface/InputTask.h"
 #include "interface/InterfaceController.h"
+#include "interface/Keyboard.h"
 #include "sequencer/Sequencer.h"
 #include "sequencer/midi/MidiOutputService.h"
 
 // hardware
 Display display = Display();
 LedMatrix ledMatrix = LedMatrix();
+Keyboard keyboard = Keyboard();
 
 // data
 AppData appData = AppData();
@@ -24,8 +27,8 @@ EventOutputService eventOutputService = EventOutputService(midiOutputSevice);
 Sequencer sequencer = Sequencer(appData, eventOutputService);
 
 // user interface
-InterfaceController interfaceController = InterfaceController(appData, sequencer, display, ledMatrix);
-InputTask inputTask = InputTask(interfaceController);
+InterfaceController interfaceController = InterfaceController(appData, sequencer, display, ledMatrix, keyboard);
+InputTask inputTask = InputTask(interfaceController, keyboard);
 
 
 void setup() {

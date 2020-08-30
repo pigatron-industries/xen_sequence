@@ -9,23 +9,24 @@
 #include "../lib/drivers/AnalogStick.h"
 #include "../lib/drivers/RotaryEncoder.h"
 #include "Keypad.h"
+#include "Keyboard.h"
 
 
 class InputTask : public Task {
 
 public:
-    InputTask(InterfaceController& _interface);
+    InputTask(InterfaceController& _interface, Keyboard& keyboard);
     void init();
     void execute();
 
 private:
     InterfaceController& interface;
+    Keyboard& keyboard;
 
     AnalogStick analogStick;
     Switch analogStickSwitch;
     RotaryEncoder encoder;
     Switch encoderSwitch;
-    Keypad keypad;
 
 };
 

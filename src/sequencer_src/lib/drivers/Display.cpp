@@ -1,8 +1,9 @@
 #include "Display.h"
 
 #include <ssd1351.h>
+#include "../../hwconfig.h"
 
-ssd1351::SSD1351<ssd1351::HighColor, ssd1351::NoBuffer, 128, 128> oled;
+ssd1351::SSD1351<ssd1351::HighColor, ssd1351::NoBuffer, 128, 128> oled(OLED_CS_PIN, OLED_DC_PIN, OLED_RESET_PIN, 11, 13);
 
 ssd1351::HighColor c(const Colour &colour) {
     return ssd1351::HighColor(colour.r, colour.g, colour.b);

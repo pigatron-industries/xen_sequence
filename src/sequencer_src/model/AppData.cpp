@@ -84,6 +84,7 @@ uint8_t AppData::getUnusedPatternId() {
             return id;
         }
     }
+    return 0;
 }
 
 SequenceEvent* AppData::newEvent(uint8_t tick, SequencePattern* pattern) {

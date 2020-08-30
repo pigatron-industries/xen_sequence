@@ -5,19 +5,13 @@
 
 #include "../hwconfig.h"
 
-uint8_t rowPins[KEY_ROWS] = KEY_ROW_PINS;
-uint8_t colPins[KEY_COLS] = KEY_COL_PINS;
-char keys[KEY_ROWS][KEY_COLS] = {
-    {KEY_BACK, KEY_ADD_DEL, KEY_PLAY_STOP, KEY_RECORD}
-};
-
-InputTask::InputTask(InterfaceController& _interface) :
+InputTask::InputTask(InterfaceController& _interface, Keyboard& _keyboard) :
     interface(_interface),
+    keyboard(_keyboard),
     analogStick(STICK_X_PIN, STICK_Y_PIN),
     analogStickSwitch(STICK_SWITCH_PIN),
     encoder(ENCODER_PIN1, ENCODER_PIN2),
-    encoderSwitch(ENCODER_SWITCH_PIN),
-    keypad(makeKeymap(keys), rowPins, colPins, KEY_ROWS, KEY_COLS) {
+    encoderSwitch(ENCODER_SWITCH_PIN) {
 }
 
 void InputTask::init() {
@@ -58,7 +52,7 @@ void InputTask::execute() {
         }
     }
 
-    char key = keypad.getKey();
+    char key = keyboard.getKey();
     if (key != NO_KEY) {
         interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key)));
     }

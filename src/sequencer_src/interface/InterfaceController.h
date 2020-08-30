@@ -7,6 +7,7 @@
 #include "../sequencer/Sequencer.h"
 #include "../sequencer/SequencerEventListener.h"
 #include "InterfaceEvent.h"
+#include "Keyboard.h"
 #include "View.h"
 #include "./views/SequenceView.h"
 #include "./views/ParameterView.h"
@@ -15,7 +16,7 @@
 class InterfaceController : public SequencerEventListener {
 
 public:
-    InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix);
+    InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix, Keyboard& _keyboard);
     void init();
     void render();
     void handleEvent(InterfaceEvent event);
@@ -27,6 +28,7 @@ private:
 
     Display& display;
     LedMatrix& ledMatrix;
+    Keyboard& keyboard;
 
     View* currentView;
 

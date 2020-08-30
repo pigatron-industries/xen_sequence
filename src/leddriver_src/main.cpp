@@ -1,7 +1,7 @@
 #include <Arduino.h>
+#include <SoftwareSerial.h>
 
 #include "LedMatrix.h"
-#include "SPISlave.h"
 
 #define MOSI_PIN 11
 #define SCK_PIN 13
@@ -9,7 +9,7 @@
 #define X_PIN_COUNT 12
 #define Y_PIN_COUNT 6
 
-uint8_t xPins[X_PIN_COUNT] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12};
+uint8_t xPins[X_PIN_COUNT] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 uint8_t yPins[Y_PIN_COUNT] = {A0, A1, A2, A3, A4, A5};
 LedMatrix ledMatrix = LedMatrix(X_PIN_COUNT, Y_PIN_COUNT, xPins, yPins);
 
@@ -31,7 +31,18 @@ void blank() {
     }
 }
 
-void receiveData(uint8_t b) {
+void receiveData() {
+    uint8_t b = Serial.read();
+
+    // ledMatrix.setValueAt(0, 0, (b >> 0) & 0x01);
+    // ledMatrix.setValueAt(3, 0, (b >> 1) & 0x01);
+    // ledMatrix.setValueAt(6, 0, (b >> 2) & 0x01);
+    // ledMatrix.setValueAt(9, 0, (b >> 3) & 0x01);
+    // ledMatrix.setValueAt(0, 1, (b >> 4) & 0x01);
+    // ledMatrix.setValueAt(3, 1, (b >> 5) & 0x01);
+    // ledMatrix.setValueAt(6, 1, (b >> 6) & 0x01);
+    // ledMatrix.setValueAt(9, 1, (b >> 7) & 0x01);
+
     if (b == COMMAND_OFF || b == COMMAND_ON) {
         buffer[0] = b;
         bufferPos = 1;
@@ -39,17 +50,13 @@ void receiveData(uint8_t b) {
         buffer[bufferPos] = b;
         bufferPos++;
         if(bufferPos == 3) {
-            if(runTest) {
-                blank();
-                runTest = false;
-            }
             ledMatrix.setValueAt(buffer[1], buffer[2], buffer[0] == COMMAND_ON ? HIGH : LOW);
         }
     }
 }
 
 void setup() {
-    SPISlave::begin(MOSI_PIN, SCK_PIN, receiveData);
+    Serial.begin(9600);
 }
 
 void runTestLoop() {
@@ -162,6 +169,16 @@ void runTestLoop() {
 
 void loop() {
     ledMatrix.execute();
+
+    if(runTest && Serial.available()) {
+        runTest = false;
+        blank();
+    }
+
+    if(Serial.available()) {
+        receiveData();
+    }
+
     if(runTest) {
         runTestLoop();
     }
