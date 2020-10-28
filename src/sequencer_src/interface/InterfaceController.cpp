@@ -37,6 +37,15 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 switchToSequenceView();
             }
             break;
+        case InterfaceEventType::KEY_RECORD: 
+            if(recording) {
+                recording = false;
+                keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
+            } else {
+                recording = true;
+                keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
+            }
+            break;
         case InterfaceEventType::KEY_PLAY_STOP:
             if(sequencer.isPlaying()) {
                 sequencer.stop();

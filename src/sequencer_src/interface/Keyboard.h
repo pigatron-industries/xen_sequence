@@ -2,8 +2,9 @@
 #define Keyboard_h
 
 #include <inttypes.h>
+#include <Keypad.h>
 
-#include "Keypad.h"
+// #include "../lib/drivers/Keypad.h"
 #include "InterfaceEvent.h"
 #include "../lib/drivers/KeyboardLedMatrix.h"
 
@@ -23,15 +24,20 @@ public:
 
 class Keyboard {
 
-public:
-    Keyboard();
+    public:
+        Keyboard();
 
-    char getKey();
-    void setKeyLed(InterfaceEventType key, LedColour colour);
+        bool update();
+        Key* getKeys();
+        int getNumKeys();
 
-private:
-    Keypad keypad;
-    KeyboardLedMatrix keyboardLedMatrix;
+        void setKeyLed(InterfaceEventType key, LedColour colour);
+
+    private:
+        static Keypad keypad;
+        KeyboardLedMatrix keyboardLedMatrix;
+
+        static void handleKeypadEvent(Key key);
 
 };
 

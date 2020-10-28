@@ -36,6 +36,8 @@ private:
     SequenceView sequenceView;
     ParameterView parameterView;
 
+    bool recording;
+
     void switchToParameterView();
     void switchToSequenceView();
 

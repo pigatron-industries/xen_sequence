@@ -9,15 +9,30 @@ const LedColour LedColour::BLUE = LedColour(0, 0, 1);
 uint8_t rowPins[KEY_ROWS] = KEY_ROW_PINS;
 uint8_t colPins[KEY_COLS] = KEY_COL_PINS;
 char keys[KEY_ROWS][KEY_COLS] = {
-    {KEY_RECORD, KEY_PLAY_STOP, KEY_ADD_DEL, KEY_BACK}
+    {KEY_RECORD, KEY_PLAY_STOP, KEY_PREV, KEY_NEXT},
+    {KEY_PLACE_1, KEY_PLACE_2, KEY_PLACE_3, KEY_PLACE_4},
+    {KEY_BACK, KEY_ADD_DEL, KEY_COPY, KEY_PASTE},
+    {KEY_PLACE_5, KEY_PLACE_6, KEY_PLACE_7, KEY_PLACE_8},
+    {KEY_PLACE_9, KEY_PLACE_10, KEY_PLACE_11, KEY_PLACE_12},
+    {KEY_PLACE_13, KEY_PLACE_14, KEY_PLACE_15, KEY_PLACE_16}
 };
 
-Keyboard::Keyboard():
-    keypad(makeKeymap(keys), rowPins, colPins, KEY_ROWS, KEY_COLS) {
+
+Keypad Keyboard::keypad = Keypad(makeKeymap(keys), rowPins, colPins, KEY_ROWS, KEY_COLS);
+
+Keyboard::Keyboard() {
 }
 
-char Keyboard::getKey() {
-    return keypad.getKey();
+bool Keyboard::update() {
+    return keypad.getKeys();
+}
+
+Key* Keyboard::getKeys() {
+    return keypad.key;
+}
+
+int Keyboard::getNumKeys() {
+    return keypad.numKeys();
 }
 
 void Keyboard::setKeyLed(InterfaceEventType key, LedColour colour) {
@@ -27,6 +42,7 @@ void Keyboard::setKeyLed(InterfaceEventType key, LedColour colour) {
                 keyboardLedMatrix.setLedValueAt(y*3, x, colour.red);
                 keyboardLedMatrix.setLedValueAt(y*3+1, x, colour.green);
                 keyboardLedMatrix.setLedValueAt(y*3+2, x, colour.blue);
+                return;
             }
         }
     }

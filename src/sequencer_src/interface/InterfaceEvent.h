@@ -22,6 +22,26 @@ enum InterfaceEventType {
     KEY_PREV,
     KEY_NEXT,
     //
+    KEY_PLACE_1,
+    KEY_PLACE_2,
+    KEY_PLACE_3,
+    KEY_PLACE_4,
+    //
+    KEY_PLACE_5,
+    KEY_PLACE_6,
+    KEY_PLACE_7,
+    KEY_PLACE_8,
+    //
+    KEY_PLACE_9,
+    KEY_PLACE_10,
+    KEY_PLACE_11,
+    KEY_PLACE_12,
+    //
+    KEY_PLACE_13,
+    KEY_PLACE_14,
+    KEY_PLACE_15,
+    KEY_PLACE_16,
+    //
     SEQUENCER_TICK
 };
 
