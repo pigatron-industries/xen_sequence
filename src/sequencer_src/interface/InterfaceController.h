@@ -16,7 +16,7 @@
 class InterfaceController : public SequencerEventListener {
 
 public:
-    InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix, Keyboard& _keyboard);
+    InterfaceController(AppData& _appData, Sequencer& _sequencer, Keyboard& _keyboard);
     void init();
     void render();
     void handleEvent(InterfaceEvent event);
@@ -25,9 +25,6 @@ public:
 private:
     AppData& appData;
     Sequencer& sequencer;
-
-    Display& display;
-    LedMatrix& ledMatrix;
     Keyboard& keyboard;
 
     View* currentView;

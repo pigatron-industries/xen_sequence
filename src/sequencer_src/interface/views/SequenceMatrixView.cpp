@@ -1,4 +1,5 @@
 #include "SequenceMatrixView.h"
+#include "../Hardware.h"
 
 #define OFF_PIXEL CRGB::Black
 #define DATA_PIXEL CRGB(0x000088)
@@ -8,17 +9,16 @@
 
 
 
-SequenceMatrixView::SequenceMatrixView(AppData& _appData, Sequencer& _sequencer, LedMatrix& _ledMatrix):
+SequenceMatrixView::SequenceMatrixView(AppData& _appData, Sequencer& _sequencer):
     appData(_appData),
-    sequencer(_sequencer),
-    ledMatrix(_ledMatrix) {
+    sequencer(_sequencer) {
 }
 
 void SequenceMatrixView::render() {
     renderData();
     renderSelectCursor();
     renderPlayCursor();
-    ledMatrix.update();
+    Hardware::ledMatrix.update();
 }
 
 void SequenceMatrixView::renderData() {
@@ -27,14 +27,14 @@ void SequenceMatrixView::renderData() {
         if(pattern != NULL) {
             for(uint8_t tick = 0; tick < MATRIX_COLS; tick++) {
                 if(pattern->getEvents().get(tick) != NULL) {
-                    ledMatrix.setPixel(channel, tick, DATA_PIXEL);
+                    Hardware::ledMatrix.setPixel(channel, tick, DATA_PIXEL);
                 } else {
-                    ledMatrix.setPixel(channel, tick, OFF_PIXEL);
+                    Hardware::ledMatrix.setPixel(channel, tick, OFF_PIXEL);
                 }
             }
         } else {
             for(uint8_t i = 0; i < MATRIX_COLS; i++) {
-                ledMatrix.setPixel(channel, i, OFF_PIXEL);
+                Hardware::ledMatrix.setPixel(channel, i, OFF_PIXEL);
             }
         }
     }
@@ -42,14 +42,14 @@ void SequenceMatrixView::renderData() {
 
 void SequenceMatrixView::renderSelectCursor() {
     if(selectionMode == SequenceMatrixSelectionMode::SELECT_EVENT) {
-        CRGB colour = ledMatrix.getPixel(selectCursorChannel, selectCursorTick);
+        CRGB colour = Hardware::ledMatrix.getPixel(selectCursorChannel, selectCursorTick);
         colour += selectionActive ? SELECT_CURSOR_ACTIVE_PIXEL : SELECT_CURSOR_PIXEL;
-        ledMatrix.setPixel(selectCursorChannel, selectCursorTick, colour);
+        Hardware::ledMatrix.setPixel(selectCursorChannel, selectCursorTick, colour);
     } else if(selectionMode == SequenceMatrixSelectionMode::SELECT_CHANNEL) {
         for(int i = 0; i < MATRIX_COLS; i++) {
-            CRGB colour = ledMatrix.getPixel(selectCursorChannel, i);
+            CRGB colour = Hardware::ledMatrix.getPixel(selectCursorChannel, i);
             colour += selectionActive ? SELECT_CURSOR_ACTIVE_PIXEL : SELECT_CURSOR_PIXEL;
-            ledMatrix.setPixel(selectCursorChannel, i, colour);
+            Hardware::ledMatrix.setPixel(selectCursorChannel, i, colour);
         }
     }
 }
@@ -58,9 +58,9 @@ void SequenceMatrixView::renderPlayCursor() {
     uint8_t playCursorTick = sequencer.getTickIndex();
     if(sequencer.isPlaying() && sequencer.getBarIndex() == barIndex) {
         for(int channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
-            CRGB colour = ledMatrix.getPixel(channel, playCursorTick);
+            CRGB colour = Hardware::ledMatrix.getPixel(channel, playCursorTick);
             colour += PLAY_CURSOR_PIXEL;
-            ledMatrix.setPixel(channel, playCursorTick, colour);
+            Hardware::ledMatrix.setPixel(channel, playCursorTick, colour);
         }
     }
 }

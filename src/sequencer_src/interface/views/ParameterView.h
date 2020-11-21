@@ -6,7 +6,6 @@
 #include "../View.h"
 #include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
-#include "../../lib/drivers/display.h"
 #include "../components/IntegerParameterField.h"
 #include "../components/BooleanParameterField.h"
 
@@ -37,7 +36,7 @@ enum Parameter {
 class ParameterView : public View {
 
 public:
-    ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView);
+    ParameterView(AppData& _appData, Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
     virtual void render(bool full = false);
     virtual void handleEvent(InterfaceEvent event);
 
@@ -46,7 +45,6 @@ public:
 private:
     AppData& appData;
     Sequencer& sequencer;
-    Display& display;
     SequenceMatrixView& sequenceMatrixView;
 
     bool dirtyScreen = true;

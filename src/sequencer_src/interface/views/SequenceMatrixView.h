@@ -16,7 +16,7 @@ enum class SequenceMatrixSelectionMode {
 class SequenceMatrixView {
 
 public:
-    SequenceMatrixView(AppData& _appData, Sequencer& _sequencer, LedMatrix& _ledMatrix);
+    SequenceMatrixView(AppData& _appData, Sequencer& _sequencer);
     void render();
     void cursorUp();
     void cursorDown();
@@ -34,7 +34,6 @@ public:
 private:
     AppData& appData;
     Sequencer& sequencer;
-    LedMatrix& ledMatrix;
     SequencePattern* patterns[SEQUENCE_CHANNELS];
 
     uint16_t barIndex;

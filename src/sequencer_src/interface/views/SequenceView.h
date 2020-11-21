@@ -7,19 +7,17 @@
 #include "../View.h"
 #include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
-#include "../../lib/drivers/display.h"
 
 class SequenceView : public View {
 
 public:
-    SequenceView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView);
+    SequenceView(AppData& _appData, SequenceMatrixView& _sequenceMatrixView);
     virtual void render(bool full = false);
     virtual void handleEvent(InterfaceEvent event);
     uint16_t getCursorBar() { return cursorBar; }
 
 private:
     AppData& appData;
-    Display& display;
     SequenceMatrixView& sequenceMatrixView;
 
     uint8_t cursorChannel;

@@ -1,4 +1,5 @@
 #include "SequenceView.h"
+#include "../Hardware.h"
 
 #include "Org_01.h"
 
@@ -17,9 +18,8 @@
 #define DATA_TEXT_COLOUR Colour(255, 255, 255)
 #define CURSOR_COLOUR Colour(255, 0, 0)
 
-SequenceView::SequenceView(AppData& _appData, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
+SequenceView::SequenceView(AppData& _appData, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
-    display(_display),
     sequenceMatrixView(_sequenceMatrixView) {
     cursorChannel = 0;
     cursorBar = 0;
@@ -27,14 +27,14 @@ SequenceView::SequenceView(AppData& _appData, Display& _display, SequenceMatrixV
 }
 
 void SequenceView::render(bool full) {
-    display.fillScreen(Colour(0, 0, 0));
-    display.setFont(Org_01);
-    display.setTextSize(1);
+    Hardware::display.fillScreen(Colour(0, 0, 0));
+    Hardware::display.setFont(Org_01);
+    Hardware::display.setTextSize(1);
     renderStatusBar();
     renderGrid();
     renderSequence();
     renderCursor();
-    display.updateScreen();
+    Hardware::display.updateScreen();
 
     sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
     sequenceMatrixView.setBar(cursorBar);
@@ -96,36 +96,36 @@ void SequenceView::cursorRight() {
 }
 
 void SequenceView::renderStatusBar() {
-    display.setTextColour(Colour(255, 255, 255));
+    Hardware::display.setTextColour(Colour(255, 255, 255));
 }
 
 void SequenceView::renderGrid() {
-    display.setTextColour(GRID_TEXT_COLOUR);
+    Hardware::display.setTextColour(GRID_TEXT_COLOUR);
     int16_t top = STATUS_HEIGHT;
     for(int16_t channel = 0; channel < SEQUENCE_CHANNELS+1; channel++) {
-        display.drawLine(0, top, DISPLAY_WIDTH, top, GRID_COLOUR);
+        Hardware::display.drawLine(0, top, DISPLAY_WIDTH, top, GRID_COLOUR);
         top += CHANNEL_HEIGHT;
     }
     int16_t left = 0;
     for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
-        display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, GRID_COLOUR);
-        display.setCursor(left, 12);
-        display.print(bar, HEX);
+        Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, GRID_COLOUR);
+        Hardware::display.setCursor(left, 12);
+        Hardware::display.print(bar, HEX);
         left += BAR_WIDTH;
     }
 }
 
 void SequenceView::renderSequence() {
-    display.setTextColour(DATA_TEXT_COLOUR);
+    Hardware::display.setTextColour(DATA_TEXT_COLOUR);
     short top = STATUS_HEIGHT;
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         short left = 0;
         for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
             SequencePattern* pattern = appData.getPattern(bar, channel);
             if(pattern != NULL) {
-                display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
-                display.setCursor(left+5, top+9);
-                display.print(pattern->getId(), HEX);
+                Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
+                Hardware::display.setCursor(left+5, top+9);
+                Hardware::display.print(pattern->getId(), HEX);
             }
             left += BAR_WIDTH;
         }
@@ -136,8 +136,8 @@ void SequenceView::renderSequence() {
 void SequenceView::renderCursor() {
     short top = STATUS_HEIGHT+(cursorChannel*CHANNEL_HEIGHT);
     short left = (cursorBar-scrollBar)*BAR_WIDTH;
-    display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
-    display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
-    display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
-    display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
+    Hardware::display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
+    Hardware::display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
+    Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
+    Hardware::display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
 }

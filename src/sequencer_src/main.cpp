@@ -7,6 +7,7 @@
 #include "lib/drivers/LedMatrix.h"
 #include "lib/drivers/KeyboardLedMatrix.h"
 #include "model/AppData.h"
+#include "interface/Hardware.h"
 #include "interface/InputTask.h"
 #include "interface/InterfaceController.h"
 #include "interface/Keyboard.h"
@@ -14,8 +15,6 @@
 #include "sequencer/midi/MidiOutputService.h"
 
 // hardware
-Display display = Display();
-LedMatrix ledMatrix = LedMatrix();
 Keyboard keyboard = Keyboard();
 
 // data
@@ -27,7 +26,7 @@ EventOutputService eventOutputService = EventOutputService(midiOutputSevice);
 Sequencer sequencer = Sequencer(appData, eventOutputService);
 
 // user interface
-InterfaceController interfaceController = InterfaceController(appData, sequencer, display, ledMatrix, keyboard);
+InterfaceController interfaceController = InterfaceController(appData, sequencer, keyboard);
 InputTask inputTask = InputTask(interfaceController, keyboard);
 
 
@@ -39,7 +38,7 @@ void setup() {
     Serial.println("=========================================");
     Serial.println();
 
-    ledMatrix.init();
+    Hardware::init();
     inputTask.init();
     interfaceController.init();
     midiOutputSevice.init();

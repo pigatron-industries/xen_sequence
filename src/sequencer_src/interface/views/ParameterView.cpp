@@ -1,11 +1,11 @@
 #include "ParameterView.h"
+#include "../Hardware.h"
 
 #include "Org_01.h"
 
-ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, Display& _display, SequenceMatrixView& _sequenceMatrixView) :
+ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),
     sequencer(_sequencer),
-    display(_display),
     sequenceMatrixView(_sequenceMatrixView) {
     barFields.add(&barLengthField);
     barFields.add(&barSpeedField);
@@ -24,10 +24,10 @@ void ParameterView::render(bool full) {
         setDirtyScreen();
     }
     if(dirtyScreen) {
-        display.fillScreen(Colour(0, 0, 0));
+        Hardware::display.fillScreen(Colour(0, 0, 0));
     }
-    display.setFont(Org_01);
-    display.setTextSize(1);
+    Hardware::display.setFont(Org_01);
+    Hardware::display.setTextSize(1);
     renderMode();
     renderFields();
 
@@ -38,9 +38,9 @@ void ParameterView::render(bool full) {
 
 void ParameterView::renderMode() {
     uint8_t top = 0;
-    display.setTextColour(Colour(255, 255, 255));
-    display.setCursor(0, top+TEXT_HEIGHT);
-    display.print(parameterViewMode == PARAM_MODE_BAR ? "BAR" : parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
+    Hardware::display.setTextColour(Colour(255, 255, 255));
+    Hardware::display.setCursor(0, top+TEXT_HEIGHT);
+    Hardware::display.print(parameterViewMode == PARAM_MODE_BAR ? "BAR" : parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
 }
 
 void ParameterView::renderFields() {
@@ -50,7 +50,7 @@ void ParameterView::renderFields() {
 }
 
 void ParameterView::renderField(uint8_t row) {
-    visibleFields->get(row)->render(display, row+1);
+    visibleFields->get(row)->render(Hardware::display, row+1);
 }
 
 void ParameterView::setDirtyScreen() {

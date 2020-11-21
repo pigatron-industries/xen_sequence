@@ -22,6 +22,8 @@ struct Colour {
 class Display : public Print {
 
 public:
+    static Display display;
+
     Display();
     void init();
     void updateScreen();

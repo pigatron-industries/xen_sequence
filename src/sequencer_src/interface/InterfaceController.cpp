@@ -1,23 +1,20 @@
 #include "InterfaceController.h"
+#include "Hardware.h"
 
 
-
-InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Display& _display, LedMatrix& _ledMatrix, Keyboard& _keyboard) :
+InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Keyboard& _keyboard) :
     appData(_appData),
     sequencer(_sequencer),
-    display(_display),
-    ledMatrix(_ledMatrix),
     keyboard(_keyboard),
-    sequenceMatrixView(_appData, _sequencer, _ledMatrix),
-    sequenceView(_appData, _display, sequenceMatrixView),
-    parameterView(_appData, _sequencer, _display, sequenceMatrixView) {
+    sequenceMatrixView(_appData, _sequencer),
+    sequenceView(_appData, sequenceMatrixView),
+    parameterView(_appData, _sequencer, sequenceMatrixView) {
       currentView = &sequenceView;
       sequencer.addEventListener(this);
 }
 
 void InterfaceController::init() {
-    display.init();
-    display.fillScreen(Colour(0, 0, 0));
+    Hardware::display.fillScreen(Colour(0, 0, 0));
     render();
 }
 
