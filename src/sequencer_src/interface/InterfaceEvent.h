@@ -1,6 +1,9 @@
 #ifndef InterfaceEvent_h
 #define InterfaceEvent_h
 
+#define EVENT_KEY_RELEASED 0
+#define EVENT_KEY_PRESSED 1
+
 enum InterfaceEventType {
     STICK_LEFT,
     STICK_RIGHT,
@@ -22,14 +25,14 @@ enum InterfaceEventType {
     KEY_PLACE_3,
     KEY_PLACE_4,
     //
-    KEY_BACK,
+    KEY_VIEW,
+    KEY_SELECTION,
+    KEY_PLACE_5,
+    KEY_PLACE_6,
+    //
     KEY_ADD_DEL,
     KEY_COPY,
     KEY_PASTE,
-    //
-    KEY_PLACE_5,
-    KEY_PLACE_6,
-    KEY_PLACE_7,
     KEY_PLACE_8,
     //
     KEY_PLACE_9,
@@ -40,7 +43,7 @@ enum InterfaceEventType {
     KEY_PLACE_13,
     KEY_PLACE_14,
     KEY_PLACE_15,
-    KEY_PLACE_16,
+    KEY_HELP,
     //
     SEQUENCER_TICK
 };

@@ -74,8 +74,8 @@ void ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::STICK_RIGHT:
             cursorRight();
             break;
-        case InterfaceEventType::STICK_PRESS:
-            cycleSelectionMode();
+        case InterfaceEventType::DATA_PRESS:
+            nextParameter();
             render();
             break;
         case InterfaceEventType::DATA_INCREMENT:
@@ -84,17 +84,21 @@ void ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::DATA_DECREMENT:
             fieldDecrement(event.data);
             break;
-        case InterfaceEventType::DATA_PRESS:
-            cycleParameterViewMode();
-            render();
+        case InterfaceEventType::KEY_SELECTION:
+            if(event.data == EVENT_KEY_PRESSED) {
+                cycleParameterViewMode();
+                render();
+            }
             break;
         case InterfaceEventType::KEY_ADD_DEL:
-            if(selectedEvent == NULL) {
-                addEvent();
-            } else {
-                deleteEvent();
+            if(event.data == EVENT_KEY_PRESSED) {
+                if(selectedEvent == NULL) {
+                    addEvent();
+                } else {
+                    deleteEvent();
+                }
+                render();
             }
-            render();
             break;
         default:
             break;
@@ -102,69 +106,27 @@ void ParameterView::handleEvent(InterfaceEvent event) {
 }
 
 void ParameterView::cursorUp() {
-    switch(selectionMode) {
-        case ParameterViewSelectionMode::SELECT_PARAMETER:
-            prevParameter();
-            render();
-            break;
-        case ParameterViewSelectionMode::SELECT_EVENT:
-            sequenceMatrixView.cursorUp();
-            updateSelectedEvent();
-            render();
-            break;
-        case ParameterViewSelectionMode::SELECT_CHANNEL:
-            sequenceMatrixView.cursorUp();
-            updateSelectedChannel();
-            render();
-            break;
-    }
+    sequenceMatrixView.cursorUp();
+    updateSelectedChannel();
+    render();
 }
 
 void ParameterView::cursorDown() {
-    switch(selectionMode) {
-        case ParameterViewSelectionMode::SELECT_PARAMETER:
-            nextParameter();
-            render();
-            break;
-        case ParameterViewSelectionMode::SELECT_EVENT:
-            sequenceMatrixView.cursorDown();
-            updateSelectedEvent();
-            render();
-            break;
-        case ParameterViewSelectionMode::SELECT_CHANNEL:
-            sequenceMatrixView.cursorDown();
-            updateSelectedChannel();
-            render();
-            break;
-    }
+    sequenceMatrixView.cursorDown();
+    updateSelectedChannel();
+    render();
 }
 
 void ParameterView::cursorLeft() {
-    switch(selectionMode) {
-        case ParameterViewSelectionMode::SELECT_PARAMETER:
-            break;
-        case ParameterViewSelectionMode::SELECT_EVENT:
-            sequenceMatrixView.cursorLeft();
-            updateSelectedEvent();
-            render();
-            break;
-        case ParameterViewSelectionMode::SELECT_CHANNEL:
-            break;
-    }
+    sequenceMatrixView.cursorLeft();
+    updateSelectedEvent();
+    render();
 }
 
 void ParameterView::cursorRight() {
-    switch(selectionMode) {
-        case ParameterViewSelectionMode::SELECT_PARAMETER:
-            break;
-        case ParameterViewSelectionMode::SELECT_EVENT:
-            sequenceMatrixView.cursorRight();
-            updateSelectedEvent();
-            render();
-            break;
-        case ParameterViewSelectionMode::SELECT_CHANNEL:
-            break;
-    }
+    sequenceMatrixView.cursorRight();
+    updateSelectedEvent();
+    render();
 }
 
 void ParameterView::fieldIncrement(int amount) {

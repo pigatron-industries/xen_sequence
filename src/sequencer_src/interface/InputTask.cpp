@@ -57,12 +57,9 @@ void InputTask::execute() {
         for(int i = 0; i < keyboard.getNumKeys(); i++) {
             Key key = keyboard.getKeys()[i];
             if(key.stateChanged && key.kstate == PRESSED) {
-                // Serial.print("PRESSED ");
-                // Serial.println((int)key.kchar);
-                interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key.kchar)));
+                interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key.kchar), EVENT_KEY_PRESSED));
             } else if (key.stateChanged && key.kstate == RELEASED) {
-                // Serial.print("RELEASED ");
-                // Serial.println((int)key.kchar);
+                interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key.kchar), EVENT_KEY_RELEASED));
             }
         }
     }

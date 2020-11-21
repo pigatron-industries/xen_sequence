@@ -1,5 +1,5 @@
-#ifndef ParameterView_h
-#define ParameterView_h
+#ifndef HelpView_h
+#define HelpView_h
 
 #include <inttypes.h>
 
@@ -15,7 +15,7 @@ public:
     virtual void handleEvent(InterfaceEvent event);
 
 private:
-    
+
 };
 
 #endif

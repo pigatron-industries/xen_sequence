@@ -29,27 +29,42 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 switchToParameterView();
             }
             break;
-        case InterfaceEventType::KEY_BACK:
-            if(currentView == &parameterView) {
-                switchToSequenceView();
+        case InterfaceEventType::KEY_VIEW:
+            if(event.data == EVENT_KEY_PRESSED) {
+                if(currentView == &parameterView) {
+                    switchToSequenceView();
+                } else {
+                    switchToParameterView();
+                }
+            }
+            break;
+        case InterfaceEventType::KEY_HELP:
+            if(event.data == EVENT_KEY_PRESSED) {
+                helpView.render();
+            } else {
+                currentView->render(true);
             }
             break;
         case InterfaceEventType::KEY_RECORD: 
-            if(recording) {
-                recording = false;
-                keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
-            } else {
-                recording = true;
-                keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
+            if(event.data == EVENT_KEY_PRESSED) {
+                if(recording) {
+                    recording = false;
+                    keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
+                } else {
+                    recording = true;
+                    keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
+                }
             }
             break;
         case InterfaceEventType::KEY_PLAY_STOP:
-            if(sequencer.isPlaying()) {
-                sequencer.stop();
-                keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
-            } else {
-                sequencer.play();
-                keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
+            if(event.data == EVENT_KEY_PRESSED) {
+                if(sequencer.isPlaying()) {
+                    sequencer.stop();
+                    keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
+                } else {
+                    sequencer.play();
+                    keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
+                }
             }
             break;
         case InterfaceEventType::SEQUENCER_TICK:

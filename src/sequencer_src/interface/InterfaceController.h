@@ -12,6 +12,7 @@
 #include "./views/SequenceView.h"
 #include "./views/ParameterView.h"
 #include "./views/SequenceMatrixView.h"
+#include "./views/HelpView.h"
 
 class InterfaceController : public SequencerEventListener {
 
@@ -32,6 +33,7 @@ private:
     SequenceMatrixView sequenceMatrixView;
     SequenceView sequenceView;
     ParameterView parameterView;
+    HelpView helpView;
 
     bool recording;
 
