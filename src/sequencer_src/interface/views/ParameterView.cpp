@@ -108,12 +108,14 @@ void ParameterView::handleEvent(InterfaceEvent event) {
 void ParameterView::cursorUp() {
     sequenceMatrixView.cursorUp();
     updateSelectedChannel();
+    updateSelectedEvent();
     render();
 }
 
 void ParameterView::cursorDown() {
     sequenceMatrixView.cursorDown();
     updateSelectedChannel();
+    updateSelectedEvent();
     render();
 }
 
