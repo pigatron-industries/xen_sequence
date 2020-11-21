@@ -22,7 +22,7 @@ Keyboard keyboard = Keyboard();
 AppData appData = AppData();
 
 // sequencer
-MidiOutputService midiOutputSevice = MidiOutputService(Serial2);
+MidiOutputService midiOutputSevice = MidiOutputService(Serial3);
 EventOutputService eventOutputService = EventOutputService(midiOutputSevice);
 Sequencer sequencer = Sequencer(appData, eventOutputService);
 

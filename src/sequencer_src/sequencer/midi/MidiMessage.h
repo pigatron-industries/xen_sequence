@@ -23,7 +23,7 @@ class MidiMessage {
         uint8_t length = 3;
 
         uint8_t* getBytes() {
-            bytes[0] = (channel << 4) | command;
+            bytes[0] = (command << 4) | channel;
             bytes[1] = data1;
             bytes[2] = data2;
             return bytes;

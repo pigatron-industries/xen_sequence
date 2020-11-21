@@ -12,20 +12,20 @@ enum InterfaceEventType {
     DATA_DECREMENT,
     DATA_PRESS,
     //
+    KEY_RECORD,
+    KEY_PLAY_STOP,
+    KEY_PREV,
+    KEY_NEXT,
+    //
+    KEY_LOOP,
+    KEY_PLACE_2,
+    KEY_PLACE_3,
+    KEY_PLACE_4,
+    //
     KEY_BACK,
     KEY_ADD_DEL,
     KEY_COPY,
     KEY_PASTE,
-    //
-    KEY_PLAY_STOP,
-    KEY_RECORD,
-    KEY_PREV,
-    KEY_NEXT,
-    //
-    KEY_PLACE_1,
-    KEY_PLACE_2,
-    KEY_PLACE_3,
-    KEY_PLACE_4,
     //
     KEY_PLACE_5,
     KEY_PLACE_6,

@@ -4,8 +4,6 @@
 #include "../../hwconfig.h"
 
 
-
-
 MidiOutputService::MidiOutputService(HardwareSerial& _midiSerial) :
     midiSerial(_midiSerial) {
 }
