@@ -38,7 +38,7 @@ void ParameterView::render(bool full) {
 
 void ParameterView::renderMode() {
     uint8_t top = 0;
-    Hardware::display.setTextColour(Colour(255, 255, 255));
+    Hardware::display.setTextColour(Colour::WHITE);
     Hardware::display.setCursor(0, top+TEXT_HEIGHT);
     Hardware::display.print(parameterViewMode == PARAM_MODE_BAR ? "BAR" : parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
 }

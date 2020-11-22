@@ -1,9 +1,9 @@
 
 // Teensy Pins
-#define SPI_CS_PIN 10
-#define SPI_MOSI_PIN 11
-#define SPI_MISO_PIN 12
-#define SPI_SCLK_PIN 13
+// #define SEQ_SPI_CS_PIN 10
+// #define SEQ_SPI_MOSI_PIN 11
+// #define SEQ_SPI_MISO_PIN 12
+// #define SEQ_SPI_SCLK_PIN 13
 #define OLED_CS_PIN 10
 #define OLED_RESET_PIN 18
 #define OLED_DC_PIN 19

@@ -15,8 +15,8 @@
 #define GRID_COLOUR Colour(20, 20, 20)
 #define GRID_TEXT_COLOUR Colour(127, 127, 127)
 #define DATA_COLOUR Colour(0, 40, 80)
-#define DATA_TEXT_COLOUR Colour(255, 255, 255)
-#define CURSOR_COLOUR Colour(255, 0, 0)
+#define DATA_TEXT_COLOUR Colour::WHITE
+#define CURSOR_COLOUR Colour::RED
 
 SequenceView::SequenceView(AppData& _appData, SequenceMatrixView& _sequenceMatrixView) :
     appData(_appData),

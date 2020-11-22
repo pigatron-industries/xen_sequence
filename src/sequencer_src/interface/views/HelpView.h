@@ -15,7 +15,7 @@ public:
     virtual void handleEvent(InterfaceEvent event);
 
 private:
-
+    void renderPage(InterfaceEventType eventType);
 };
 
 #endif

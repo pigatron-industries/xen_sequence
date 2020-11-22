@@ -3,6 +3,19 @@
 #include <ssd1351.h>
 #include "../../hwconfig.h"
 
+Colour Colour::WHITE(255, 255, 255);
+Colour Colour::BLACK(0, 0, 0);
+
+Colour Colour::RED(255, 0, 0);
+Colour Colour::GREEN(0, 255, 0);
+Colour Colour::BLUE(0, 0, 255);
+Colour Colour::YELLOW(255, 255, 0);
+Colour Colour::PURPLE(255, 0, 255);
+Colour Colour::CYAN(0, 255, 255);
+
+Colour Colour::ORANGE(255, 127, 0);
+
+
 ssd1351::SSD1351<ssd1351::HighColor, ssd1351::NoBuffer, 128, 128> oled(OLED_CS_PIN, OLED_DC_PIN, OLED_RESET_PIN, 11, 13);
 
 ssd1351::HighColor c(const Colour &colour) {

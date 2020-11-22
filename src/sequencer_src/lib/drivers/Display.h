@@ -10,20 +10,30 @@ static const uint8_t ALIGN_LEFT = 0;
 static const uint8_t ALIGN_CENTER = 1;
 static const uint8_t ALIGN_RIGHT = 2;
 
-struct Colour {
+class Colour {
+public:
 	uint8_t r = 0;
 	uint8_t g = 0;
 	uint8_t b = 0;
 	Colour() {}
 	Colour(int16_t _r, int16_t _g, int16_t _b) : r(_r), g(_g), b(_b) {}
+
+    static Colour WHITE;
+    static Colour BLACK;
+    static Colour RED;
+    static Colour GREEN;
+    static Colour BLUE;
+    static Colour YELLOW;
+    static Colour PURPLE;
+    static Colour CYAN;
+
+    static Colour ORANGE;
 };
 
 
 class Display : public Print {
 
 public:
-    static Display display;
-
     Display();
     void init();
     void updateScreen();

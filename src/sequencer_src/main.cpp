@@ -14,6 +14,8 @@
 #include "sequencer/Sequencer.h"
 #include "sequencer/midi/MidiOutputService.h"
 
+#include "repository/DataRepository.h"
+
 // hardware
 Keyboard keyboard = Keyboard();
 
@@ -39,6 +41,7 @@ void setup() {
     Serial.println();
 
     Hardware::init();
+    DataRepository::data.init();
     inputTask.init();
     interfaceController.init();
     midiOutputSevice.init();

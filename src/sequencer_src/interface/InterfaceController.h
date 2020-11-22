@@ -29,6 +29,7 @@ private:
     Keyboard& keyboard;
 
     View* currentView;
+    View* previousView;
 
     SequenceMatrixView sequenceMatrixView;
     SequenceView sequenceView;
