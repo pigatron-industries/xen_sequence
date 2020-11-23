@@ -4,7 +4,6 @@
 #include <inttypes.h>
 
 #include "../View.h"
-#include "../../lib/drivers/display.h"
 
 
 class HelpView : public View {

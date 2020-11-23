@@ -1,6 +1,8 @@
 #include "InterfaceController.h"
 #include "Hardware.h"
 
+#include "../repository/DataRepository.h"
+
 InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Keyboard& _keyboard) :
     appData(_appData),
     sequencer(_sequencer),
@@ -65,6 +67,13 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                         sequencer.play();
                         keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
                     }
+                }
+                break;
+            case InterfaceEventType::KEY_FILE:
+                if(event.data == EVENT_KEY_PRESSED) {
+                    fileView.load();
+                    currentView = &fileView;
+                    currentView->render(true);
                 }
                 break;
             case InterfaceEventType::SEQUENCER_TICK:

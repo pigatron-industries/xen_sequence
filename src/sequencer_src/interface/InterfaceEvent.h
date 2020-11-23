@@ -42,7 +42,7 @@ enum InterfaceEventType {
     //
     KEY_PLACE_13,
     KEY_PLACE_14,
-    KEY_PLACE_15,
+    KEY_FILE,
     KEY_HELP,
     //
     SEQUENCER_TICK
