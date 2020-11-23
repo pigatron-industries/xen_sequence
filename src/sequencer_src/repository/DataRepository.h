@@ -12,7 +12,7 @@ class DataRepository {
 
         void init();
 
-        void loadFileList(char* directoryName);
+        void loadFileList(String directoryName);
         FileList& getFileList() { return fileList; }
         
         void saveData();
@@ -21,6 +21,8 @@ class DataRepository {
         void listFiles(); //TEST FUNCTION
 
     private:
+        static const String ROOT_DIRECTORY;
+
         DataRepository() {}
         SdFat sd;
 

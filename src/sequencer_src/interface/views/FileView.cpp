@@ -5,7 +5,6 @@
 #include "Org_01.h"
 
 FileView::FileView() {
-    strncpy(currentDirectory, "/", MAX_FILENAME_SIZE);
 }
 
 void FileView::load() {

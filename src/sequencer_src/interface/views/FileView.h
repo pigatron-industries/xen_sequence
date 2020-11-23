@@ -16,7 +16,7 @@ public:
     virtual void handleEvent(InterfaceEvent event);
 
 private:
-    char currentDirectory[MAX_FILENAME_SIZE];
+    String currentDirectory = String("/");
 
 };
 
