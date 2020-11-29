@@ -12,7 +12,7 @@ class FileInfo {
 class FileList {
     public:
         int size;
-        FileInfo file[];
+        FileInfo file[MAX_FILE_COUNT];
 };
 
 #endif

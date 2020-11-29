@@ -4,8 +4,6 @@
 #include <SdFat.h>
 #include "FileInfo.h"
 
-#define MAX_FILE_COUNT 32
-
 class DataRepository {
     public:
         static DataRepository data;
@@ -17,8 +15,6 @@ class DataRepository {
         
         void saveData();
         void loadData();
-
-        void listFiles(); //TEST FUNCTION
 
     private:
         static const String ROOT_DIRECTORY;

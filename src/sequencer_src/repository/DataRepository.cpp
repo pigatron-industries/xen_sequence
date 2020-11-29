@@ -14,8 +14,6 @@ void DataRepository::init() {
         Serial.println("Creating sequence directory");
         sd.mkdir(ROOT_DIRECTORY, true);
     }
-
-    listFiles();
 }
 
 void DataRepository::loadFileList(String directoryName) {
@@ -28,24 +26,24 @@ void DataRepository::loadFileList(String directoryName) {
             entry.getName(fileList.file[i].filename, MAX_FILENAME_SIZE);
             entry.close();
             fileList.size++;
+            i++;
             entry = dir.openNextFile();
         }
     }
-}
-
-void DataRepository::listFiles() {
-    loadFileList("/sequence");
-    for(int i = 0; i < fileList.size; i++) {
-        Serial.println(fileList.file[i].filename);
-    }
+    dir.close();
 }
 
 void DataRepository::saveData() {
     SdFile file;
-    // sd.chdir("/sequence");
-    // file.open("text.txt", FILE_WRITE);
-    // file.println("test data");
-    // file.close();
+    sd.chdir("/sequence");
+    Serial.println("Opening file");
+    if(!file.open("test2.txt", FILE_WRITE)) {
+        Serial.println("Open file failed!");
+    }
+
+    file.println("test data");
+    file.sync();
+    file.close();
 }
 
 void DataRepository::loadData() {
