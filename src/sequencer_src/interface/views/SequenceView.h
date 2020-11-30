@@ -12,7 +12,7 @@ class SequenceView : public View {
 
 public:
     SequenceView(AppData& _appData, SequenceMatrixView& _sequenceMatrixView);
-    virtual void render(bool full = false);
+    virtual void render(GraphicsContext& g);
     virtual void handleEvent(InterfaceEvent event);
     uint16_t getCursorBar() { return cursorBar; }
 

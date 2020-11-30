@@ -2,11 +2,11 @@
 #define View_h
 
 #include "InterfaceEvent.h"
+#include "components/Component.h"
 #include "../lib/drivers/Display.h"
 
-class View {
+class View : public Component {
     public:
-        virtual void render(bool full = false) = 0;
         virtual void handleEvent(InterfaceEvent event) = 0;
 };
 

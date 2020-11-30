@@ -19,8 +19,8 @@ ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, SequenceM
     setParameterViewMode(PARAM_MODE_BAR);
 }
 
-void ParameterView::render(bool full) {
-    if(full) {
+void ParameterView::render(GraphicsContext& g) {
+    if(g.full) {
         setDirtyScreen();
     }
     if(dirtyScreen) {
@@ -76,7 +76,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
             break;
         case InterfaceEventType::DATA_PRESS:
             nextParameter();
-            render();
+            Component::render();
             break;
         case InterfaceEventType::DATA_INCREMENT:
             fieldIncrement(event.data);
@@ -87,7 +87,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::KEY_SELECTION:
             if(event.data == EVENT_KEY_PRESSED) {
                 cycleParameterViewMode();
-                render();
+                Component::render();
             }
             break;
         case InterfaceEventType::KEY_ADD_DEL:
@@ -97,7 +97,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
                 } else {
                     deleteEvent();
                 }
-                render();
+                Component::render();
             }
             break;
         default:
@@ -109,26 +109,26 @@ void ParameterView::cursorUp() {
     sequenceMatrixView.cursorUp();
     updateSelectedChannel();
     updateSelectedEvent();
-    render();
+    Component::render();
 }
 
 void ParameterView::cursorDown() {
     sequenceMatrixView.cursorDown();
     updateSelectedChannel();
     updateSelectedEvent();
-    render();
+    Component::render();
 }
 
 void ParameterView::cursorLeft() {
     sequenceMatrixView.cursorLeft();
     updateSelectedEvent();
-    render();
+    Component::render();
 }
 
 void ParameterView::cursorRight() {
     sequenceMatrixView.cursorRight();
     updateSelectedEvent();
-    render();
+    Component::render();
 }
 
 void ParameterView::fieldIncrement(int amount) {

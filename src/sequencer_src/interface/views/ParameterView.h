@@ -37,7 +37,7 @@ class ParameterView : public View {
 
 public:
     ParameterView(AppData& _appData, Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
-    virtual void render(bool full = false);
+    virtual void render(GraphicsContext& g);
     virtual void handleEvent(InterfaceEvent event);
 
     void setBar(uint16_t _barIndex);

@@ -1,6 +1,7 @@
 #include "InterfaceController.h"
 #include "Hardware.h"
 
+#include "components/GraphicsContext.h"
 #include "../repository/DataRepository.h"
 
 InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Keyboard& _keyboard) :
@@ -44,7 +45,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 if(event.data == EVENT_KEY_PRESSED) {
                     previousView = currentView;
                     currentView = &helpView;
-                    currentView->render(true);
+                    render();
                 }
                 break;
             case InterfaceEventType::KEY_RECORD: 
@@ -73,7 +74,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 if(event.data == EVENT_KEY_PRESSED) {
                     fileView.load();
                     currentView = &fileView;
-                    currentView->render(true);
+                    render();
                 }
                 break;
             case InterfaceEventType::SEQUENCER_TICK:
@@ -83,7 +84,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
         }
     } else if (event.eventType == InterfaceEventType::KEY_HELP && event.data == EVENT_KEY_RELEASED) {
         currentView = previousView;
-        currentView->render(true);
+        render();
     }
 
     currentView->handleEvent(event);
@@ -97,10 +98,10 @@ void InterfaceController::switchToParameterView() {
     currentView = &parameterView;
     uint16_t bar = sequenceView.getCursorBar();
     parameterView.setBar(bar);
-    currentView->render(true);
+    render();
 }
 
 void InterfaceController::switchToSequenceView() {
     currentView = &sequenceView;
-    currentView->render(true);
+    render();
 }

@@ -26,7 +26,7 @@ SequenceView::SequenceView(AppData& _appData, SequenceMatrixView& _sequenceMatri
     scrollBar = 0;
 }
 
-void SequenceView::render(bool full) {
+void SequenceView::render(GraphicsContext& g) {
     Hardware::display.fillScreen(Colour(0, 0, 0));
     Hardware::display.setFont(Org_01);
     Hardware::display.setTextSize(1);
@@ -63,14 +63,14 @@ void SequenceView::handleEvent(InterfaceEvent event) {
 void SequenceView::cursorUp() {
     if(cursorChannel > 0) {
         cursorChannel--;
-        render();
+        Component::render();
     }
 }
 
 void SequenceView::cursorDown() {
     if(cursorChannel < SEQUENCE_CHANNELS-1) {
         cursorChannel++;
-        render();
+        Component::render();
     }
 }
 
@@ -80,7 +80,7 @@ void SequenceView::cursorLeft() {
         if(cursorBar == scrollBar-1) {
             scrollBar--;
         }
-        render();
+        Component::render();
     }
 }
 
@@ -91,7 +91,7 @@ void SequenceView::cursorRight() {
         if(cursorBar == scrollBar+VISIBLE_BARS-1) {
             scrollBar++;
         }
-        render();
+        Component::render();
     }
 }
 

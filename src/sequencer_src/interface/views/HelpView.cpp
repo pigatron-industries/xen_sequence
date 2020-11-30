@@ -6,7 +6,7 @@
 HelpView::HelpView() {
 }
 
-void HelpView::render(bool full = false) {
+void HelpView::render(GraphicsContext& g) {
     Hardware::display.fillScreen(Colour(0, 0, 0));
     Hardware::display.setFont(Org_01);
     Hardware::display.setTextSize(1);

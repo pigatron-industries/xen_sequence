@@ -12,7 +12,7 @@ class FileView : public View {
 public:
     FileView();
     void load();
-    virtual void render(bool full = false);
+    virtual void render(GraphicsContext& g);
     virtual void handleEvent(InterfaceEvent event);
 
 private:

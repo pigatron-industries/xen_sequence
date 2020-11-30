@@ -11,7 +11,7 @@ void FileView::load() {
     DataRepository::data.loadFileList(currentDirectory);
 }
 
-void FileView::render(bool full) {
+void FileView::render(GraphicsContext& g) {
     Hardware::display.fillScreen(Colour(0, 0, 0));
     Hardware::display.setFont(Org_01);
     Hardware::display.setTextSize(1);
