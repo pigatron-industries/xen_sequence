@@ -8,7 +8,7 @@
 #include "../sequencer/SequencerEventListener.h"
 #include "InterfaceEvent.h"
 #include "Keyboard.h"
-#include "View.h"
+#include "views/View.h"
 #include "./views/SequenceView.h"
 #include "./views/ParameterView.h"
 #include "./views/SequenceMatrixView.h"

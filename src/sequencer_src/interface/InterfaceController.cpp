@@ -1,7 +1,7 @@
 #include "InterfaceController.h"
 #include "Hardware.h"
 
-#include "components/GraphicsContext.h"
+#include "graphics/GraphicsContext.h"
 #include "../repository/DataRepository.h"
 
 InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Keyboard& _keyboard) :

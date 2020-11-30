@@ -2,7 +2,7 @@
 #define Component_h
 
 #include <inttypes.h>
-#include "GraphicsContext.h"
+#include "../graphics/GraphicsContext.h"
 
 class Component {
 

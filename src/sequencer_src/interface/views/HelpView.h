@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-#include "../View.h"
+#include "View.h"
 
 
 class HelpView : public View {

@@ -4,7 +4,7 @@
 #include <inttypes.h>
 
 #include "../InterfaceEvent.h"
-#include "../View.h"
+#include "View.h"
 #include "SequenceMatrixView.h"
 #include "../../model/AppData.h"
 
