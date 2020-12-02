@@ -1,5 +1,5 @@
-#ifndef ListView_h
-#define ListView_h
+#ifndef ListComponent_h
+#define ListComponent_h
 
 #include "Component.h"
 #include "../../lib/drivers/Display.h"
@@ -7,12 +7,13 @@
 #define MAX_COMPONENTS 255
 
 
-class ListView : public Component {
+class ListComponent : public Component {
 
 public:
-    ListView() {}
+    ListComponent() {}
     virtual void render(GraphicsContext& g);
 
+    void clear() { componentCount = 0; }
     void addComponent(Component* component);
 
 private:

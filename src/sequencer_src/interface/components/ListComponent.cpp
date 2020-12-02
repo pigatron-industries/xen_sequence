@@ -1,13 +1,13 @@
-#include "ListView.h"
+#include "ListComponent.h"
 
-void ListView::render(GraphicsContext& g) {
+void ListComponent::render(GraphicsContext& g) {
     for(int i = 0; i < componentCount; i++) {
         components[i]->render(g);
         g.yPos += components[i]->getHeight();
     }
 }
 
-void ListView::addComponent(Component* component) {
+void ListComponent::addComponent(Component* component) {
     components[componentCount] = component;
     componentCount++;
 }

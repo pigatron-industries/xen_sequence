@@ -3,6 +3,9 @@
 
 #include <inttypes.h>
 
+class Focusable {
+};
+
 class GraphicsContext {
 
 public:
@@ -12,6 +15,8 @@ public:
     int xPos = 0;
     int yPos = 0;
     bool full = false;
+
+    Focusable* focus;
 
 };
 

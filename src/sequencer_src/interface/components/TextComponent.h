@@ -2,16 +2,20 @@
 #define StringComponent_h
 
 #include "Component.h"
-
+#include "../Hardware.h"
 
 class TextComponent : public Component {
 
 public:
     TextComponent();
     virtual void render(GraphicsContext& g);
+    void setText(const char* text);
+    void setTextColour(Colour textColour) { this->textColour = textColour; }
 
-protected:
+private:
     char text[32];
+
+    Colour textColour;
 
 };
 

@@ -1,15 +1,25 @@
 #include "TextComponent.h"
-#include "../Hardware.h"
 
 #define FIELD_HEIGHT 11
+#define FIELD_WIDTH 128 // TODO get max width of display
 #define TEXT_HEIGHT 7
 
 TextComponent::TextComponent() {
     height = FIELD_HEIGHT;
+    width = FIELD_WIDTH;
 }
 
 void TextComponent::render(GraphicsContext& g) {
-    Hardware::display.setTextColour(Colour(0, 128, 255));
-    Hardware::display.setCursor(0, g.yPos+TEXT_HEIGHT);
+    if(g.focus == this) {
+        Hardware::display.setTextColour(Colour::BLACK);
+        Hardware::display.fillRect(0, g.yPos, width, height, textColour);
+    } else {
+        Hardware::display.setTextColour(textColour);
+    }
+    Hardware::display.setCursor(1, g.yPos+TEXT_HEIGHT);
     Hardware::display.print(text);
+}
+
+void TextComponent::setText(const char* text) {
+    strcpy(this->text, text);
 }
