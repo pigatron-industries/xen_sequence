@@ -24,6 +24,7 @@ private:
     int selectedIndex;
     int listSize;
 
+    TextComponent titleComponent;
     Component* selectedComponent;
     ListComponent listComponent;
     TextComponent textComponents[MAX_FILES];

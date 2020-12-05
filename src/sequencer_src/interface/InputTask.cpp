@@ -5,9 +5,8 @@
 
 #include "../hwconfig.h"
 
-InputTask::InputTask(InterfaceController& _interface, Keyboard& _keyboard) :
+InputTask::InputTask(InterfaceController& _interface) :
     interface(_interface),
-    keyboard(_keyboard),
     analogStick(STICK_X_PIN, STICK_Y_PIN),
     analogStickSwitch(STICK_SWITCH_PIN),
     encoder(ENCODER_PIN1, ENCODER_PIN2),
@@ -52,10 +51,10 @@ void InputTask::execute() {
         }
     }
 
-    if(keyboard.update()) {
+    if(Hardware::keyboard.update()) {
         // Serial.println("================");
-        for(int i = 0; i < keyboard.getNumKeys(); i++) {
-            Key key = keyboard.getKeys()[i];
+        for(int i = 0; i < Hardware::keyboard.getNumKeys(); i++) {
+            Key key = Hardware::keyboard.getKeys()[i];
             if(key.stateChanged && key.kstate == PRESSED) {
                 interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key.kchar), EVENT_KEY_PRESSED));
             } else if (key.stateChanged && key.kstate == RELEASED) {

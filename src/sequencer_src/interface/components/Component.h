@@ -9,7 +9,7 @@ class Component : public Focusable {
 public:
     Component() {}
     virtual void render(GraphicsContext& graphicsContext) = 0;
-    void render() { GraphicsContext g = GraphicsContext(true); render(g); }
+    void render(bool full = true);
 
     uint8_t getHeight() { return height; }
     uint8_t getWidth() { return width; }

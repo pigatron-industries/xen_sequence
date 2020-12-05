@@ -15,13 +15,12 @@
 class InputTask : public Task {
 
 public:
-    InputTask(InterfaceController& _interface, Keyboard& keyboard);
+    InputTask(InterfaceController& _interface);
     void init();
     void execute();
 
 private:
     InterfaceController& interface;
-    Keyboard& keyboard;
 
     AnalogStick analogStick;
     Switch analogStickSwitch;

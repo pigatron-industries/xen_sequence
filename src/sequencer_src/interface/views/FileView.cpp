@@ -2,12 +2,12 @@
 #include "../Hardware.h"
 #include "../components/ParameterField.h"
 
-#include "Org_01.h"
-
 FileView::FileView() {
     for(int i = 0; i < MAX_FILES; i++) {
         textComponents[i].setTextColour(Colour::YELLOW);
     }
+    titleComponent.setText("LOAD/SAVE");
+    titleComponent.setTextColour(Colour::WHITE);
 }
 
 void FileView::init() {
@@ -26,11 +26,10 @@ void FileView::init() {
 
 void FileView::render(GraphicsContext& g) {
     g.focus = selectedComponent;
-
-    Hardware::display.fillScreen(Colour(0, 0, 0));
-    Hardware::display.setFont(Org_01);
-    Hardware::display.setTextSize(1);
-
+    if(g.full) {
+        titleComponent.render(g);
+    }
+    g.yPos += titleComponent.getHeight();
     listComponent.render(g);
 
     Hardware::display.updateScreen();
@@ -42,9 +41,9 @@ void FileView::handleEvent(InterfaceEvent event) {
             selectedIndex++;
             if(selectedIndex >= listSize) {
                 selectedIndex = 0;
-            }
+            } 
             selectedComponent = &textComponents[selectedIndex];
-            Component::render();
+            View::render(false);
             break;
         case InterfaceEventType::STICK_UP:
             selectedIndex--;
@@ -52,7 +51,7 @@ void FileView::handleEvent(InterfaceEvent event) {
                 selectedIndex = listSize-1;
             }
             selectedComponent = &textComponents[selectedIndex];
-            Component::render();
+            View::render(false);
             break;
         default:
             break;

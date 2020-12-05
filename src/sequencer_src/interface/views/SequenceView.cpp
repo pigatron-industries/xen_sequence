@@ -1,8 +1,6 @@
 #include "SequenceView.h"
 #include "../Hardware.h"
 
-#include "Org_01.h"
-
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 128
 
@@ -27,9 +25,6 @@ SequenceView::SequenceView(AppData& _appData, SequenceMatrixView& _sequenceMatri
 }
 
 void SequenceView::render(GraphicsContext& g) {
-    Hardware::display.fillScreen(Colour(0, 0, 0));
-    Hardware::display.setFont(Org_01);
-    Hardware::display.setTextSize(1);
     renderStatusBar();
     renderGrid();
     renderSequence();
@@ -63,14 +58,14 @@ void SequenceView::handleEvent(InterfaceEvent event) {
 void SequenceView::cursorUp() {
     if(cursorChannel > 0) {
         cursorChannel--;
-        Component::render();
+        View::render();
     }
 }
 
 void SequenceView::cursorDown() {
     if(cursorChannel < SEQUENCE_CHANNELS-1) {
         cursorChannel++;
-        Component::render();
+        View::render();
     }
 }
 
@@ -80,7 +75,7 @@ void SequenceView::cursorLeft() {
         if(cursorBar == scrollBar-1) {
             scrollBar--;
         }
-        Component::render();
+        View::render();
     }
 }
 
@@ -91,7 +86,7 @@ void SequenceView::cursorRight() {
         if(cursorBar == scrollBar+VISIBLE_BARS-1) {
             scrollBar++;
         }
-        Component::render();
+        View::render();
     }
 }
 

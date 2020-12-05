@@ -23,11 +23,6 @@ void ParameterView::render(GraphicsContext& g) {
     if(g.full) {
         setDirtyScreen();
     }
-    if(dirtyScreen) {
-        Hardware::display.fillScreen(Colour(0, 0, 0));
-    }
-    Hardware::display.setFont(Org_01);
-    Hardware::display.setTextSize(1);
     renderMode();
     renderFields();
 
@@ -76,7 +71,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
             break;
         case InterfaceEventType::DATA_PRESS:
             nextParameter();
-            Component::render();
+            View::render();
             break;
         case InterfaceEventType::DATA_INCREMENT:
             fieldIncrement(event.data);
@@ -88,7 +83,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::STICK_PRESS:
             if(event.data == EVENT_KEY_PRESSED) {
                 cycleParameterViewMode();
-                Component::render();
+                View::render();
             }
             break;
         case InterfaceEventType::KEY_ADD_DEL:
@@ -98,7 +93,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
                 } else {
                     deleteEvent();
                 }
-                Component::render();
+                View::render();
             }
             break;
         default:
@@ -110,26 +105,26 @@ void ParameterView::cursorUp() {
     sequenceMatrixView.cursorUp();
     updateSelectedChannel();
     updateSelectedEvent();
-    Component::render();
+    View::render();
 }
 
 void ParameterView::cursorDown() {
     sequenceMatrixView.cursorDown();
     updateSelectedChannel();
     updateSelectedEvent();
-    Component::render();
+    View::render();
 }
 
 void ParameterView::cursorLeft() {
     sequenceMatrixView.cursorLeft();
     updateSelectedEvent();
-    Component::render();
+    View::render();
 }
 
 void ParameterView::cursorRight() {
     sequenceMatrixView.cursorRight();
     updateSelectedEvent();
-    Component::render();
+    View::render();
 }
 
 void ParameterView::fieldIncrement(int amount) {

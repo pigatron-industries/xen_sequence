@@ -4,10 +4,9 @@
 #include "graphics/GraphicsContext.h"
 #include "../repository/DataRepository.h"
 
-InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer, Keyboard& _keyboard) :
+InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer) :
     appData(_appData),
     sequencer(_sequencer),
-    keyboard(_keyboard),
     sequenceMatrixView(_appData, _sequencer),
     sequenceView(_appData, sequenceMatrixView),
     parameterView(_appData, _sequencer, sequenceMatrixView) {
@@ -25,7 +24,8 @@ void InterfaceController::render() {
 }
 
 void InterfaceController::handleEvent(InterfaceEvent event) {
-    if(currentView != &helpView) {
+    if(isSequenceView()) {
+
         switch(event.eventType) {
             case InterfaceEventType::STICK_PRESS:
                 if(currentView == &sequenceView) {
@@ -50,37 +50,25 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 break;
             case InterfaceEventType::KEY_RECORD: 
                 if(event.data == EVENT_KEY_PRESSED) {
-                    if(recording) {
-                        recording = false;
-                        keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
-                    } else {
-                        recording = true;
-                        keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
-                    }
+                    record(!recording);
                 }
                 break;
             case InterfaceEventType::KEY_PLAY_STOP:
                 if(event.data == EVENT_KEY_PRESSED) {
                     if(sequencer.isPlaying()) {
-                        sequencer.stop();
-                        keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
+                        stop();
                     } else {
-                        sequencer.play();
-                        keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
+                        play();
                     }
                 }
                 break;
             case InterfaceEventType::KEY_FILE:
                 if(event.data == EVENT_KEY_PRESSED) {
-                    if(currentView != &fileView) {
-                        fileView.init();
-                        previousView = currentView;
-                        currentView = &fileView;
-                        render();
-                    } else {
-                        currentView = previousView;
-                        render();
-                    }
+                    stop();
+                    fileView.init();
+                    previousView = currentView;
+                    currentView = &fileView;
+                    render();
                 }
                 break;
             case InterfaceEventType::SEQUENCER_TICK:
@@ -88,9 +76,27 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
             default:
                 break;
         }
-    } else if (event.eventType == InterfaceEventType::KEY_HELP && event.data == EVENT_KEY_RELEASED) {
-        currentView = previousView;
-        render();
+
+    } else if (isHelpView()) {
+
+        if(event.eventType == InterfaceEventType::KEY_HELP && event.data == EVENT_KEY_RELEASED) {
+            currentView = previousView;
+            render();
+        }
+
+    } else if (isFileView()) {
+
+        switch(event.eventType) {
+            case InterfaceEventType::KEY_FILE:
+                if(event.data == EVENT_KEY_PRESSED) {
+                    currentView = previousView;
+                    render();
+                }
+                break;
+            default:
+                break;
+        }
+
     }
 
     currentView->handleEvent(event);
@@ -110,4 +116,19 @@ void InterfaceController::switchToParameterView() {
 void InterfaceController::switchToSequenceView() {
     currentView = &sequenceView;
     render();
+}
+
+void InterfaceController::play() {
+    sequencer.play();
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
+}
+
+void InterfaceController::stop() {
+    sequencer.stop();
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
+}
+
+void InterfaceController::record(bool value) {
+    recording = value;
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, value ? LedColour::RED : LedColour::OFF);
 }

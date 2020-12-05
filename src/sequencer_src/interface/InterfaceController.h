@@ -18,7 +18,7 @@
 class InterfaceController : public SequencerEventListener {
 
 public:
-    InterfaceController(AppData& _appData, Sequencer& _sequencer, Keyboard& _keyboard);
+    InterfaceController(AppData& _appData, Sequencer& _sequencer);
     void init();
     void render();
     void handleEvent(InterfaceEvent event);
@@ -27,7 +27,6 @@ public:
 private:
     AppData& appData;
     Sequencer& sequencer;
-    Keyboard& keyboard;
 
     View* currentView;
     View* previousView;
@@ -42,6 +41,14 @@ private:
 
     void switchToParameterView();
     void switchToSequenceView();
+
+    bool isSequenceView() { return currentView == &sequenceView || currentView == &parameterView; }
+    bool isHelpView() { return currentView == &helpView; }
+    bool isFileView() { return currentView == &fileView; }
+
+    void play();
+    void stop();
+    void record(bool value);
 
 };
 

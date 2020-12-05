@@ -15,6 +15,7 @@ void TextComponent::render(GraphicsContext& g) {
         Hardware::display.fillRect(0, g.yPos, width, height, textColour);
     } else {
         Hardware::display.setTextColour(textColour);
+        Hardware::display.fillRect(0, g.yPos, width, height, Colour::BLACK);
     }
     Hardware::display.setCursor(1, g.yPos+TEXT_HEIGHT);
     Hardware::display.print(text);

@@ -1,15 +1,10 @@
 #include "HelpView.h"
 #include "../Hardware.h"
 
-#include "Org_01.h"
-
 HelpView::HelpView() {
 }
 
 void HelpView::render(GraphicsContext& g) {
-    Hardware::display.fillScreen(Colour(0, 0, 0));
-    Hardware::display.setFont(Org_01);
-    Hardware::display.setTextSize(1);
     Hardware::display.setCursor(0, 12);
     Hardware::display.setTextColour(Colour(0, 0, 255));
     Hardware::display.println("LEFT SIDE");

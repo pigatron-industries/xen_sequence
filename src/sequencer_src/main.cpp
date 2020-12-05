@@ -16,9 +16,6 @@
 
 #include "repository/DataRepository.h"
 
-// hardware
-Keyboard keyboard = Keyboard();
-
 // data
 AppData appData = AppData();
 
@@ -28,8 +25,8 @@ EventOutputService eventOutputService = EventOutputService(midiOutputSevice);
 Sequencer sequencer = Sequencer(appData, eventOutputService);
 
 // user interface
-InterfaceController interfaceController = InterfaceController(appData, sequencer, keyboard);
-InputTask inputTask = InputTask(interfaceController, keyboard);
+InterfaceController interfaceController = InterfaceController(appData, sequencer);
+InputTask inputTask = InputTask(interfaceController);
 
 
 void setup() {
