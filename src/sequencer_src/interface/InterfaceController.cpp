@@ -72,9 +72,15 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 break;
             case InterfaceEventType::KEY_FILE:
                 if(event.data == EVENT_KEY_PRESSED) {
-                    fileView.load();
-                    currentView = &fileView;
-                    render();
+                    if(currentView != &fileView) {
+                        fileView.init();
+                        previousView = currentView;
+                        currentView = &fileView;
+                        render();
+                    } else {
+                        currentView = previousView;
+                        render();
+                    }
                 }
                 break;
             case InterfaceEventType::SEQUENCER_TICK:

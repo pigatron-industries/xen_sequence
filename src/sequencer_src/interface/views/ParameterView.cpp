@@ -85,6 +85,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
             fieldDecrement(event.data);
             break;
         case InterfaceEventType::KEY_SELECTION:
+        case InterfaceEventType::STICK_PRESS:
             if(event.data == EVENT_KEY_PRESSED) {
                 cycleParameterViewMode();
                 Component::render();

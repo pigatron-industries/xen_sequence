@@ -34,7 +34,7 @@ void InputTask::execute() {
 
     if(analogStickSwitch.update()) {
         if(analogStickSwitch.fell()) {
-            interface.handleEvent(InterfaceEvent(STICK_PRESS));
+            interface.handleEvent(InterfaceEvent(STICK_PRESS, EVENT_KEY_PRESSED));
         }
     }
 

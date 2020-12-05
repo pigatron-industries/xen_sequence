@@ -10,7 +10,7 @@ FileView::FileView() {
     }
 }
 
-void FileView::load() {
+void FileView::init() {
     DataRepository::data.loadFileList(currentDirectory);
 
     listComponent.clear();
