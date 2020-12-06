@@ -19,7 +19,8 @@ enum SequencePlayMode {
 class Sequencer {
 
 public:
-    Sequencer(AppData& _appData, EventOutputService& _eventOutputService);
+    Sequencer(EventOutputService& _eventOutputService);
+    void init();
     void addEventListener(SequencerEventListener* eventListener);
     void execute();
 
@@ -34,7 +35,6 @@ public:
     uint8_t getTickIndex() { return tickIndex; }
 
 private:
-    AppData& appData;
     EventOutputService& eventOutputService;
     EventCompiler eventCompiler;
     Clock clock;

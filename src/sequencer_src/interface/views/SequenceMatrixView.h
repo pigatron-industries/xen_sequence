@@ -16,7 +16,7 @@ enum class SequenceMatrixSelectionMode {
 class SequenceMatrixView {
 
 public:
-    SequenceMatrixView(AppData& _appData, Sequencer& _sequencer);
+    SequenceMatrixView(Sequencer& _sequencer);
     void render();
     void cursorUp();
     void cursorDown();
@@ -32,7 +32,6 @@ public:
     uint8_t getSelectCursorTick() { return selectCursorTick; }
 
 private:
-    AppData& appData;
     Sequencer& sequencer;
     SequencePattern* patterns[SEQUENCE_CHANNELS];
 

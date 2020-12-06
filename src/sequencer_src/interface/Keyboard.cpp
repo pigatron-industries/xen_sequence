@@ -5,6 +5,9 @@ const LedColour LedColour::OFF = LedColour(0, 0, 0);
 const LedColour LedColour::RED = LedColour(1, 0, 0);
 const LedColour LedColour::GREEN = LedColour(0, 1, 0);
 const LedColour LedColour::BLUE = LedColour(0, 0, 1);
+const LedColour LedColour::YELLOW = LedColour(1, 1, 0);
+const LedColour LedColour::MAGENTA = LedColour(1, 0, 1);
+const LedColour LedColour::CYAN = LedColour(0, 1, 1);
 
 uint8_t rowPins[KEY_ROWS] = KEY_ROW_PINS;
 uint8_t colPins[KEY_COLS] = KEY_COL_PINS;

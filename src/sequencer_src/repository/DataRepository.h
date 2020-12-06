@@ -2,7 +2,11 @@
 #define DataRepository_h
 
 #include <SdFat.h>
+#include <ArduinoJson.h>
 #include "FileInfo.h"
+
+#define JSON_BUF_SIZE 2048
+#define JSON_DOC_SIZE 2048
 
 class DataRepository {
     public:
@@ -13,8 +17,8 @@ class DataRepository {
         void loadFileList(String directoryName);
         FileList& getFileList() { return fileList; }
         
-        void saveData();
-        void loadData();
+        void saveSequence(String path);
+        void loadSequence(String path);
 
     private:
         static const String ROOT_DIRECTORY;
@@ -23,6 +27,9 @@ class DataRepository {
         SdFat sd;
 
         FileList fileList;
+
+        size_t serializeSequence(char* buffer, size_t bufferSize);
+        void deserializeSequence(char* buffer, size_t bufferSize);
 };
 
 #endif

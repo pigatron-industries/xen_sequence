@@ -8,6 +8,11 @@
 class SequenceBar {
 
 public:
+    SequenceBar() {
+        for(int i = 0; i < SEQUENCE_CHANNELS; i++) {
+            patterns[i] = NULL;
+        }
+    }
     SequencePattern* getPattern(uint8_t channel) { return patterns[channel]; }
     void setPattern(uint8_t channel, SequencePattern* pattern) { patterns[channel] = pattern; }
     uint8_t getLength() { return length; }

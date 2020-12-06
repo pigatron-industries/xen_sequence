@@ -2,11 +2,13 @@
 
 #include <Arduino.h>
 
-Sequencer::Sequencer(AppData& _appData, EventOutputService& _eventOutputService) :
-    appData(_appData),
+Sequencer::Sequencer(EventOutputService& _eventOutputService) :
     eventOutputService(_eventOutputService) {
     playing = false;
     playMode = PLAY_LOOP_BAR;
+}
+
+void Sequencer::init() {
     setBar(0);
 }
 
@@ -65,7 +67,7 @@ void Sequencer::reset() {
 
 void Sequencer::setBar(uint16_t _barIndex) {
     barIndex = _barIndex;
-    currentBar = appData.getBar(barIndex);
+    currentBar = AppData::data.getBar(barIndex);
     clock.setTicksPerMinute(currentBar->getSpeed());
 }
 
@@ -75,7 +77,7 @@ void Sequencer::tick() {
         tickIndex = 0;
         if(playMode != PLAY_LOOP_BAR) {
             barIndex++;
-            if(barIndex < appData.getSequence().getLength()) {
+            if(barIndex < AppData::data.getSequence().getLength()) {
                 setBar(barIndex);
             } else {
                 reset();

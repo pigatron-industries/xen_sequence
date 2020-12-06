@@ -7,7 +7,7 @@
 class AppData {
 
 public:
-    AppData();
+    static AppData data;
 
     Sequence& getSequence() { return sequence; }
     LinkedList<SequencePattern*>& getPatterns() { return patterns; }
@@ -26,9 +26,13 @@ public:
 
     SequenceChannel& getChannel(uint8_t index);
 
+    void clear();
+
     void populateTestData();
 
 private:
+    AppData();
+
     Sequence sequence;
     LinkedList<SequencePattern*> patterns;
 

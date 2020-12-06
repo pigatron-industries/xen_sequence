@@ -1,5 +1,6 @@
 #include "SequenceView.h"
 #include "../Hardware.h"
+#include "../../model/AppData.h"
 
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 128
@@ -16,8 +17,7 @@
 #define DATA_TEXT_COLOUR Colour::WHITE
 #define CURSOR_COLOUR Colour::RED
 
-SequenceView::SequenceView(AppData& _appData, SequenceMatrixView& _sequenceMatrixView) :
-    appData(_appData),
+SequenceView::SequenceView(SequenceMatrixView& _sequenceMatrixView) :
     sequenceMatrixView(_sequenceMatrixView) {
     cursorChannel = 0;
     cursorBar = 0;
@@ -116,7 +116,7 @@ void SequenceView::renderSequence() {
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         short left = 0;
         for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
-            SequencePattern* pattern = appData.getPattern(bar, channel);
+            SequencePattern* pattern = AppData::data.getPattern(bar, channel);
             if(pattern != NULL) {
                 Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
                 Hardware::display.setCursor(left+5, top+9);

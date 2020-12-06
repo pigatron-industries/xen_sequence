@@ -33,19 +33,60 @@ void DataRepository::loadFileList(String directoryName) {
     dir.close();
 }
 
-void DataRepository::saveData() {
+void DataRepository::saveSequence(String path) {
+    String fullpath = String(ROOT_DIRECTORY).concat(path);
+    Serial.println("Saving to ");
+    Serial.println(fullpath);
+
+    char jsonBuffer[JSON_BUF_SIZE];
+    serializeSequence(jsonBuffer, JSON_BUF_SIZE);
+    Serial.println(jsonBuffer);
+
     SdFile file;
-    sd.chdir("/sequence");
-    Serial.println("Opening file");
-    if(!file.open("test2.txt", FILE_WRITE)) {
+    if(!file.open(fullpath.c_str(), O_WRONLY | O_CREAT | O_TRUNC)) {
+        Serial.println("Open file failed!");
+    }
+    file.println(jsonBuffer);
+    file.sync();
+    file.close();
+    Serial.println("done.");
+    Serial.println();
+}
+
+void DataRepository::loadSequence(String path) {
+    String fullpath = String(ROOT_DIRECTORY).concat(path);
+    Serial.println("Loading from ");
+    Serial.println(fullpath);
+
+    SdFile file;
+    if(!file.open(fullpath.c_str(), FILE_READ)) {
         Serial.println("Open file failed!");
     }
 
-    file.println("test data");
-    file.sync();
+    char jsonBuffer[JSON_BUF_SIZE];
+    int size = file.read(jsonBuffer, JSON_BUF_SIZE);
+    Serial.write(jsonBuffer, size);
+
+    deserializeSequence(jsonBuffer, size);
+
     file.close();
+    Serial.println("done.");
+    Serial.println();
 }
 
-void DataRepository::loadData() {
+size_t DataRepository::serializeSequence(char* buffer, size_t bufferSize) {
+    DynamicJsonDocument doc(JSON_DOC_SIZE);
 
+    doc["test"] = 43;
+
+    return serializeJson(doc, buffer, bufferSize);
+}
+
+void DataRepository::deserializeSequence(char* buffer, size_t size) {
+    DynamicJsonDocument doc(JSON_DOC_SIZE);
+    deserializeJson(doc, buffer, size);
+
+    int test = doc["test"];
+
+    Serial.println(test);
 }

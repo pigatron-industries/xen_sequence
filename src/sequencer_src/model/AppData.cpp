@@ -2,11 +2,13 @@
 
 #include <Arduino.h>
 
+AppData AppData::data;
+
 AppData::AppData() {
     SequencePattern* pattern1 = newPattern();
     SequencePattern* pattern3 = newPattern();
 
-    //newEvent(0, pattern1);
+    newEvent(0, pattern1);
     newEvent(2, pattern1)->setPitch(1);
     newEvent(4, pattern1)->setPitch(2);
     newEvent(6, pattern1)->setPitch(3);
@@ -121,4 +123,19 @@ void AppData::deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickI
 
 SequenceChannel& AppData::getChannel(uint8_t index) {
     return sequence.getChannel(index);
+}
+
+void AppData::clear() {
+    LinkedList<SequenceBar*>& bars = sequence.getBars();
+    for(int i = 0; i < bars.size(); i++) {
+        SequenceBar* bar = bars.get(i);
+        delete bar;
+    }
+    bars.clear();
+
+    for(int i = 0; i < patterns.size(); i++) {
+        SequencePattern* pattern = patterns.get(i);
+        delete pattern;
+    }
+    patterns.clear();
 }

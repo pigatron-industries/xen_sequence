@@ -5,7 +5,6 @@
 
 #include "View.h"
 #include "SequenceMatrixView.h"
-#include "../../model/AppData.h"
 #include "../components/IntegerParameterField.h"
 #include "../components/BooleanParameterField.h"
 
@@ -36,14 +35,13 @@ enum Parameter {
 class ParameterView : public View {
 
 public:
-    ParameterView(AppData& _appData, Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
+    ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
     virtual void render(GraphicsContext& g);
     virtual void handleEvent(InterfaceEvent event);
 
     void setBar(uint16_t _barIndex);
 
 private:
-    AppData& appData;
     Sequencer& sequencer;
     SequenceMatrixView& sequenceMatrixView;
 

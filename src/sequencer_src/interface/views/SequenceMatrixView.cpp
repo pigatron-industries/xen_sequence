@@ -9,8 +9,7 @@
 
 
 
-SequenceMatrixView::SequenceMatrixView(AppData& _appData, Sequencer& _sequencer):
-    appData(_appData),
+SequenceMatrixView::SequenceMatrixView(Sequencer& _sequencer):
     sequencer(_sequencer) {
 }
 
@@ -23,7 +22,7 @@ void SequenceMatrixView::render() {
 
 void SequenceMatrixView::renderData() {
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
-        SequencePattern* pattern = appData.getPattern(barIndex, channel);
+        SequencePattern* pattern = AppData::data.getPattern(barIndex, channel);
         if(pattern != NULL) {
             for(uint8_t tick = 0; tick < MATRIX_COLS; tick++) {
                 if(pattern->getEvents().get(tick) != NULL) {

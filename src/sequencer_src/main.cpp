@@ -16,16 +16,13 @@
 
 #include "repository/DataRepository.h"
 
-// data
-AppData appData = AppData();
-
 // sequencer
 MidiOutputService midiOutputSevice = MidiOutputService(Serial3);
 EventOutputService eventOutputService = EventOutputService(midiOutputSevice);
-Sequencer sequencer = Sequencer(appData, eventOutputService);
+Sequencer sequencer = Sequencer(eventOutputService);
 
 // user interface
-InterfaceController interfaceController = InterfaceController(appData, sequencer);
+InterfaceController interfaceController = InterfaceController(sequencer);
 InputTask inputTask = InputTask(interfaceController);
 
 
@@ -39,6 +36,7 @@ void setup() {
 
     Hardware::init();
     DataRepository::data.init();
+    sequencer.init();
     inputTask.init();
     interfaceController.init();
     midiOutputSevice.init();

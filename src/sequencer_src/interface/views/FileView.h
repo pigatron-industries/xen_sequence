@@ -29,6 +29,9 @@ private:
     ListComponent listComponent;
     TextComponent textComponents[MAX_FILES];
 
+    void save();
+    void load();
+
 };
 
 #endif

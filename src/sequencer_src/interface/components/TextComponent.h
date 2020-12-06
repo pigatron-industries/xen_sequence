@@ -11,6 +11,7 @@ public:
     virtual void render(GraphicsContext& g);
     void setText(const char* text);
     void setTextColour(Colour textColour) { this->textColour = textColour; }
+    char* getText() { return text; }
 
 private:
     char text[32];

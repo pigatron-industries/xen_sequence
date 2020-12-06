@@ -15,6 +15,9 @@ public:
     static const LedColour RED;
     static const LedColour GREEN;
     static const LedColour BLUE;
+    static const LedColour YELLOW;
+    static const LedColour MAGENTA;
+    static const LedColour CYAN;
     LedColour(bool _red, bool _green, bool _blue) :
         red(_red), green(_green), blue(_blue) {}
     bool red;

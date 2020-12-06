@@ -1,10 +1,10 @@
 #include "ParameterView.h"
 #include "../Hardware.h"
+#include "../../model/AppData.h"
 
 #include "Org_01.h"
 
-ParameterView::ParameterView(AppData& _appData, Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
-    appData(_appData),
+ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
     sequencer(_sequencer),
     sequenceMatrixView(_sequenceMatrixView) {
     barFields.add(&barLengthField);
@@ -248,14 +248,14 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
 }
 
 void ParameterView::updateSelectedBar() {
-    bar = appData.getBar(barIndex);
+    bar = AppData::data.getBar(barIndex);
     barLengthField.setValue(bar->getLength());
     barSpeedField.setValue(bar->getSpeed());
 }
 
 void ParameterView::updateSelectedChannel() {
     selectedPattern = bar->getPattern(sequenceMatrixView.getSelectCursorChannel());
-    SequenceChannel selectedChannel = appData.getChannel(sequenceMatrixView.getSelectCursorChannel());
+    SequenceChannel selectedChannel = AppData::data.getChannel(sequenceMatrixView.getSelectCursorChannel());
     channelMuteField.setValue(selectedChannel.getMute());
 }
 
@@ -304,11 +304,11 @@ void ParameterView::updateDataFromField(ParameterField* field) {
 }
 
 void ParameterView::addEvent() {
-    appData.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
+    AppData::data.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
     updateSelectedEvent();
 }
 
 void ParameterView::deleteEvent() {
-    appData.deleteEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
+    AppData::data.deleteEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
     updateSelectedEvent();
 }

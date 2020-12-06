@@ -1,15 +1,16 @@
 #include "InterfaceController.h"
+
 #include "Hardware.h"
+#include "../model/AppData.h"
 
 #include "graphics/GraphicsContext.h"
 #include "../repository/DataRepository.h"
 
-InterfaceController::InterfaceController(AppData& _appData, Sequencer& _sequencer) :
-    appData(_appData),
+InterfaceController::InterfaceController(Sequencer& _sequencer) :
     sequencer(_sequencer),
-    sequenceMatrixView(_appData, _sequencer),
-    sequenceView(_appData, sequenceMatrixView),
-    parameterView(_appData, _sequencer, sequenceMatrixView) {
+    sequenceMatrixView(_sequencer),
+    sequenceView(sequenceMatrixView),
+    parameterView(_sequencer, sequenceMatrixView) {
       currentView = &sequenceView;
       sequencer.addEventListener(this);
 }

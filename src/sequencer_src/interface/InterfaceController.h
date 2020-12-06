@@ -3,7 +3,6 @@
 
 #include <inttypes.h>
 
-#include "../model/AppData.h"
 #include "../sequencer/Sequencer.h"
 #include "../sequencer/SequencerEventListener.h"
 #include "InterfaceEvent.h"
@@ -18,14 +17,13 @@
 class InterfaceController : public SequencerEventListener {
 
 public:
-    InterfaceController(AppData& _appData, Sequencer& _sequencer);
+    InterfaceController(Sequencer& _sequencer);
     void init();
     void render();
     void handleEvent(InterfaceEvent event);
     virtual void onTick();
 
 private:
-    AppData& appData;
     Sequencer& sequencer;
 
     View* currentView;
