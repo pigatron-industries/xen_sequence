@@ -29,3 +29,14 @@ void SequencePattern::clear() {
     }
     events.clear();
 }
+
+void SequencePattern::serialize(JsonObject doc) {
+    doc["id"] = id;
+    JsonArray docEvents = doc.createNestedArray("events");
+    for(int i = 0; i < events.size(); i++) {
+        JsonObject docEvent = docEvents.createNestedObject();
+        if(events[i] != NULL) {
+            events[i]->serialize(docEvent);
+        }
+    }
+}

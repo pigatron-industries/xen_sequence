@@ -3,6 +3,7 @@
 
 #include <LinkedList.h>
 #include <inttypes.h>
+#include <ArduinoJson.h>
 
 #include "SequenceEvent.h"
 
@@ -19,6 +20,8 @@ public:
     void addEvent(uint8_t index, SequenceEvent* event);
     void deleteEvent(uint8_t index);
     void clear();
+
+    void serialize(JsonObject doc);
 
 private:
     uint8_t id;

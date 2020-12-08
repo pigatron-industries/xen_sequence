@@ -7,6 +7,7 @@
 class AppData {
 
 public:
+    static constexpr float DATA_VERSION = 0.1;
     static AppData data;
 
     Sequence& getSequence() { return sequence; }
@@ -27,6 +28,8 @@ public:
     SequenceChannel& getChannel(uint8_t index);
 
     void clear();
+
+    void serialize(JsonObject doc);
 
     void populateTestData();
 

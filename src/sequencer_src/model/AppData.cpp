@@ -139,3 +139,15 @@ void AppData::clear() {
     }
     patterns.clear();
 }
+
+void AppData::serialize(JsonObject doc) {
+    doc["version"] = DATA_VERSION;
+    JsonArray docPatterns = doc.createNestedArray("patterns");
+    for(int i = 0; i < patterns.size(); i++) {
+        JsonObject docPattern = docPatterns.createNestedObject();
+        patterns[i]->serialize(docPattern);
+    }
+
+    JsonObject docSequence = doc.createNestedObject("sequence");
+    sequence.serialize(docSequence);
+}

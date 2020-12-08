@@ -5,8 +5,8 @@
 #include <ArduinoJson.h>
 #include "FileInfo.h"
 
-#define JSON_BUF_SIZE 2048
-#define JSON_DOC_SIZE 2048
+#define JSON_BUF_SIZE 16384
+#define JSON_DOC_SIZE 16384
 
 class DataRepository {
     public:

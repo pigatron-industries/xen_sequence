@@ -1,4 +1,5 @@
 #include "DataRepository.h"
+#include "../model/AppData.h"
 
 DataRepository DataRepository::data;
 
@@ -39,8 +40,10 @@ void DataRepository::saveSequence(String path) {
     Serial.println(fullpath);
 
     char jsonBuffer[JSON_BUF_SIZE];
-    serializeSequence(jsonBuffer, JSON_BUF_SIZE);
+    size_t jsonSize = serializeSequence(jsonBuffer, JSON_BUF_SIZE);
     Serial.println(jsonBuffer);
+    Serial.print(jsonSize);
+    Serial.println(" bytes");
 
     SdFile file;
     if(!file.open(fullpath.c_str(), O_WRONLY | O_CREAT | O_TRUNC)) {
@@ -76,9 +79,8 @@ void DataRepository::loadSequence(String path) {
 
 size_t DataRepository::serializeSequence(char* buffer, size_t bufferSize) {
     DynamicJsonDocument doc(JSON_DOC_SIZE);
-
-    doc["test"] = 43;
-
+    JsonObject docSequence = doc.to<JsonObject>();
+    AppData::data.serialize(docSequence);
     return serializeJson(doc, buffer, bufferSize);
 }
 

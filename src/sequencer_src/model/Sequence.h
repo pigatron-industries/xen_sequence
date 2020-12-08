@@ -13,6 +13,8 @@ public:
     void addBar(uint16_t index, SequenceBar* bar) { bars.set(index, bar); }
     int getLength() { return bars.size(); }
 
+    void serialize(JsonObject doc);
+
 private:
     LinkedList<SequenceBar*> bars;
     SequenceChannel channels[SEQUENCE_CHANNELS];

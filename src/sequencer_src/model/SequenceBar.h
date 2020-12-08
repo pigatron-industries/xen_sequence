@@ -20,6 +20,8 @@ public:
     void setLength(uint16_t _length) { length = _length; }
     void setSpeed(uint16_t _speed) { speed = _speed; }
 
+    void serialize(JsonObject doc);
+
 private:
     SequencePattern* patterns[SEQUENCE_CHANNELS];
     uint8_t length = 16;

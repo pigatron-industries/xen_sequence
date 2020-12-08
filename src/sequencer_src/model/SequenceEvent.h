@@ -2,6 +2,7 @@
 #define SequenceEvent_h
 
 #include <inttypes.h>
+#include <ArduinoJson.h>
 
 #include "../sequencer/midi/CompiledEvent.h"
 
@@ -38,6 +39,8 @@ public:
     bool isCompileNeeded() { return compileNeeded; }
     CompiledEvent& getCompiledEvent() { return compiledEvent; }
     void setCompiled() { compileNeeded = false; }
+
+    void serialize(JsonObject doc);
 
 private:
     uint8_t eventFlags = NOTE_ON | NOTE_OFF;
