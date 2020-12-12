@@ -5,6 +5,7 @@
 
 #include "graphics/GraphicsContext.h"
 #include "../repository/DataRepository.h"
+#include "../lib/util/debug.h"
 
 InterfaceController::InterfaceController(Sequencer& _sequencer) :
     sequencer(_sequencer),
@@ -31,6 +32,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
             case InterfaceEventType::STICK_PRESS:
                 if(currentView == &sequenceView) {
                     switchToParameterView();
+                    return;
                 }
                 break;
             case InterfaceEventType::KEY_VIEW:
@@ -40,6 +42,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                     } else {
                         switchToParameterView();
                     }
+                    return;
                 }
                 break;
             case InterfaceEventType::KEY_HELP:
@@ -108,6 +111,7 @@ void InterfaceController::onTick() {
 }
 
 void InterfaceController::switchToParameterView() {
+    DEBUG("InterfaceController::switchToParameterView");
     currentView = &parameterView;
     uint16_t bar = sequenceView.getCursorBar();
     parameterView.setBar(bar);
@@ -115,6 +119,7 @@ void InterfaceController::switchToParameterView() {
 }
 
 void InterfaceController::switchToSequenceView() {
+    DEBUG("InterfaceController::switchToSequenceView");
     currentView = &sequenceView;
     render();
 }

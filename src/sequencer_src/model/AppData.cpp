@@ -5,38 +5,41 @@
 AppData AppData::data;
 
 AppData::AppData() {
-    SequencePattern* pattern1 = newPattern();
-    SequencePattern* pattern3 = newPattern();
+    // SequencePattern* pattern1 = newPattern();
+    // SequencePattern* pattern3 = newPattern();
 
-    newEvent(0, pattern1);
-    newEvent(2, pattern1)->setPitch(1);
-    newEvent(4, pattern1)->setPitch(2);
-    newEvent(6, pattern1)->setPitch(3);
-    newEvent(8, pattern1)->setPitch(4);
-    newEvent(10, pattern1)->setPitch(5);
-    newEvent(12, pattern1)->setPitch(6);
-    newEvent(14, pattern1)->setPitch(7);
+    // newEvent(0, pattern1);
+    // newEvent(2, pattern1)->setPitch(1);
+    // newEvent(4, pattern1)->setPitch(2);
+    // newEvent(6, pattern1)->setPitch(3);
+    // newEvent(8, pattern1)->setPitch(4);
+    // newEvent(10, pattern1)->setPitch(5);
+    // newEvent(12, pattern1)->setPitch(6);
+    // newEvent(14, pattern1)->setPitch(7);
 
-    newEvent(1, pattern3);
-    newEvent(3, pattern3);
-    newEvent(5, pattern3);
-    newEvent(7, pattern3);
-    newEvent(9, pattern3);
-    newEvent(11, pattern3);
-    newEvent(13, pattern3);
-    newEvent(15, pattern3);
+    // newEvent(1, pattern3);
+    // newEvent(3, pattern3);
+    // newEvent(5, pattern3);
+    // newEvent(7, pattern3);
+    // newEvent(9, pattern3);
+    // newEvent(11, pattern3);
+    // newEvent(13, pattern3);
+    // newEvent(15, pattern3);
 
-    SequenceBar* bar1 = newBar(0);
-    SequenceBar* bar2 = newBar(0);
-    SequenceBar* bar3 = newBar(0);
+    // SequenceBar* bar1 = newBar(0);
+    // SequenceBar* bar2 = newBar(0);
+    // SequenceBar* bar3 = newBar(0);
 
-    bar1->setPattern(0, pattern1);
-    bar2->setPattern(1, pattern3);
-    bar3->setPattern(0, pattern1);
-    bar3->setPattern(1, pattern3);
+    // bar1->setPattern(0, pattern1);
+    // bar2->setPattern(1, pattern3);
+    // bar3->setPattern(0, pattern1);
+    // bar3->setPattern(1, pattern3);
 }
 
 SequenceBar* AppData::getBar(int index) {
+    while(index >= sequence.getBars().size()) {
+        newBar(sequence.getBars().size());
+    }
     return sequence.getBar(index);
 }
 
@@ -150,4 +153,13 @@ void AppData::serialize(JsonObject doc) {
 
     JsonObject docSequence = doc.createNestedObject("sequence");
     sequence.serialize(docSequence);
+}
+
+void AppData::deserialize(JsonObject doc) {
+    AppData::clear();
+    float version = doc["version"];
+    Serial.println(version);
+
+    JsonArray docPatterns = doc["patterns"];
+
 }

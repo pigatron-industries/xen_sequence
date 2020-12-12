@@ -1,6 +1,7 @@
 #include "ParameterView.h"
 #include "../Hardware.h"
 #include "../../model/AppData.h"
+#include "../../lib/util/debug.h"
 
 #include "Org_01.h"
 
@@ -20,6 +21,7 @@ ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenc
 }
 
 void ParameterView::render(GraphicsContext& g) {
+    DEBUG("ParameterView::render");
     if(g.full) {
         setDirtyScreen();
     }
@@ -56,6 +58,7 @@ void ParameterView::setDirtyScreen() {
 }
 
 void ParameterView::handleEvent(InterfaceEvent event) {
+    DEBUG("ParameterView::handleEvent");
     switch(event.eventType) {
         case InterfaceEventType::STICK_UP:
             cursorUp();
@@ -220,6 +223,8 @@ void ParameterView::cycleParameterViewMode() {
 }
 
 void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
+    DEBUG("ParameterView::setParameterViewMode");
+    DEBUG(_parameterViewMode);
     parameterViewMode = _parameterViewMode;
     switch(parameterViewMode) {
         case PARAM_MODE_BAR:

@@ -30,6 +30,7 @@ public:
     void clear();
 
     void serialize(JsonObject doc);
+    void deserialize(JsonObject doc);
 
     void populateTestData();
 

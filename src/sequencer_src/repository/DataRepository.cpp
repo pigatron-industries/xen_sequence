@@ -87,8 +87,6 @@ size_t DataRepository::serializeSequence(char* buffer, size_t bufferSize) {
 void DataRepository::deserializeSequence(char* buffer, size_t size) {
     DynamicJsonDocument doc(JSON_DOC_SIZE);
     deserializeJson(doc, buffer, size);
-
-    int test = doc["test"];
-
-    Serial.println(test);
+    JsonObject docSequence = doc.as<JsonObject>();
+    AppData::data.deserialize(docSequence);
 }
