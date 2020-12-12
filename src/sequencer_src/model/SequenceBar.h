@@ -21,6 +21,7 @@ public:
     void setSpeed(uint16_t _speed) { speed = _speed; }
 
     void serialize(JsonObject doc);
+    void deserialize(JsonObject doc);
 
 private:
     SequencePattern* patterns[SEQUENCE_CHANNELS];

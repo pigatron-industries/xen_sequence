@@ -34,9 +34,21 @@ void SequencePattern::serialize(JsonObject doc) {
     doc["id"] = id;
     JsonArray docEvents = doc.createNestedArray("events");
     for(int i = 0; i < events.size(); i++) {
-        JsonObject docEvent = docEvents.createNestedObject();
         if(events[i] != NULL) {
+            JsonObject docEvent = docEvents.createNestedObject();
+            docEvent["pos"] = i;
             events[i]->serialize(docEvent);
         }
+    }
+}
+
+void SequencePattern::deserialize(JsonObject doc) {
+    id = doc["id"];
+    JsonArray docEvents = doc["events"];
+    for(JsonObject docEvent : docEvents) {
+        int pos = docEvent["pos"];
+        SequenceEvent* event = new SequenceEvent();
+        addEvent(pos, event);
+        event->deserialize(docEvent);
     }
 }

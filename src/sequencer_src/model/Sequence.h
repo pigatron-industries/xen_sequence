@@ -14,6 +14,7 @@ public:
     int getLength() { return bars.size(); }
 
     void serialize(JsonObject doc);
+    void deserialize(JsonObject doc);
 
 private:
     LinkedList<SequenceBar*> bars;

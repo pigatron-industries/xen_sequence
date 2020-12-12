@@ -11,6 +11,7 @@ public:
     void setMute(bool _mute) { mute = _mute; }
 
     void serialize(JsonObject doc);
+    void deserialize(JsonObject doc);
 
 private:
     bool mute;

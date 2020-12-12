@@ -22,6 +22,7 @@ public:
     void clear();
 
     void serialize(JsonObject doc);
+    void deserialize(JsonObject doc);
 
 private:
     uint8_t id;

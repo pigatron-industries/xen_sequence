@@ -13,3 +13,22 @@ void Sequence::serialize(JsonObject doc) {
         bars[i]->serialize(docBar);
     }
 }
+
+void Sequence::deserialize(JsonObject doc) {
+    JsonArray docChannels = doc["channels"];
+    int i = 0;
+    for(JsonObject docChannel : docChannels) {
+        channels[i].deserialize(docChannel);
+        i++;
+    }
+
+    JsonArray docBars = doc["bars"];
+    i = 0;
+    for(JsonObject docBar : docBars) {
+        SequenceBar* bar = new SequenceBar();
+        bars.add(i, bar);
+        bar->deserialize(docBar);
+        i++;
+    }
+}
+

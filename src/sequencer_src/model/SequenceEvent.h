@@ -41,6 +41,7 @@ public:
     void setCompiled() { compileNeeded = false; }
 
     void serialize(JsonObject doc);
+    void deserialize(JsonObject doc);
 
 private:
     uint8_t eventFlags = NOTE_ON | NOTE_OFF;
