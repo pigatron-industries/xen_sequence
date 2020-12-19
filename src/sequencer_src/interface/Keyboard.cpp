@@ -38,6 +38,16 @@ int Keyboard::getNumKeys() {
     return keypad.numKeys();
 }
 
+void Keyboard::clear() {
+    for(int x = 0; x < KEY_ROWS; x++) {
+        for(int y = 0; y < KEY_COLS; y++) {
+            keyboardLedMatrix.setLedValueAt(y*3, x, false);
+            keyboardLedMatrix.setLedValueAt(y*3+1, x, false);
+            keyboardLedMatrix.setLedValueAt(y*3+2, x, false);
+        }
+    }
+}
+
 void Keyboard::setKeyLed(InterfaceEventType key, LedColour colour) {
     for(int x = 0; x < KEY_ROWS; x++) {
         for(int y = 0; y < KEY_COLS; y++) {

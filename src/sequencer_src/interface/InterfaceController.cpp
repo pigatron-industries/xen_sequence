@@ -94,6 +94,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
             case InterfaceEventType::KEY_FILE:
                 if(event.data == EVENT_KEY_PRESSED) {
                     currentView = previousView;
+                    Hardware::keyboard.clear();
                     render();
                 }
                 break;
@@ -125,6 +126,7 @@ void InterfaceController::switchToSequenceView() {
 }
 
 void InterfaceController::play() {
+    sequencer.setBar(0); //TODO get currently selected bar?
     sequencer.play();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
 }

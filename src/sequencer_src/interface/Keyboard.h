@@ -34,6 +34,7 @@ class Keyboard {
         Key* getKeys();
         int getNumKeys();
 
+        void clear();
         void setKeyLed(InterfaceEventType key, LedColour colour);
 
     private:

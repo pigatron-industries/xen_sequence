@@ -1,6 +1,7 @@
 #include "Sequencer.h"
 
 #include <Arduino.h>
+#include "../lib/util/debug.h"
 
 Sequencer::Sequencer(EventOutputService& _eventOutputService) :
     eventOutputService(_eventOutputService) {
@@ -66,6 +67,7 @@ void Sequencer::reset() {
 }
 
 void Sequencer::setBar(uint16_t _barIndex) {
+    DEBUG("Sequencer::setBar");
     barIndex = _barIndex;
     currentBar = AppData::data.getBar(barIndex);
     clock.setTicksPerMinute(currentBar->getSpeed());
