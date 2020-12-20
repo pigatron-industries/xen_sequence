@@ -16,7 +16,7 @@ Colour Colour::CYAN(0, 255, 255);
 Colour Colour::ORANGE(255, 127, 0);
 
 
-ssd1351::SSD1351<ssd1351::HighColor, ssd1351::NoBuffer, 128, 128> oled(OLED_CS_PIN, OLED_DC_PIN, OLED_RESET_PIN, 11, 13);
+ssd1351::SSD1351<ssd1351::HighColor, ssd1351::NoBuffer, DISPLAY_WIDTH, DISPLAY_HEIGHT> oled(OLED_CS_PIN, OLED_DC_PIN, OLED_RESET_PIN, 11, 13);
 
 ssd1351::HighColor c(const Colour &colour) {
     return ssd1351::HighColor(colour.r, colour.g, colour.b);

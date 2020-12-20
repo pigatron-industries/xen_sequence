@@ -36,7 +36,7 @@ void SequenceView::render(GraphicsContext& g) {
     sequenceMatrixView.render();
 }
 
-void SequenceView::handleEvent(InterfaceEvent event) {
+InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case STICK_UP:
             cursorUp();
@@ -53,6 +53,8 @@ void SequenceView::handleEvent(InterfaceEvent event) {
         default:
             break;
     }
+
+    return InterfaceEvent::NONE;
 }
 
 void SequenceView::cursorUp() {

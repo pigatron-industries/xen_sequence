@@ -5,6 +5,9 @@
 #include <Arduino.h>
 #include <gfxfont.h>
 
+#define DISPLAY_WIDTH 128
+#define DISPLAY_HEIGHT 128
+
 // Text alignments
 static const uint8_t ALIGN_LEFT = 0;
 static const uint8_t ALIGN_CENTER = 1;

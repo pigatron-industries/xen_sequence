@@ -11,7 +11,7 @@ class HelpView : public View {
 public:
     HelpView();
     virtual void render(GraphicsContext& g);
-    virtual void handleEvent(InterfaceEvent event);
+    virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
 private:
     void renderPage(InterfaceEventType eventType);

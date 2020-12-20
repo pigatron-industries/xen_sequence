@@ -5,6 +5,7 @@
 #define EVENT_KEY_PRESSED 1
 
 enum InterfaceEventType {
+    NONE,
     STICK_LEFT,
     STICK_RIGHT,
     STICK_UP,
@@ -50,8 +51,10 @@ enum InterfaceEventType {
 
 class InterfaceEvent {
     public:
+        static const InterfaceEvent NONE;
         InterfaceEvent(InterfaceEventType _eventType) {
             eventType = _eventType;
+            data = 1;
         }
         InterfaceEvent(InterfaceEventType _eventType, int _data) {
             eventType = _eventType;

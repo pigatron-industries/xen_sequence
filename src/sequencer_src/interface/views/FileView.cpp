@@ -1,6 +1,7 @@
 #include "FileView.h"
 #include "../Hardware.h"
 #include "../components/ParameterField.h"
+#include "../components/DisplayUtils.h"
 
 FileView::FileView() {
     for(int i = 0; i < MAX_FILES; i++) {
@@ -22,6 +23,8 @@ void FileView::init() {
     }
 
     selectedComponent = &textComponents[0];
+    saveConfirmation = false;
+    loadConfirmation = false;
 
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::MAGENTA);
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::YELLOW);
@@ -38,9 +41,10 @@ void FileView::render(GraphicsContext& g) {
     Hardware::display.updateScreen();
 }
 
-void FileView::handleEvent(InterfaceEvent event) {
+InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::STICK_DOWN:
+            cancelDialog();
             selectedIndex++;
             if(selectedIndex >= listSize) {
                 selectedIndex = 0;
@@ -49,6 +53,7 @@ void FileView::handleEvent(InterfaceEvent event) {
             View::render(false);
             break;
         case InterfaceEventType::STICK_UP:
+            cancelDialog();
             selectedIndex--;
             if(selectedIndex < 0) {
                 selectedIndex = listSize-1;
@@ -58,17 +63,23 @@ void FileView::handleEvent(InterfaceEvent event) {
             break;
         case InterfaceEventType::KEY_RECORD: //SAVE
             if(event.data == EVENT_KEY_PRESSED) {
-                save();
+                if(confirmSave()) {
+                    return InterfaceEvent(InterfaceEventType::KEY_VIEW);
+                }
             }
             break;
         case InterfaceEventType::KEY_PLAY_STOP: //LOAD
             if(event.data == EVENT_KEY_PRESSED) {
-                load();
+                if(confirmLoad()) {
+                    return InterfaceEvent(InterfaceEventType::KEY_VIEW);
+                }
             }
             break;
         default:
             break;
     }
+
+    return InterfaceEvent::NONE;
 }
 
 void FileView::save() {
@@ -79,4 +90,35 @@ void FileView::save() {
 void FileView::load() {
     String path = String(currentDirectory).concat(textComponents[selectedIndex].getText());
     DataRepository::data.loadSequence(path);
+
+}
+
+bool FileView::confirmLoad() {
+    if(loadConfirmation) {
+        load();
+        return true;
+    } else {
+        DisplayUtils::drawDialog("Load?", 50, 16);
+        loadConfirmation = true;
+        return false;
+    }
+}
+
+bool FileView::confirmSave() {
+    if(saveConfirmation) {
+        save();
+        return true;
+    } else {
+        DisplayUtils::drawDialog("Save?", 50, 16);
+        saveConfirmation = true;
+        return false;
+    }
+}
+
+void FileView::cancelDialog() {
+    if(saveConfirmation || loadConfirmation) {
+        saveConfirmation = false;
+        loadConfirmation = false;
+        View::render(true);
+    }
 }

@@ -1,5 +1,6 @@
 #include "DataRepository.h"
 #include "../model/AppData.h"
+#include "../lib/util/debug.h"
 
 DataRepository DataRepository::data;
 
@@ -7,17 +8,18 @@ const String DataRepository::ROOT_DIRECTORY = String("/sequence");
 
 void DataRepository::init() {
     if (!sd.begin(SdioConfig(FIFO_SDIO))) {
-        Serial.println("SD card init failed");
+        ERROR("SD card init failed");
         return;
     }
 
     if(!sd.exists(ROOT_DIRECTORY)) {
-        Serial.println("Creating sequence directory");
+        DEBUG("Creating sequence directory");
         sd.mkdir(ROOT_DIRECTORY, true);
     }
 }
 
 void DataRepository::loadFileList(String directoryName) {
+    DEBUG("DataRepository::loadFileList");
     File dir = sd.open(String(ROOT_DIRECTORY).concat(directoryName));
     if(dir.isDirectory()) {
         int i = 0;
@@ -36,34 +38,33 @@ void DataRepository::loadFileList(String directoryName) {
 
 void DataRepository::saveSequence(String path) {
     String fullpath = String(ROOT_DIRECTORY).concat(path);
-    Serial.println("Saving to ");
-    Serial.println(fullpath);
+    INFO("Saving to");
+    INFO(fullpath);
 
     char jsonBuffer[JSON_BUF_SIZE];
     size_t jsonSize = serializeSequence(jsonBuffer, JSON_BUF_SIZE);
-    Serial.println(jsonBuffer);
-    Serial.print(jsonSize);
-    Serial.println(" bytes");
+    DEBUG(jsonBuffer);
+    INFO("Writing bytes"); 
+    INFO(jsonSize);
 
     SdFile file;
     if(!file.open(fullpath.c_str(), O_WRONLY | O_CREAT | O_TRUNC)) {
-        Serial.println("Open file failed!");
+        ERROR("Open file failed!");
     }
     file.println(jsonBuffer);
     file.sync();
     file.close();
-    Serial.println("done.");
-    Serial.println();
+    INFO("done.");
 }
 
 void DataRepository::loadSequence(String path) {
     String fullpath = String(ROOT_DIRECTORY).concat(path);
-    Serial.println("Loading from ");
-    Serial.println(fullpath);
+    INFO("Loading from"); 
+    INFO(fullpath);
 
     SdFile file;
     if(!file.open(fullpath.c_str(), FILE_READ)) {
-        Serial.println("Open file failed!");
+        ERROR("Open file failed!");
     }
 
     char jsonBuffer[JSON_BUF_SIZE];
@@ -73,8 +74,7 @@ void DataRepository::loadSequence(String path) {
     deserializeSequence(jsonBuffer, size);
 
     file.close();
-    Serial.println("done.");
-    Serial.println();
+    INFO("done.");
 }
 
 size_t DataRepository::serializeSequence(char* buffer, size_t bufferSize) {

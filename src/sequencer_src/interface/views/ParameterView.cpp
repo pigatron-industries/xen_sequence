@@ -57,7 +57,7 @@ void ParameterView::setDirtyScreen() {
     }
 }
 
-void ParameterView::handleEvent(InterfaceEvent event) {
+InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
     DEBUG("ParameterView::handleEvent");
     switch(event.eventType) {
         case InterfaceEventType::STICK_UP:
@@ -102,6 +102,8 @@ void ParameterView::handleEvent(InterfaceEvent event) {
         default:
             break;
     }
+
+    return InterfaceEvent::NONE;
 }
 
 void ParameterView::cursorUp() {
@@ -223,7 +225,7 @@ void ParameterView::cycleParameterViewMode() {
 }
 
 void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
-    DEBUG("ParameterView::setParameterViewMode");
+    DEBUG("ParameterView::setParameterViewMode"); 
     DEBUG(_parameterViewMode);
     parameterViewMode = _parameterViewMode;
     switch(parameterViewMode) {

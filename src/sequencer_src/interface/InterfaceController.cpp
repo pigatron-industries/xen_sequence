@@ -26,6 +26,9 @@ void InterfaceController::render() {
 }
 
 void InterfaceController::handleEvent(InterfaceEvent event) {
+    DEBUG("InterfaceController::handleEvent")
+    DEBUG(event.eventType)
+    
     if(isSequenceView()) {
 
         switch(event.eventType) {
@@ -92,6 +95,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
 
         switch(event.eventType) {
             case InterfaceEventType::KEY_FILE:
+            case InterfaceEventType::KEY_VIEW:
                 if(event.data == EVENT_KEY_PRESSED) {
                     currentView = previousView;
                     Hardware::keyboard.clear();
@@ -104,7 +108,10 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
 
     }
 
-    currentView->handleEvent(event);
+    InterfaceEvent responseEvent = currentView->handleEvent(event);
+    if(responseEvent.eventType != InterfaceEventType::NONE) {
+        handleEvent(responseEvent);
+    }
 }
 
 void InterfaceController::onTick() {

@@ -31,16 +31,18 @@ void HelpView::render(GraphicsContext& g) {
     Hardware::display.updateScreen();
 }
 
-void HelpView::handleEvent(InterfaceEvent event) {
-        switch(event.eventType) {
-            case InterfaceEventType::KEY_RECORD:
-            case InterfaceEventType::KEY_PLAY_STOP:
-            case InterfaceEventType::KEY_LOOP:
-                renderPage(event.eventType);
-                break;
-            default:
-                break;
-        }
+InterfaceEvent HelpView::handleEvent(InterfaceEvent event) {
+    switch(event.eventType) {
+        case InterfaceEventType::KEY_RECORD:
+        case InterfaceEventType::KEY_PLAY_STOP:
+        case InterfaceEventType::KEY_LOOP:
+            renderPage(event.eventType);
+            break;
+        default:
+            break;
+    }
+
+    return InterfaceEvent::NONE;
 }
 
 void HelpView::renderPage(InterfaceEventType eventType) {

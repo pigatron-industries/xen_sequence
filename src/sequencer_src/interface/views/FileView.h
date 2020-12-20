@@ -17,7 +17,7 @@ public:
     FileView();
     void init();
     virtual void render(GraphicsContext& g);
-    virtual void handleEvent(InterfaceEvent event);
+    virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
 private:
     String currentDirectory = String("/");
@@ -31,6 +31,13 @@ private:
 
     void save();
     void load();
+
+    bool confirmLoad();
+    bool confirmSave();
+    void cancelDialog();
+
+    bool saveConfirmation;
+    bool loadConfirmation;
 
 };
 
