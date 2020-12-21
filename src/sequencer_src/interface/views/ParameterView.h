@@ -7,6 +7,7 @@
 #include "SequenceMatrixView.h"
 #include "../components/IntegerParameterField.h"
 #include "../components/BooleanParameterField.h"
+#include "../../sequencer/midi/MidiEventHandler.h"
 
 enum ParameterViewMode {
     PARAM_MODE_BAR, // Track length
@@ -32,18 +33,21 @@ enum Parameter {
 };
 
 
-class ParameterView : public View {
+class ParameterView : public View, public MidiEventHandler {
 
 public:
     ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
+    virtual void handleMidiEvent(MidiMessage message);
 
     void setBar(uint16_t _barIndex);
 
 private:
     Sequencer& sequencer;
     SequenceMatrixView& sequenceMatrixView;
+
+    bool recording;
 
     bool dirtyScreen = true;
 
@@ -77,6 +81,8 @@ private:
     void setDirtyScreen();
 
     // events
+    void record(bool value);
+
     void cursorUp();
     void cursorDown();
     void cursorLeft();

@@ -18,6 +18,8 @@ ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenc
 
     sequenceMatrixView.setPlayCursor(false);
     setParameterViewMode(PARAM_MODE_BAR);
+
+    Hardware::midiInputService.addEventHandler(this);
 }
 
 void ParameterView::render(GraphicsContext& g) {
@@ -57,6 +59,20 @@ void ParameterView::setDirtyScreen() {
     }
 }
 
+void ParameterView::handleMidiEvent(MidiMessage message) {
+    if(recording && parameterViewMode == PARAM_MODE_EVENT) {
+        DEBUG("ParameterView::handleMidiEvent");
+        if(message.command == COMMAND_NOTEON) {
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::MAGENTA);
+            eventNoteField.setValue(message.data1);
+            updateDataFromField(&eventNoteField);
+            View::render();
+        } else if (message.command == COMMAND_NOTEOFF) {
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
+        }
+    }
+}
+
 InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
     DEBUG("ParameterView::handleEvent");
     switch(event.eventType) {
@@ -82,6 +98,11 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::DATA_DECREMENT:
             fieldDecrement(event.data);
             break;
+        case InterfaceEventType::KEY_RECORD: 
+            if(event.data == EVENT_KEY_PRESSED) {
+                record(!recording);
+            }
+            break;
         case InterfaceEventType::KEY_SELECTION:
         case InterfaceEventType::STICK_PRESS:
             if(event.data == EVENT_KEY_PRESSED) {
@@ -104,6 +125,11 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
     }
 
     return InterfaceEvent::NONE;
+}
+
+void ParameterView::record(bool value) {
+    recording = value;
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, value ? LedColour::RED : LedColour::OFF);
 }
 
 void ParameterView::cursorUp() {

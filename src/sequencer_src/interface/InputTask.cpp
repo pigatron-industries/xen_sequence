@@ -52,7 +52,6 @@ void InputTask::execute() {
     }
 
     if(Hardware::keyboard.update()) {
-        // Serial.println("================");
         for(int i = 0; i < Hardware::keyboard.getNumKeys(); i++) {
             Key key = Hardware::keyboard.getKeys()[i];
             if(key.stateChanged && key.kstate == PRESSED) {
@@ -62,4 +61,6 @@ void InputTask::execute() {
             }
         }
     }
+
+    Hardware::midiInputService.update();
 }

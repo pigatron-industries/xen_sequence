@@ -46,7 +46,7 @@ private:
 
     void play();
     void stop();
-    void record(bool value);
+    // void record(bool value);
 
 };
 

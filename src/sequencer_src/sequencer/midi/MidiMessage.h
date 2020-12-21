@@ -2,6 +2,7 @@
 #define MidiMessage_h
 
 #include <inttypes.h>
+#include "MidiConstants.h"
 
 class MidiMessage {
     public:
@@ -11,6 +12,18 @@ class MidiMessage {
             command = _command;
             data1 = _data1;
             data2 = _data2;
+        }
+
+        MidiMessage(uint8_t _channel, uint8_t _command, uint8_t _data1, uint8_t _data2) {
+            pulse = 0;
+            channel = _channel;
+            command = _command;
+            data1 = _data1;
+            data2 = _data2;
+        }
+
+        MidiMessage() {
+            command = COMMAND_NONE;
         }
 
         uint8_t pulse;

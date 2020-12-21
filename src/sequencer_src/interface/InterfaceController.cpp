@@ -55,11 +55,11 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                     render();
                 }
                 break;
-            case InterfaceEventType::KEY_RECORD: 
-                if(event.data == EVENT_KEY_PRESSED) {
-                    record(!recording);
-                }
-                break;
+            // case InterfaceEventType::KEY_RECORD: 
+            //     if(event.data == EVENT_KEY_PRESSED) {
+            //         record(!recording);
+            //     }
+            //     break;
             case InterfaceEventType::KEY_PLAY_STOP:
                 if(event.data == EVENT_KEY_PRESSED) {
                     if(sequencer.isPlaying()) {
@@ -143,7 +143,7 @@ void InterfaceController::stop() {
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
 }
 
-void InterfaceController::record(bool value) {
-    recording = value;
-    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, value ? LedColour::RED : LedColour::OFF);
-}
+// void InterfaceController::record(bool value) {
+//     recording = value;
+//     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, value ? LedColour::RED : LedColour::OFF);
+// }
