@@ -66,7 +66,7 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::MAGENTA);
             eventNoteField.setValue(message.data1);
             updateDataFromField(&eventNoteField);
-            View::render();
+            View::render(false);
         } else if (message.command == COMMAND_NOTEOFF) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
         }
@@ -123,6 +123,7 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
         default:
             break;
     }
+
 
     return InterfaceEvent::NONE;
 }

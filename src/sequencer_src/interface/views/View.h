@@ -8,6 +8,8 @@
 class View : public Component {
     public:
         virtual InterfaceEvent handleEvent(InterfaceEvent event) = 0;
+        bool rerender;
+
 };
 
 #endif

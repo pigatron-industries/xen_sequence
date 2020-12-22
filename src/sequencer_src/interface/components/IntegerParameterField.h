@@ -11,7 +11,7 @@ public:
     void decrement(int16_t amount);
     void render(Display& display, uint8_t row);
 
-    void setValue(int16_t _value) { value = _value; }
+    void setValue(int16_t _value) { value = _value; dirtyValue = true; }
     uint16_t getValue() { return value; }
 
 private:

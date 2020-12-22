@@ -55,11 +55,6 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                     render();
                 }
                 break;
-            // case InterfaceEventType::KEY_RECORD: 
-            //     if(event.data == EVENT_KEY_PRESSED) {
-            //         record(!recording);
-            //     }
-            //     break;
             case InterfaceEventType::KEY_PLAY_STOP:
                 if(event.data == EVENT_KEY_PRESSED) {
                     if(sequencer.isPlaying()) {
@@ -110,7 +105,11 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
 
     InterfaceEvent responseEvent = currentView->handleEvent(event);
     if(responseEvent.eventType != InterfaceEventType::NONE) {
-        handleEvent(responseEvent);
+        handleEvent(responseEvent); //TODO push event onto queue instead of calling recursively
+    }
+
+    if(currentView->rerender) {
+        currentView->render(false);
     }
 }
 
@@ -142,8 +141,3 @@ void InterfaceController::stop() {
     sequencer.stop();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
 }
-
-// void InterfaceController::record(bool value) {
-//     recording = value;
-//     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, value ? LedColour::RED : LedColour::OFF);
-// }

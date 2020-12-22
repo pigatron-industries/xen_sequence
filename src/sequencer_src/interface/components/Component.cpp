@@ -1,9 +1,11 @@
 #include "Component.h"
 #include "../Hardware.h"
 #include "../views/Org_01.h"
+#include "../../lib/util/debug.h"
 
 
 void Component::render(bool full) { 
+    DEBUG("Component::render")
     GraphicsContext g = GraphicsContext(full); 
     if(full) {
         Hardware::display.fillScreen(Colour::BLACK);
