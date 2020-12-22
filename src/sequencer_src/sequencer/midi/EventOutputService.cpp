@@ -15,3 +15,8 @@ void EventOutputService::event(uint8_t channel, uint16_t pulseCount, SequenceEve
         midiOutputService.sendMessage(*message);
     }
 }
+
+void EventOutputService::system(uint8_t command) {
+    MidiMessage message = MidiMessage(command);
+    midiOutputService.sendMessage(message);
+}

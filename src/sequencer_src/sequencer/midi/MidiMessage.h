@@ -22,8 +22,15 @@ class MidiMessage {
             data2 = _data2;
         }
 
+        MidiMessage(uint8_t systemCommand) {
+            command = COMMAND_SYSTEM;
+            channel = systemCommand;
+            length = 1;
+        }
+
         MidiMessage() {
             command = COMMAND_NONE;
+            length = 0;
         }
 
         uint8_t pulse;

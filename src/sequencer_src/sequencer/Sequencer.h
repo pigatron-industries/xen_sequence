@@ -47,8 +47,11 @@ private:
     uint16_t barIndex = 0;
     uint8_t tickIndex = 0;
 
+    uint8_t midiPulseDivider = 4; //convert 96ppm to 24ppm
+
     void tick();
-    void executeTickEvents();
+    void pulse();
+    void pulseClockEvent();
     void notifyTickEvent();
 
 };

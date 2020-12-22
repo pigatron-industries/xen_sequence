@@ -10,6 +10,7 @@ class EventOutputService {
 public:
     EventOutputService(MidiOutputService& _midiOutputService);
     void event(uint8_t channel, uint16_t pulseCount, SequenceEvent* event);
+    void system(uint8_t command);
 
 private:
     MidiOutputService& midiOutputService;

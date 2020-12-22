@@ -23,14 +23,16 @@ void Sequencer::execute() {
         if(isTick) {
             tick();
         }
-        executeTickEvents();
+        pulse();
         if(isTick) {
             notifyTickEvent();
         }
     }
 }
 
-void Sequencer::executeTickEvents() {
+void Sequencer::pulse() {
+    pulseClockEvent();
+
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         SequencePattern* pattern = currentBar->getPattern(channel);
         if(pattern != NULL) {
@@ -45,11 +47,18 @@ void Sequencer::executeTickEvents() {
     }
 }
 
+void Sequencer::pulseClockEvent() {
+    if(clock.getPulseCount() % midiPulseDivider == 0) {
+        eventOutputService.system(SYSTEM_CLOCK);
+    }
+}
+
 void Sequencer::play() {
     tickIndex = 0;
     playing = true;
     clock.start();
-    executeTickEvents();
+    eventOutputService.system(SYSTEM_START);
+    pulse();
 }
 
 void Sequencer::stop() {
