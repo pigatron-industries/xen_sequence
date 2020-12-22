@@ -64,6 +64,7 @@ void Sequencer::play() {
 void Sequencer::stop() {
     playing = false;
     clock.stop();
+    eventOutputService.system(SYSTEM_STOP);
     reset();
 }
 
