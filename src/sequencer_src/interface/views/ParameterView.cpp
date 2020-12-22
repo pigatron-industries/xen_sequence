@@ -63,9 +63,14 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
     if(recording && parameterViewMode == PARAM_MODE_EVENT) {
         DEBUG("ParameterView::handleMidiEvent");
         if(message.command == COMMAND_NOTEON) {
-            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::MAGENTA);
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
+            if(selectedEvent == NULL) {
+                addEvent();
+            }
             eventNoteField.setValue(message.data1);
+            eventVelocityField.setValue(message.data2);
             updateDataFromField(&eventNoteField);
+            updateDataFromField(&eventVelocityField);
             View::render(false);
         } else if (message.command == COMMAND_NOTEOFF) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
