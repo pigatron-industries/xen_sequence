@@ -22,6 +22,11 @@ ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenc
     Hardware::midiInputService.addEventHandler(this);
 }
 
+void ParameterView::init() {
+    barIndex = sequencer.getBarIndex();
+    updateSelectedBar();
+}
+
 void ParameterView::render(GraphicsContext& g) {
     DEBUG("ParameterView::render");
     if(g.full) {
@@ -84,30 +89,38 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::STICK_UP:
             cursorUp();
             break;
+
         case InterfaceEventType::STICK_DOWN:
             cursorDown();
             break;
+
         case InterfaceEventType::STICK_LEFT:
             cursorLeft();
             break;
+
         case InterfaceEventType::STICK_RIGHT:
             cursorRight();
             break;
+
         case InterfaceEventType::DATA_PRESS:
             nextParameter();
             View::render();
             break;
+
         case InterfaceEventType::DATA_INCREMENT:
             fieldIncrement(event.data);
             break;
+
         case InterfaceEventType::DATA_DECREMENT:
             fieldDecrement(event.data);
             break;
+
         case InterfaceEventType::KEY_RECORD: 
             if(event.data == EVENT_KEY_PRESSED) {
                 record(!recording);
             }
             break;
+
         case InterfaceEventType::KEY_SELECTION:
         case InterfaceEventType::STICK_PRESS:
             if(event.data == EVENT_KEY_PRESSED) {
@@ -115,6 +128,7 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
                 View::render();
             }
             break;
+
         case InterfaceEventType::KEY_ADD_DEL:
             if(event.data == EVENT_KEY_PRESSED) {
                 if(selectedEvent == NULL) {
@@ -125,6 +139,18 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
                 View::render();
             }
             break;
+
+        case KEY_PREV:
+            if(event.data == EVENT_KEY_PRESSED) {
+                prevBar();
+            }
+            break;
+        case KEY_NEXT:
+            if(event.data == EVENT_KEY_PRESSED) {
+                nextBar();
+            }
+            break;
+
         default:
             break;
     }
@@ -162,6 +188,20 @@ void ParameterView::cursorRight() {
     sequenceMatrixView.cursorRight();
     updateSelectedEvent();
     View::render();
+}
+
+void ParameterView::nextBar() {
+    barIndex = sequencer.nextBar();
+    updateSelectedBar();
+    updateSelectedEvent();
+    queueRender();
+}
+
+void ParameterView::prevBar() {
+    barIndex = sequencer.prevBar();
+    updateSelectedBar();
+    updateSelectedEvent();
+    queueRender();
 }
 
 void ParameterView::fieldIncrement(int amount) {
@@ -290,6 +330,7 @@ void ParameterView::updateSelectedBar() {
     bar = AppData::data.getBar(barIndex);
     barLengthField.setValue(bar->getLength());
     barSpeedField.setValue(bar->getSpeed());
+    sequenceMatrixView.setBar(barIndex);
 }
 
 void ParameterView::updateSelectedChannel() {

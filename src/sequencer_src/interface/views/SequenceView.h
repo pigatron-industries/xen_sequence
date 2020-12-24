@@ -10,12 +10,13 @@
 class SequenceView : public View {
 
 public:
-    SequenceView(SequenceMatrixView& _sequenceMatrixView);
+    SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
     uint16_t getCursorBar() { return cursorBar; }
 
 private:
+    Sequencer& sequencer;
     SequenceMatrixView& sequenceMatrixView;
 
     uint8_t cursorChannel;

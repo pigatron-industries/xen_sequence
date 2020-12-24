@@ -30,7 +30,9 @@ public:
 
     bool isPlaying() { return playing; }
 
-    void setBar(uint16_t _barIndex);
+    uint16_t setBar(uint16_t _barIndex);
+    uint16_t nextBar();
+    uint16_t prevBar();
     uint16_t getBarIndex() { return barIndex; }
     uint8_t getTickIndex() { return tickIndex; }
 

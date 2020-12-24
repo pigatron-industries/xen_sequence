@@ -37,6 +37,7 @@ class ParameterView : public View, public MidiEventHandler {
 
 public:
     ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
+    void init();
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
     virtual void handleMidiEvent(MidiMessage message);
@@ -87,6 +88,9 @@ private:
     void cursorDown();
     void cursorLeft();
     void cursorRight();
+
+    void nextBar();
+    void prevBar();
 
     void fieldIncrement(int amount);
     void fieldDecrement(int amount);

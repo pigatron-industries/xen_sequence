@@ -10,7 +10,7 @@
 InterfaceController::InterfaceController(Sequencer& _sequencer) :
     sequencer(_sequencer),
     sequenceMatrixView(_sequencer),
-    sequenceView(sequenceMatrixView),
+    sequenceView(_sequencer, sequenceMatrixView),
     parameterView(_sequencer, sequenceMatrixView) {
       currentView = &sequenceView;
       sequencer.addEventListener(this);
@@ -32,12 +32,14 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
     if(isSequenceView()) {
 
         switch(event.eventType) {
+
             case InterfaceEventType::STICK_PRESS:
                 if(currentView == &sequenceView) {
                     switchToParameterView();
                     return;
                 }
                 break;
+
             case InterfaceEventType::KEY_VIEW:
                 if(event.data == EVENT_KEY_PRESSED) {
                     if(currentView == &parameterView) {
@@ -48,6 +50,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                     return;
                 }
                 break;
+
             case InterfaceEventType::KEY_HELP:
                 if(event.data == EVENT_KEY_PRESSED) {
                     previousView = currentView;
@@ -55,6 +58,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                     render();
                 }
                 break;
+
             case InterfaceEventType::KEY_PLAY_STOP:
                 if(event.data == EVENT_KEY_PRESSED) {
                     if(sequencer.isPlaying()) {
@@ -64,6 +68,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                     }
                 }
                 break;
+
             case InterfaceEventType::KEY_FILE:
                 if(event.data == EVENT_KEY_PRESSED) {
                     stop();
@@ -73,8 +78,10 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                     render();
                 }
                 break;
+
             case InterfaceEventType::SEQUENCER_TICK:
                 sequenceMatrixView.render();
+
             default:
                 break;
         }
@@ -120,8 +127,7 @@ void InterfaceController::onTick() {
 void InterfaceController::switchToParameterView() {
     DEBUG("InterfaceController::switchToParameterView");
     currentView = &parameterView;
-    uint16_t bar = sequenceView.getCursorBar();
-    parameterView.setBar(bar);
+    parameterView.init();
     render();
 }
 

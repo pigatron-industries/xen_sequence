@@ -20,14 +20,14 @@ void InputTask::init() {
 void InputTask::execute() {
     if(analogStick.update()) {
         if(analogStick.wasPushedLeft()) {
-            interface.handleEvent(InterfaceEvent(STICK_LEFT));
+            interface.handleEvent(InterfaceEvent(STICK_LEFT, EVENT_KEY_PRESSED));
         } else if(analogStick.wasPushedRight()) {
-            interface.handleEvent(InterfaceEvent(STICK_RIGHT));
+            interface.handleEvent(InterfaceEvent(STICK_RIGHT, EVENT_KEY_PRESSED));
         }
         if(analogStick.wasPushedUp()) {
-            interface.handleEvent(InterfaceEvent(STICK_UP));
+            interface.handleEvent(InterfaceEvent(STICK_UP, EVENT_KEY_PRESSED));
         } else if(analogStick.wasPushedDown()) {
-            interface.handleEvent(InterfaceEvent(STICK_DOWN));
+            interface.handleEvent(InterfaceEvent(STICK_DOWN, EVENT_KEY_PRESSED));
         }
     }
 
@@ -47,7 +47,7 @@ void InputTask::execute() {
 
     if(encoderSwitch.update()) {
         if(encoderSwitch.fell()) {
-            interface.handleEvent(InterfaceEvent(DATA_PRESS));
+            interface.handleEvent(InterfaceEvent(DATA_PRESS, EVENT_KEY_PRESSED));
         }
     }
 

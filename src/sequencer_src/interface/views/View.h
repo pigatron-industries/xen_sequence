@@ -8,6 +8,7 @@
 class View : public Component {
     public:
         virtual InterfaceEvent handleEvent(InterfaceEvent event) = 0;
+        void queueRender() { rerender = true; }
         bool rerender;
 
 };

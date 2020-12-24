@@ -17,8 +17,9 @@
 #define DATA_TEXT_COLOUR Colour::WHITE
 #define CURSOR_COLOUR Colour::RED
 
-SequenceView::SequenceView(SequenceMatrixView& _sequenceMatrixView) :
-    sequenceMatrixView(_sequenceMatrixView) {
+SequenceView::SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
+        sequencer(_sequencer),
+        sequenceMatrixView(_sequenceMatrixView) {
     cursorChannel = 0;
     cursorBar = 0;
     scrollBar = 0;
@@ -45,10 +46,16 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
             cursorDown();
             break;
         case STICK_LEFT:
-            cursorLeft();
+        case KEY_PREV:
+            if(event.data == EVENT_KEY_PRESSED) {
+                cursorLeft();
+            }
             break;
         case STICK_RIGHT:
-            cursorRight();
+        case KEY_NEXT:
+            if(event.data == EVENT_KEY_PRESSED) {
+                cursorRight();
+            }
             break;
         default:
             break;
@@ -72,24 +79,19 @@ void SequenceView::cursorDown() {
 }
 
 void SequenceView::cursorLeft() {
-    if(cursorBar > 0) {
-        cursorBar--;
-        if(cursorBar == scrollBar-1) {
-            scrollBar--;
-        }
-        View::render();
+    cursorBar = sequencer.prevBar();
+    if(cursorBar == scrollBar-1) {
+        scrollBar--;
     }
+    View::render();
 }
 
 void SequenceView::cursorRight() {
-    // TODO find max sequence length
-    if(cursorBar < 10) {
-        cursorBar++;
-        if(cursorBar == scrollBar+VISIBLE_BARS-1) {
-            scrollBar++;
-        }
-        View::render();
+    cursorBar = sequencer.nextBar();
+    if(cursorBar == scrollBar+VISIBLE_BARS-1) {
+        scrollBar++;
     }
+    View::render();
 }
 
 void SequenceView::renderStatusBar() {

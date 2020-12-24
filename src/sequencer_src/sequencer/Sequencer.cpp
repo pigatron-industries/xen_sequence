@@ -76,11 +76,24 @@ void Sequencer::reset() {
     clock.reset();
 }
 
-void Sequencer::setBar(uint16_t _barIndex) {
+uint16_t Sequencer::setBar(uint16_t _barIndex) {
     DEBUG("Sequencer::setBar");
-    barIndex = _barIndex;
+    barIndex = _barIndex; // TODO check max bar number
     currentBar = AppData::data.getBar(barIndex);
     clock.setTicksPerMinute(currentBar->getSpeed());
+    return barIndex;
+}
+
+uint16_t Sequencer::nextBar() {
+    return setBar(barIndex+1);
+}
+
+uint16_t Sequencer::prevBar() {
+    if(barIndex == 0) {
+        return barIndex;
+    } else {
+        return setBar(barIndex-1);
+    }
 }
 
 void Sequencer::tick() {
