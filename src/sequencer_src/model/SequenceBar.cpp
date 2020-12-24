@@ -24,6 +24,7 @@ void SequenceBar::deserialize(JsonObject doc) {
         int id = docPattern["id"];
         SequencePattern* pattern = AppData::data.getPatternById(id);
         patterns[i] = pattern;
+        empty = false;
         i++;
     }
 }
