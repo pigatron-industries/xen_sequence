@@ -23,6 +23,7 @@ public:
 
     SequenceEvent* newEvent(uint8_t tick, SequencePattern* pattern);
     SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
+    SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceEvent* copy);
     void deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
 
     SequenceChannel& getChannel(uint8_t index);

@@ -54,10 +54,12 @@ void Sequencer::pulseClockEvent() {
 }
 
 void Sequencer::play() {
+    DEBUG("Sequencer::play")
     tickIndex = 0;
     playing = true;
     clock.start();
     eventOutputService.system(SYSTEM_START);
+    tick();
     pulse();
 }
 

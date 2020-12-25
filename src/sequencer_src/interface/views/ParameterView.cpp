@@ -15,16 +15,14 @@ ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenc
     eventFields.add(&eventVelocityField);
     eventFields.add(&eventGateField);
     eventFields.add(&eventDelayField);
-
-    sequenceMatrixView.setPlayCursor(false);
-    setParameterViewMode(PARAM_MODE_BAR);
-
     Hardware::midiInputService.addEventHandler(this);
 }
 
 void ParameterView::init() {
+    DEBUG("ParameterView::init")
     barIndex = sequencer.getBarIndex();
     updateSelectedBar();
+    setParameterViewMode(parameterViewMode);
 }
 
 void ParameterView::render(GraphicsContext& g) {
@@ -136,18 +134,29 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
                 } else {
                     deleteEvent();
                 }
-                View::render();
             }
             break;
 
-        case KEY_PREV:
+        case InterfaceEventType::KEY_PREV:
             if(event.data == EVENT_KEY_PRESSED) {
                 prevBar();
             }
             break;
-        case KEY_NEXT:
+        case InterfaceEventType::KEY_NEXT:
             if(event.data == EVENT_KEY_PRESSED) {
                 nextBar();
+            }
+            break;
+
+        case InterfaceEventType::KEY_COPY:
+            if(event.data == EVENT_KEY_PRESSED) {
+                copy();
+            }
+            break;
+
+        case InterfaceEventType::KEY_PASTE:
+            if(event.data == EVENT_KEY_PRESSED) {
+                paste();
             }
             break;
 
@@ -268,15 +277,13 @@ void ParameterView::setBar(uint16_t _barIndex) {
 void ParameterView::cycleSelectionMode() {
     switch(parameterViewMode) {
         case PARAM_MODE_BAR:
-            setSelectionMode(ParameterViewSelectionMode::SELECT_PARAMETER);
+            setSelectionMode(ParameterViewSelectionMode::SELECT_NONE);
             break;
         case PARAM_MODE_CHANNEL:
-            setSelectionMode(selectionMode == ParameterViewSelectionMode::SELECT_PARAMETER ?
-                             ParameterViewSelectionMode::SELECT_CHANNEL : ParameterViewSelectionMode::SELECT_PARAMETER);
+            setSelectionMode(ParameterViewSelectionMode::SELECT_CHANNEL);
             break;
         case PARAM_MODE_EVENT:
-            setSelectionMode(selectionMode == ParameterViewSelectionMode::SELECT_PARAMETER ?
-                             ParameterViewSelectionMode::SELECT_EVENT : ParameterViewSelectionMode::SELECT_PARAMETER);
+            setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
             break;
     }
 }
@@ -304,21 +311,17 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
         case PARAM_MODE_BAR:
             visibleFields = &barFields;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
-            setSelectionMode(ParameterViewSelectionMode::SELECT_PARAMETER);
+            setSelectionMode(ParameterViewSelectionMode::SELECT_NONE);
             break;
         case PARAM_MODE_CHANNEL:
             visibleFields = &channelFields;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_CHANNEL);
-            if(selectionMode != ParameterViewSelectionMode::SELECT_PARAMETER) {
-                setSelectionMode(ParameterViewSelectionMode::SELECT_CHANNEL);
-            }
+            setSelectionMode(ParameterViewSelectionMode::SELECT_CHANNEL);
             break;
         case PARAM_MODE_EVENT:
             visibleFields = &eventFields;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_EVENT);
-            if(selectionMode != ParameterViewSelectionMode::SELECT_PARAMETER) {
-                setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
-            }
+            setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
             updateSelectedEvent();
             break;
     };
@@ -354,13 +357,15 @@ void ParameterView::updateSelectedEvent() {
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(true);
         }
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
     } else {
-        setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(false);
         }
         setDirtyScreen();
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
     }
+    queueRender();
 }
 
 void ParameterView::updateDataFromField(ParameterField* field) {
@@ -388,7 +393,31 @@ void ParameterView::addEvent() {
     updateSelectedEvent();
 }
 
+void ParameterView::addEvent(SequenceEvent* copy) {
+    AppData::data.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick(), copy);
+    updateSelectedEvent();
+}
+
 void ParameterView::deleteEvent() {
     AppData::data.deleteEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
     updateSelectedEvent();
+}
+
+void ParameterView::copy() {
+    if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
+        if(selectedEvent != NULL) {
+            copiedEvent = selectedEvent;
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PASTE, LedColour::BLUE);
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
+        }
+    }
+}
+
+void ParameterView::paste() {
+    if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
+        if(copiedEvent != NULL) {
+            deleteEvent();
+            addEvent(copiedEvent);
+        }
+    }
 }

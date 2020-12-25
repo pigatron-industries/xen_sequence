@@ -16,7 +16,7 @@ enum ParameterViewMode {
 };
 
 enum class ParameterViewSelectionMode {
-    SELECT_PARAMETER,
+    SELECT_NONE,
     SELECT_CHANNEL,
     SELECT_EVENT
 };
@@ -57,8 +57,10 @@ private:
     SequencePattern* selectedPattern;
     SequenceEvent* selectedEvent;
 
-    ParameterViewMode parameterViewMode = PARAM_MODE_BAR;
-    ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_PARAMETER;
+    SequenceEvent* copiedEvent;
+
+    ParameterViewMode parameterViewMode = PARAM_MODE_EVENT;
+    ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_EVENT;
 
     int8_t selectedFieldIndex = 0;
     ParameterField* selectedField = NULL;
@@ -110,7 +112,10 @@ private:
     void updateDataFromField(ParameterField* field);
 
     void addEvent();
+    void addEvent(SequenceEvent* copy);
     void deleteEvent();
+    void copy();
+    void paste();
 };
 
 #endif

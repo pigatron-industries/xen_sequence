@@ -113,6 +113,20 @@ SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_
     return event;
 }
 
+SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceEvent* copy) {
+    SequenceBar* bar = getBar(barIndex);
+    if(bar == NULL) {
+        bar = newBar(barIndex);
+    }
+    SequencePattern* pattern = bar->getPattern(channelIndex);
+    if(pattern == NULL) {
+        pattern = newPattern(barIndex, channelIndex);
+    }
+    SequenceEvent* event = new SequenceEvent(copy);
+    pattern->addEvent(tickIndex, event);
+    return event;
+}
+
 void AppData::deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
     SequenceBar* bar = getBar(barIndex);
     if(bar == NULL) {

@@ -17,6 +17,9 @@ enum SequenceEventFlag {
 class SequenceEvent {
 
 public:
+    SequenceEvent();
+    SequenceEvent(SequenceEvent* event);
+
     void setFlag(SequenceEventFlag flag, bool value) {
         if(value) {
             eventFlags |= flag;

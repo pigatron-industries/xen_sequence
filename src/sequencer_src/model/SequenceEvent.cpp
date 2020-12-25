@@ -1,5 +1,21 @@
 #include "SequenceEvent.h"
 
+SequenceEvent::SequenceEvent() {
+    pitch = 64;
+    velocity = 64;
+    gate = 48;
+    delay = 0;
+    compileNeeded = true;
+}
+
+SequenceEvent::SequenceEvent(SequenceEvent* event) {
+    pitch = event->pitch;
+    velocity = event->velocity;
+    gate = event->gate;
+    delay = event->delay;
+    compileNeeded = true;
+}
+
 void SequenceEvent::serialize(JsonObject doc) {
     JsonArray docFlags = doc.createNestedArray("flags");
     if(getFlag(SequenceEventFlag::NOTE_ON)) {
