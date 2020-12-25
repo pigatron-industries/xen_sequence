@@ -358,12 +358,14 @@ void ParameterView::updateSelectedEvent() {
             eventFields.get(i)->setEnabled(true);
         }
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
     } else {
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(false);
         }
         setDirtyScreen();
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
     }
     queueRender();
 }
@@ -406,7 +408,10 @@ void ParameterView::deleteEvent() {
 void ParameterView::copy() {
     if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
         if(selectedEvent != NULL) {
-            copiedEvent = selectedEvent;
+            if(copiedEvent != NULL) {
+                delete copiedEvent;
+            }
+            copiedEvent = new SequenceEvent(selectedEvent);
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PASTE, LedColour::BLUE);
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
         }
