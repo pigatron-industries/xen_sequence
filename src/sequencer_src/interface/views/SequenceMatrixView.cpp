@@ -7,6 +7,7 @@
 #define SELECT_CURSOR_PIXEL CRGB(0x880000)
 #define SELECT_CURSOR_ACTIVE_PIXEL CRGB(0x880000)
 #define PLAY_CURSOR_PIXEL CRGB(0x008800)
+#define MARKER_PIXEL CRGB(0x880000)
 
 
 
@@ -17,6 +18,7 @@ SequenceMatrixView::SequenceMatrixView(Sequencer& _sequencer):
 void SequenceMatrixView::render() {
     renderData();
     renderSelectCursor();
+    renderMarker();
     renderPlayCursor();
     Hardware::ledMatrix.update();
 }
@@ -65,12 +67,30 @@ void SequenceMatrixView::renderPlayCursor() {
     }
 }
 
+void SequenceMatrixView::renderMarker() {
+    if(showMarker) {
+        CRGB colour = Hardware::ledMatrix.getPixel(markerChannel, markerTick);
+        colour += selectionActive ? SELECT_CURSOR_ACTIVE_PIXEL : SELECT_CURSOR_PIXEL;
+        Hardware::ledMatrix.setPixel(markerChannel, markerTick, colour);
+    }
+}
+
 void SequenceMatrixView::setBar(int _barIndex) {
     barIndex = _barIndex;
 }
 
 void SequenceMatrixView::setPlayCursor(bool _showPlayCursor) {
     showPlayCursor =_showPlayCursor;
+}
+
+void SequenceMatrixView::setMarker(uint8_t channel, uint8_t tick) {
+    showMarker = true;
+    markerChannel = channel;
+    markerTick = tick;
+}
+
+void SequenceMatrixView::clearMarker() {
+    showMarker = false;
 }
 
 void SequenceMatrixView::cursorUp() {

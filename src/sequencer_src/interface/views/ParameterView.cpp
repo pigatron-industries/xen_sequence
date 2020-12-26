@@ -160,6 +160,14 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
             }
             break;
 
+        case InterfaceEventType::KEY_MOVE:
+            if(event.data == EVENT_KEY_PRESSED) {
+                drag();
+            } else if(event.data == EVENT_KEY_RELEASED) {
+                drop();
+            }
+            break;
+
         default:
             break;
     }
@@ -425,4 +433,29 @@ void ParameterView::paste() {
             addEvent(copiedEvent);
         }
     }
+}
+
+void ParameterView::drag() {
+    if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT && selectedEvent != NULL) {
+        copiedEvent = new SequenceEvent(selectedEvent);
+        dragging = true;
+        draggingFromBar = barIndex;
+        draggingFromChannel = sequenceMatrixView.getSelectCursorChannel();
+        draggingFromTick = sequenceMatrixView.getSelectCursorTick();
+        sequenceMatrixView.setMarker(draggingFromChannel, draggingFromTick);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, LedColour::BLUE);
+    }
+}
+
+void ParameterView::drop() {
+    if(dragging) {
+        if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT && copiedEvent != NULL) {
+            AppData::data.deleteEvent(draggingFromBar, draggingFromChannel, draggingFromTick);
+            addEvent(copiedEvent);
+        }
+    }
+
+    sequenceMatrixView.clearMarker();
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, LedColour::OFF);
+    dragging = false;
 }

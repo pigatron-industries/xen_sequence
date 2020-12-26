@@ -34,7 +34,7 @@ enum InterfaceEventType {
     KEY_ADD_DEL,
     KEY_COPY,
     KEY_PASTE,
-    KEY_PLACE_8,
+    KEY_MOVE,
     //
     KEY_PLACE_9,
     KEY_PLACE_10,

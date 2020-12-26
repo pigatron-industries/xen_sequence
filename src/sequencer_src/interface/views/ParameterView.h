@@ -58,6 +58,10 @@ private:
     SequenceEvent* selectedEvent;
 
     SequenceEvent* copiedEvent;
+    bool dragging;
+    int draggingFromBar;
+    int draggingFromChannel;
+    int draggingFromTick;
 
     ParameterViewMode parameterViewMode = PARAM_MODE_EVENT;
     ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_EVENT;
@@ -116,6 +120,8 @@ private:
     void deleteEvent();
     void copy();
     void paste();
+    void drag();
+    void drop();
 };
 
 #endif
