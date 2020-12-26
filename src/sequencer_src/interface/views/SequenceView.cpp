@@ -93,23 +93,34 @@ void SequenceView::renderCursor() {
 
 InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
-        case STICK_UP:
+        case InterfaceEventType::STICK_UP:
             cursorUp();
             break;
-        case STICK_DOWN:
+
+        case InterfaceEventType::STICK_DOWN:
             cursorDown();
             break;
-        case STICK_LEFT:
-        case KEY_PREV:
+
+        case InterfaceEventType::STICK_LEFT:
+        case InterfaceEventType::KEY_PREV:
             if(event.data == EVENT_KEY_PRESSED) {
                 cursorLeft();
             }
             break;
-        case STICK_RIGHT:
-        case KEY_NEXT:
+
+        case InterfaceEventType::STICK_RIGHT:
+        case InterfaceEventType::KEY_NEXT:
             if(event.data == EVENT_KEY_PRESSED) {
                 cursorRight();
             }
+            break;
+
+        case InterfaceEventType::DATA_INCREMENT:
+            incrementPattern();
+            break;
+
+        case InterfaceEventType::DATA_DECREMENT:
+            decrementPattern();
             break;
         
         case KEY_ADD_DEL:
@@ -157,6 +168,30 @@ void SequenceView::cursorRight() {
         scrollBar++;
     }
     View::render();
+}
+
+void SequenceView::incrementPattern() {
+    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
+    uint16_t patternId = pattern->getId();
+    patternId++;
+    pattern = AppData::data.getPatternById(patternId);
+    if(pattern != NULL) {
+        AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+        queueRender();
+    }
+}
+
+void SequenceView::decrementPattern() {
+    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
+    int patternId = pattern->getId();
+    patternId--;
+    if(patternId > 0) {
+        pattern = AppData::data.getPatternById(patternId);
+        if(pattern != NULL) {
+            AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+            queueRender();
+        }
+    }
 }
 
 void SequenceView::addPattern() {
