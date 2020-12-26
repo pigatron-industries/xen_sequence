@@ -1,6 +1,7 @@
 #include "SequenceView.h"
 #include "../Hardware.h"
 #include "../../model/AppData.h"
+#include "../../lib/util/debug.h"
 
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 128
@@ -16,6 +17,7 @@
 #define DATA_COLOUR Colour(0, 40, 80)
 #define DATA_TEXT_COLOUR Colour::WHITE
 #define CURSOR_COLOUR Colour::RED
+#define BACKGROUND_COLOUR Colour::BLACK
 
 SequenceView::SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
         sequencer(_sequencer),
@@ -26,6 +28,8 @@ SequenceView::SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceM
 }
 
 void SequenceView::render(GraphicsContext& g) {
+    DEBUG("SequenceView::render");
+
     renderStatusBar();
     renderGrid();
     renderSequence();
@@ -35,6 +39,56 @@ void SequenceView::render(GraphicsContext& g) {
     sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
     sequenceMatrixView.setBar(cursorBar);
     sequenceMatrixView.render();
+}
+
+
+void SequenceView::renderStatusBar() {
+    Hardware::display.setTextColour(Colour(255, 255, 255));
+}
+
+void SequenceView::renderGrid() {
+    Hardware::display.setTextColour(GRID_TEXT_COLOUR);
+    int16_t top = STATUS_HEIGHT;
+    for(int16_t channel = 0; channel < SEQUENCE_CHANNELS+1; channel++) {
+        Hardware::display.drawLine(0, top, DISPLAY_WIDTH, top, GRID_COLOUR);
+        top += CHANNEL_HEIGHT;
+    }
+    int16_t left = 0;
+    for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
+        Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, GRID_COLOUR);
+        Hardware::display.setCursor(left, 12);
+        Hardware::display.print(bar, HEX);
+        left += BAR_WIDTH;
+    }
+}
+
+void SequenceView::renderSequence() {
+    Hardware::display.setTextColour(DATA_TEXT_COLOUR);
+    short top = STATUS_HEIGHT;
+    for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
+        short left = 0;
+        for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
+            SequencePattern* pattern = AppData::data.getPattern(bar, channel);
+            if(pattern != NULL) {
+                Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
+                Hardware::display.setCursor(left+5, top+9);
+                Hardware::display.print(pattern->getId(), HEX);
+            } else {
+                Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, BACKGROUND_COLOUR);
+            }
+            left += BAR_WIDTH;
+        }
+        top += CHANNEL_HEIGHT;
+    }
+}
+
+void SequenceView::renderCursor() {
+    short top = STATUS_HEIGHT+(cursorChannel*CHANNEL_HEIGHT);
+    short left = (cursorBar-scrollBar)*BAR_WIDTH;
+    Hardware::display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
+    Hardware::display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
+    Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
+    Hardware::display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
 }
 
 InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
@@ -57,6 +111,17 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
                 cursorRight();
             }
             break;
+        
+        case KEY_ADD_DEL:
+            if(event.data == EVENT_KEY_PRESSED) {
+                SequencePattern* selectedPattern = AppData::data.getPattern(cursorBar, cursorChannel);
+                if(selectedPattern != NULL) {
+                    deletePattern();
+                } else {
+                    addPattern();
+                }
+            }
+
         default:
             break;
     }
@@ -94,49 +159,15 @@ void SequenceView::cursorRight() {
     View::render();
 }
 
-void SequenceView::renderStatusBar() {
-    Hardware::display.setTextColour(Colour(255, 255, 255));
+void SequenceView::addPattern() {
+    SequencePattern* pattern = AppData::data.getPatternById(1);
+    if(pattern != NULL) {
+        AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+    }
+    queueRender();
 }
 
-void SequenceView::renderGrid() {
-    Hardware::display.setTextColour(GRID_TEXT_COLOUR);
-    int16_t top = STATUS_HEIGHT;
-    for(int16_t channel = 0; channel < SEQUENCE_CHANNELS+1; channel++) {
-        Hardware::display.drawLine(0, top, DISPLAY_WIDTH, top, GRID_COLOUR);
-        top += CHANNEL_HEIGHT;
-    }
-    int16_t left = 0;
-    for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
-        Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, GRID_COLOUR);
-        Hardware::display.setCursor(left, 12);
-        Hardware::display.print(bar, HEX);
-        left += BAR_WIDTH;
-    }
-}
-
-void SequenceView::renderSequence() {
-    Hardware::display.setTextColour(DATA_TEXT_COLOUR);
-    short top = STATUS_HEIGHT;
-    for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
-        short left = 0;
-        for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
-            SequencePattern* pattern = AppData::data.getPattern(bar, channel);
-            if(pattern != NULL) {
-                Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
-                Hardware::display.setCursor(left+5, top+9);
-                Hardware::display.print(pattern->getId(), HEX);
-            }
-            left += BAR_WIDTH;
-        }
-        top += CHANNEL_HEIGHT;
-    }
-}
-
-void SequenceView::renderCursor() {
-    short top = STATUS_HEIGHT+(cursorChannel*CHANNEL_HEIGHT);
-    short left = (cursorBar-scrollBar)*BAR_WIDTH;
-    Hardware::display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
-    Hardware::display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
-    Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
-    Hardware::display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
+void SequenceView::deletePattern() {
+    AppData::data.setPattern(cursorBar, cursorChannel, NULL);
+    queueRender();
 }

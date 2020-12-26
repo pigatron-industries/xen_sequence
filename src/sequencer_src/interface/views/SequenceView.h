@@ -33,6 +33,9 @@ private:
     void cursorLeft();
     void cursorRight();
 
+    void addPattern();
+    void deletePattern();
+
 };
 
 #endif

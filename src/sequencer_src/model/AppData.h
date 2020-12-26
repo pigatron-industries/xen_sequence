@@ -20,6 +20,7 @@ public:
     SequencePattern* getPattern(uint16_t barIndex, uint8_t channel);
     SequencePattern* newPattern();
     SequencePattern* newPattern(uint16_t barIndex, uint8_t channel);
+    void setPattern(uint16_t barIndex, uint8_t channel, SequencePattern* pattern);
 
     SequenceEvent* newEvent(uint8_t tick, SequencePattern* pattern);
     SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
