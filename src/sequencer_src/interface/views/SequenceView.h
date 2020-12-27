@@ -24,6 +24,10 @@ private:
     uint16_t cursorBar;
     uint16_t scrollBar;
 
+    bool dragging;
+    uint8_t draggingFromChannel;
+    uint16_t draggingFromBar;
+
     SequencePattern* copiedPattern;
 
     void renderStatusBar();

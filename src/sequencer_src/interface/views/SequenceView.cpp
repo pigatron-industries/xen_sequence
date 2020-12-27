@@ -277,9 +277,20 @@ void SequenceView::paste() {
 }
 
 void SequenceView::drag() {
-
+    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
+    if(pattern != NULL) {
+        draggingFromChannel = cursorChannel;
+        draggingFromBar = cursorBar;
+        dragging = true;
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, LedColour::BLUE);
+    }
 }
 
 void SequenceView::drop() {
-
+    if(dragging) {
+        SequencePattern* pattern = AppData::data.getPattern(draggingFromBar, draggingFromChannel);
+        AppData::data.setPattern(draggingFromBar, draggingFromChannel, NULL);
+        AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, LedColour::OFF);
+    }
 }
