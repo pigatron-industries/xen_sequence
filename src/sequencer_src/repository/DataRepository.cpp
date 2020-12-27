@@ -18,7 +18,7 @@ void DataRepository::init() {
     }
 }
 
-void DataRepository::loadFileList(String directoryName) {
+bool DataRepository::loadFileList(String directoryName) {
     DEBUG("DataRepository::loadFileList");
     File dir = sd.open(String(ROOT_DIRECTORY).concat(directoryName));
     if(dir.isDirectory()) {
@@ -32,8 +32,12 @@ void DataRepository::loadFileList(String directoryName) {
             i++;
             entry = dir.openNextFile();
         }
+        dir.close();
+        return true;
+    } else {
+        dir.close();
+        return false;
     }
-    dir.close();
 }
 
 void DataRepository::saveSequence(String path) {

@@ -7,6 +7,7 @@
 TextComponent::TextComponent() {
     height = FIELD_HEIGHT;
     width = FIELD_WIDTH;
+    textColour = Colour::WHITE;
 }
 
 void TextComponent::render(GraphicsContext& g) {

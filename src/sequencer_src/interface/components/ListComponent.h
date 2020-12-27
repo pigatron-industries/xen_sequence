@@ -15,6 +15,8 @@ public:
 
     void clear() { componentCount = 0; }
     void addComponent(Component* component);
+    int getSize() { return componentCount; }
+    Component* getComponent(int index) { return components[index]; }
 
 private:
     Component* components[MAX_COMPONENTS];

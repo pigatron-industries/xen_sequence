@@ -22,12 +22,17 @@ public:
 private:
     String currentDirectory = String("/");
     int selectedIndex;
-    int listSize;
 
     TextComponent titleComponent;
-    Component* selectedComponent;
+    //Component* selectedComponent;
     ListComponent listComponent;
-    TextComponent textComponents[MAX_FILES];
+    TextComponent newFileComponent;
+    TextComponent fileComponents[MAX_FILES];
+
+    bool saveConfirmation;
+    bool loadConfirmation;
+
+    void listFiles();
 
     void save();
     void load();
@@ -36,8 +41,7 @@ private:
     bool confirmSave();
     void cancelDialog();
 
-    bool saveConfirmation;
-    bool loadConfirmation;
+    void navigate();
 
 };
 

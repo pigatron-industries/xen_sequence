@@ -5,24 +5,17 @@
 
 FileView::FileView() {
     for(int i = 0; i < MAX_FILES; i++) {
-        textComponents[i].setTextColour(Colour::YELLOW);
+        fileComponents[i].setTextColour(Colour::YELLOW);
     }
     titleComponent.setText("SAVE / LOAD");
     titleComponent.setTextColour(Colour::WHITE);
+    newFileComponent.setText(" [ NEW FILE ] ");
+    newFileComponent.setTextColour(Colour::YELLOW);
 }
 
 void FileView::init() {
-    DataRepository::data.loadFileList(currentDirectory);
+    listFiles();
 
-    listComponent.clear();
-    FileList& fileList = DataRepository::data.getFileList();
-    listSize = fileList.size;
-    for(int i = 0; i < fileList.size; i++) {
-        textComponents[i].setText(fileList.file[i].filename);
-        listComponent.addComponent(&textComponents[i]);
-    }
-
-    selectedComponent = &textComponents[0];
     saveConfirmation = false;
     loadConfirmation = false;
 
@@ -31,7 +24,7 @@ void FileView::init() {
 }
 
 void FileView::render(GraphicsContext& g) {
-    g.focus = selectedComponent;
+    g.focus = listComponent.getComponent(selectedIndex);
     if(g.full) {
         titleComponent.render(g);
     }
@@ -46,21 +39,25 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::STICK_DOWN:
             cancelDialog();
             selectedIndex++;
-            if(selectedIndex >= listSize) {
+            if(selectedIndex >= listComponent.getSize()) {
                 selectedIndex = 0;
-            } 
-            selectedComponent = &textComponents[selectedIndex];
-            View::render(false);
+            }
+            queueRender();
             break;
+
         case InterfaceEventType::STICK_UP:
             cancelDialog();
             selectedIndex--;
             if(selectedIndex < 0) {
-                selectedIndex = listSize-1;
+                selectedIndex = listComponent.getSize()-1;
             }
-            selectedComponent = &textComponents[selectedIndex];
-            View::render(false);
+            queueRender();
             break;
+
+        case InterfaceEventType::STICK_PRESS:
+            navigate();
+            break;
+
         case InterfaceEventType::KEY_RECORD: //SAVE
             if(event.data == EVENT_KEY_PRESSED) {
                 if(confirmSave()) {
@@ -68,6 +65,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
                 }
             }
             break;
+
         case InterfaceEventType::KEY_PLAY_STOP: //LOAD
             if(event.data == EVENT_KEY_PRESSED) {
                 if(confirmLoad()) {
@@ -75,6 +73,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
                 }
             }
             break;
+
         default:
             break;
     }
@@ -82,26 +81,51 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
     return InterfaceEvent::NONE;
 }
 
+void FileView::listFiles() {
+    DataRepository::data.loadFileList(currentDirectory);
+    FileList& fileList = DataRepository::data.getFileList();
+
+    listComponent.clear();
+    listComponent.addComponent(&newFileComponent);
+    for(int i = 0; i < fileList.size; i++) {
+        fileComponents[i].setText(fileList.file[i].filename);
+        listComponent.addComponent(&fileComponents[i]);
+    }
+
+    selectedIndex = 0;
+}
+
 void FileView::save() {
-    String path = String(currentDirectory).concat(textComponents[selectedIndex].getText());
-    DataRepository::data.saveSequence(path);
+    //TODO check selected component is file
+    TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
+    if(component != &newFileComponent) {
+        String path = String(currentDirectory).concat(component->getText());
+        DataRepository::data.saveSequence(path);
+    }
 }
 
 void FileView::load() {
-    String path = String(currentDirectory).concat(textComponents[selectedIndex].getText());
-    DataRepository::data.loadSequence(path);
-
+    //TODO check selected component is file
+    TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
+    if(component != &newFileComponent) {
+        String path = String(currentDirectory).concat(component->getText());
+        DataRepository::data.loadSequence(path);
+    }
 }
 
 bool FileView::confirmLoad() {
-    if(loadConfirmation) {
-        load();
-        return true;
-    } else {
-        DisplayUtils::drawDialog("Load?", 50, 16);
-        loadConfirmation = true;
-        return false;
+    TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
+    if(component != &newFileComponent) {
+        if(loadConfirmation) {
+            load();
+            return true;
+        } else {
+            DisplayUtils::drawDialog("Load?", 50, 16);
+            loadConfirmation = true;
+            return false;
+        }
     }
+    return false;
 }
 
 bool FileView::confirmSave() {
@@ -119,6 +143,15 @@ void FileView::cancelDialog() {
     if(saveConfirmation || loadConfirmation) {
         saveConfirmation = false;
         loadConfirmation = false;
-        View::render(true);
+        queueRender();
+    }
+}
+
+void FileView::navigate() {
+    String path = String(currentDirectory).concat(fileComponents[selectedIndex].getText());
+    if(DataRepository::data.loadFileList(path)) {
+        currentDirectory = path;
+        //TODO
+        queueRender();
     }
 }

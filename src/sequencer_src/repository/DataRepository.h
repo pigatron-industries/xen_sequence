@@ -14,7 +14,7 @@ class DataRepository {
 
         void init();
 
-        void loadFileList(String directoryName);
+        bool loadFileList(String directoryName);
         FileList& getFileList() { return fileList; }
         
         void saveSequence(String path);
