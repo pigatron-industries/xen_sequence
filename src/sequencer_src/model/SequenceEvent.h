@@ -19,6 +19,7 @@ class SequenceEvent {
 public:
     SequenceEvent();
     SequenceEvent(SequenceEvent* event);
+    void copy(SequenceEvent* event);
 
     void setFlag(SequenceEventFlag flag, bool value) {
         if(value) {

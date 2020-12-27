@@ -18,6 +18,7 @@ InterfaceController::InterfaceController(Sequencer& _sequencer) :
 
 void InterfaceController::init() {
     Hardware::display.fillScreen(Colour(0, 0, 0));
+    sequenceView.init();
     render();
 }
 
@@ -134,6 +135,7 @@ void InterfaceController::switchToParameterView() {
 void InterfaceController::switchToSequenceView() {
     DEBUG("InterfaceController::switchToSequenceView");
     currentView = &sequenceView;
+    sequenceView.init();
     render();
 }
 

@@ -9,6 +9,10 @@ SequenceEvent::SequenceEvent() {
 }
 
 SequenceEvent::SequenceEvent(SequenceEvent* event) {
+    copy(event);
+}
+
+void SequenceEvent::copy(SequenceEvent* event) {
     pitch = event->pitch;
     velocity = event->velocity;
     gate = event->gate;

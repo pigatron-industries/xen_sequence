@@ -25,6 +25,11 @@ SequenceView::SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceM
     cursorChannel = 0;
     cursorBar = 0;
     scrollBar = 0;
+    copiedPattern = NULL;
+}
+
+void SequenceView::init() {
+    updateSelectedPattern();
 }
 
 void SequenceView::render(GraphicsContext& g) {
@@ -123,7 +128,7 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
             decrementPattern();
             break;
         
-        case KEY_ADD_DEL:
+        case InterfaceEventType::KEY_ADD_DEL:
             if(event.data == EVENT_KEY_PRESSED) {
                 SequencePattern* selectedPattern = AppData::data.getPattern(cursorBar, cursorChannel);
                 if(selectedPattern != NULL) {
@@ -132,6 +137,27 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
                     addPattern();
                 }
             }
+            break;
+
+        case InterfaceEventType::KEY_COPY:
+            if(event.data == EVENT_KEY_PRESSED) {
+                copy();
+            }
+            break;
+
+        case InterfaceEventType::KEY_PASTE:
+            if(event.data == EVENT_KEY_PRESSED) {
+                paste();
+            }
+            break;
+
+        case InterfaceEventType::KEY_MOVE:
+            if(event.data == EVENT_KEY_PRESSED) {
+                drag();
+            } else if(event.data == EVENT_KEY_RELEASED) {
+                drop();
+            }
+            break;
 
         default:
             break;
@@ -143,31 +169,52 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
 void SequenceView::cursorUp() {
     if(cursorChannel > 0) {
         cursorChannel--;
-        View::render();
+        queueRender();
+        updateSelectedPattern();
     }
 }
 
 void SequenceView::cursorDown() {
     if(cursorChannel < SEQUENCE_CHANNELS-1) {
         cursorChannel++;
-        View::render();
+        queueRender();
+        updateSelectedPattern();
     }
 }
 
 void SequenceView::cursorLeft() {
+    uint16_t prevCursorBar = cursorBar;
     cursorBar = sequencer.prevBar();
-    if(cursorBar == scrollBar-1) {
-        scrollBar--;
+    if(cursorBar != prevCursorBar) {
+        if(cursorBar == scrollBar-1) {
+            scrollBar--;
+        }
+        updateSelectedPattern();
+        queueRender();
     }
-    View::render();
 }
 
 void SequenceView::cursorRight() {
+    uint16_t prevCursorBar = cursorBar;
     cursorBar = sequencer.nextBar();
-    if(cursorBar == scrollBar+VISIBLE_BARS-1) {
-        scrollBar++;
+    if(cursorBar != prevCursorBar) {
+        if(cursorBar == scrollBar+VISIBLE_BARS-1) {
+            scrollBar++;
+        }
+        updateSelectedPattern();
+        queueRender();
     }
-    View::render();
+}
+
+void SequenceView::updateSelectedPattern() {
+    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
+    if(pattern != NULL) {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+    } else {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
+    }
 }
 
 void SequenceView::incrementPattern() {
@@ -195,14 +242,44 @@ void SequenceView::decrementPattern() {
 }
 
 void SequenceView::addPattern() {
+    //TODO determine most sensible pattern id to add
     SequencePattern* pattern = AppData::data.getPatternById(1);
     if(pattern != NULL) {
         AppData::data.setPattern(cursorBar, cursorChannel, pattern);
     }
+    updateSelectedPattern();
     queueRender();
 }
 
 void SequenceView::deletePattern() {
     AppData::data.setPattern(cursorBar, cursorChannel, NULL);
+    updateSelectedPattern();
     queueRender();
+}
+
+void SequenceView::copy() {
+    DEBUG("SequenceView::copy")
+    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
+    if(pattern != NULL) {
+        copiedPattern = AppData::data.copyPattern(pattern);
+        queueRender();
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PASTE, LedColour::BLUE);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
+    }
+}
+
+void SequenceView::paste() {
+    DEBUG("SequenceView::paste")
+    if(copiedPattern != NULL) {
+        AppData::data.setPattern(cursorBar, cursorChannel, copiedPattern);
+        queueRender();
+    }
+}
+
+void SequenceView::drag() {
+
+}
+
+void SequenceView::drop() {
+
 }

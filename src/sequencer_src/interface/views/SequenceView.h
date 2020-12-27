@@ -11,6 +11,7 @@ class SequenceView : public View {
 
 public:
     SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
+    void init();
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
     uint16_t getCursorBar() { return cursorBar; }
@@ -23,6 +24,8 @@ private:
     uint16_t cursorBar;
     uint16_t scrollBar;
 
+    SequencePattern* copiedPattern;
+
     void renderStatusBar();
     void renderGrid();
     void renderSequence();
@@ -33,11 +36,17 @@ private:
     void cursorLeft();
     void cursorRight();
 
+    void updateSelectedPattern();
+
     void incrementPattern();
     void decrementPattern();
 
     void addPattern();
     void deletePattern();
+    void copy();
+    void paste();
+    void drag();
+    void drop();
 
 };
 

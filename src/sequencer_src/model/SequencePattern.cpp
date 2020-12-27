@@ -4,6 +4,17 @@ SequencePattern::~SequencePattern() {
     clear();
 }
 
+void SequencePattern::copy(SequencePattern* sourcePattern) {
+    clear();
+    for(int i = 0; i < sourcePattern->getEvents().size(); i++) {
+        SequenceEvent* sourceEvent = sourcePattern->getEvent(i);
+        if(sourceEvent != NULL) {
+            SequenceEvent* newEvent = new SequenceEvent(sourceEvent);
+            addEvent(i, newEvent);
+        }
+    }
+}
+
 void SequencePattern::addEvent(uint8_t index, SequenceEvent* event) {
     while(events.size() <= index) {
         events.add(NULL);
