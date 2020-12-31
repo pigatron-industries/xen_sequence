@@ -117,7 +117,9 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
     }
 
     if(currentView->rerender) {
-        currentView->render(false);
+        currentView->render(currentView->rerenderFull);
+        currentView->rerender = false;
+        currentView->rerenderFull = false;
     }
 }
 

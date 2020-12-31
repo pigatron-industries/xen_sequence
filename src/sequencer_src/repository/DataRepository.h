@@ -19,6 +19,7 @@ class DataRepository {
         
         void saveSequence(String path);
         void loadSequence(String path);
+        void removeSequence(String path);
 
     private:
         static const String ROOT_DIRECTORY;

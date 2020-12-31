@@ -5,6 +5,7 @@
 
 #include "../lib/drivers/Display.h"
 #include "../lib/drivers/LedMatrix.h"
+#include "../lib/drivers/Time.h"
 #include "../sequencer/midi/MidiInputService.h"
 #include "Keyboard.h"
 
@@ -17,6 +18,7 @@ public:
     static LedMatrix ledMatrix;
     static Keyboard keyboard;
     static MidiInputService midiInputService;
+    static Time time;
 
 private:
     Hardware() {}

@@ -8,6 +8,12 @@
 #include "../components/TextComponent.h"
 #include "../../repository/DataRepository.h"
 
+enum SelectedType {
+    EXISTING_FILE,
+    NEW_FILE,
+    CHILD_DIRECTORY,
+    PARENT_DIRECTORY
+};
 
 class FileView : public View {
 
@@ -24,24 +30,29 @@ private:
     int selectedIndex;
 
     TextComponent titleComponent;
-    //Component* selectedComponent;
     ListComponent listComponent;
     TextComponent newFileComponent;
     TextComponent fileComponents[MAX_FILES];
 
     bool saveConfirmation;
     bool loadConfirmation;
+    bool removeConfirmation;
 
     void listFiles();
 
     void save();
     void load();
+    void remove();
 
     bool confirmLoad();
     bool confirmSave();
+    bool confirmRemove();
     void cancelDialog();
 
     void navigate();
+
+    String getSelectedFilePath();
+    SelectedType getSelectedType();
 
 };
 

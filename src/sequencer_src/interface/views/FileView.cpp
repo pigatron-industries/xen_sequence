@@ -2,6 +2,7 @@
 #include "../Hardware.h"
 #include "../components/ParameterField.h"
 #include "../components/DisplayUtils.h"
+#include "../../lib/util/debug.h"
 
 FileView::FileView() {
     for(int i = 0; i < MAX_FILES; i++) {
@@ -14,16 +15,21 @@ FileView::FileView() {
 }
 
 void FileView::init() {
+    DEBUG("FileView::init");
     listFiles();
 
     saveConfirmation = false;
     loadConfirmation = false;
+    removeConfirmation = false;
 
+    Hardware::keyboard.clear();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::MAGENTA);
-    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::YELLOW);
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
 }
 
 void FileView::render(GraphicsContext& g) {
+    DEBUG("FileView::render")
     g.focus = listComponent.getComponent(selectedIndex);
     if(g.full) {
         titleComponent.render(g);
@@ -74,6 +80,12 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
             }
             break;
 
+        case InterfaceEventType::KEY_ADD_DEL: //REMOVE
+            if(event.data == EVENT_KEY_PRESSED) {
+                confirmRemove();
+            }
+            break;
+
         default:
             break;
     }
@@ -96,26 +108,24 @@ void FileView::listFiles() {
 }
 
 void FileView::save() {
-    //TODO check selected component is file
-    TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
-    if(component != &newFileComponent) {
-        String path = String(currentDirectory).concat(component->getText());
-        DataRepository::data.saveSequence(path);
-    }
+    String path = getSelectedFilePath();
+    DataRepository::data.saveSequence(path);
 }
 
 void FileView::load() {
-    //TODO check selected component is file
-    TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
-    if(component != &newFileComponent) {
-        String path = String(currentDirectory).concat(component->getText());
-        DataRepository::data.loadSequence(path);
-    }
+    String path = getSelectedFilePath();
+    DataRepository::data.loadSequence(path);
+}
+
+void FileView::remove() {
+    String path = getSelectedFilePath();
+    DataRepository::data.removeSequence(path);
+    init();
+    queueRender(true);
 }
 
 bool FileView::confirmLoad() {
-    TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
-    if(component != &newFileComponent) {
+    if(getSelectedType() == SelectedType::EXISTING_FILE) {
         if(loadConfirmation) {
             load();
             return true;
@@ -129,21 +139,40 @@ bool FileView::confirmLoad() {
 }
 
 bool FileView::confirmSave() {
-    if(saveConfirmation) {
-        save();
-        return true;
-    } else {
-        DisplayUtils::drawDialog("Save?", 50, 16);
-        saveConfirmation = true;
-        return false;
+    SelectedType type = getSelectedType();
+    if(type == SelectedType::EXISTING_FILE || type == SelectedType::NEW_FILE) {
+        if(saveConfirmation) {
+            save();
+            return true;
+        } else {
+            DisplayUtils::drawDialog("Save?", 50, 16);
+            saveConfirmation = true;
+            return false;
+        }
     }
+    return false;
+}
+
+bool FileView::confirmRemove() {
+    if(getSelectedType() == SelectedType::EXISTING_FILE) {
+        if(removeConfirmation) {
+            remove();
+            return true;
+        } else {
+            DisplayUtils::drawDialog("Delete?", 50, 16);
+            removeConfirmation = true;
+            return false;
+        }
+    }
+    return false;
 }
 
 void FileView::cancelDialog() {
     if(saveConfirmation || loadConfirmation) {
         saveConfirmation = false;
         loadConfirmation = false;
-        queueRender();
+        removeConfirmation = false;
+        queueRender(true);
     }
 }
 
@@ -153,5 +182,32 @@ void FileView::navigate() {
         currentDirectory = path;
         //TODO
         queueRender();
+    }
+}
+
+String FileView::getSelectedFilePath() {
+    switch(getSelectedType()) {
+        case SelectedType::NEW_FILE:
+            return currentDirectory + Hardware::time.getDateTime() + F(".seq");
+            break;
+        case SelectedType::EXISTING_FILE:
+            TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
+            return currentDirectory + component->getText();
+            break;
+        case SelectedType::CHILD_DIRECTORY:
+            return currentDirectory; //TODO
+            break;
+        case SelectedType::PARENT_DIRECTORY:
+            return currentDirectory; //TODO
+            break;
+    }
+}
+
+SelectedType FileView::getSelectedType() {
+    TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
+    if(component == &newFileComponent) {
+        return SelectedType::NEW_FILE;
+    } else {
+        return SelectedType::EXISTING_FILE;
     }
 }

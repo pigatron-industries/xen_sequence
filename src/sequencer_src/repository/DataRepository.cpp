@@ -81,6 +81,21 @@ void DataRepository::loadSequence(String path) {
     INFO("done.");
 }
 
+void DataRepository::removeSequence(String path) {
+    String fullpath = String(ROOT_DIRECTORY).concat(path);
+    INFO("Deleting file"); 
+    INFO(fullpath);
+
+    SdFile file;
+    if(!file.open(fullpath.c_str(), O_RDWR)) {
+        ERROR("Open file failed!");
+    }
+
+    if(!file.remove()) {
+        ERROR("Delete file failed!");
+    }
+}
+
 size_t DataRepository::serializeSequence(char* buffer, size_t bufferSize) {
     DynamicJsonDocument doc(JSON_DOC_SIZE);
     JsonObject docSequence = doc.to<JsonObject>();
