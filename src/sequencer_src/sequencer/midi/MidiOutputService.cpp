@@ -1,7 +1,7 @@
 #include "MidiOutputService.h"
 #include "HardwareSerial.h"
 #include "MidiConstants.h"
-#include "../../hwconfig.h"
+#include "hwconfig.h"
 
 
 MidiOutputService::MidiOutputService(HardwareSerial& _midiSerial) :

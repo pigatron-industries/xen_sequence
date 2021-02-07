@@ -1,7 +1,7 @@
 #include "Component.h"
-#include "../Hardware.h"
-#include "../views/Org_01.h"
-#include "../../lib/util/debug.h"
+#include "interface/Hardware.h"
+#include "interface/views/Org_01.h"
+#include "lib/util/debug.h"
 
 
 void Component::render(bool full) { 

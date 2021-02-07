@@ -1,8 +1,8 @@
 #include "FileView.h"
-#include "../Hardware.h"
-#include "../components/ParameterField.h"
-#include "../components/DisplayUtils.h"
-#include "../../lib/util/debug.h"
+#include "interface/Hardware.h"
+#include "interface/components/field/ParameterField.h"
+#include "interface/components/DisplayUtils.h"
+#include "lib/util/debug.h"
 
 FileView::FileView() {
     for(int i = 0; i < MAX_FILES; i++) {

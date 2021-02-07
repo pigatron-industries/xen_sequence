@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-#include "../InterfaceEvent.h"
+#include "interface/InterfaceEvent.h"
 #include "View.h"
 #include "SequenceMatrixView.h"
 

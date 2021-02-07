@@ -7,7 +7,7 @@
 #include "SequencerEventListener.h"
 #include "midi/EventOutputService.h"
 #include "midi/EventCompiler.h"
-#include "../model/AppData.h"
+#include "model/AppData.h"
 
 enum SequencePlayMode {
     PLAY_SONG,

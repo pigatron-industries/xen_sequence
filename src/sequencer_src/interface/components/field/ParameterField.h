@@ -1,7 +1,7 @@
 #ifndef ParameterField_h
 #define ParameterField_h
 
-#include "../../lib/drivers/Display.h"
+#include "lib/drivers/Display.h"
 
 #define FIELD_HEIGHT 11
 #define TEXT_HEIGHT 7

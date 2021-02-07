@@ -4,9 +4,8 @@
 #include <inttypes.h>
 #include <Keypad.h>
 
-// #include "../lib/drivers/Keypad.h"
 #include "InterfaceEvent.h"
-#include "../lib/drivers/KeyboardLedMatrix.h"
+#include "lib/drivers/KeyboardLedMatrix.h"
 
 
 class LedColour {

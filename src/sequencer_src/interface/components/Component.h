@@ -2,7 +2,7 @@
 #define Component_h
 
 #include <inttypes.h>
-#include "../graphics/GraphicsContext.h"
+#include "interface/graphics/GraphicsContext.h"
 
 class Component : public Focusable {
 

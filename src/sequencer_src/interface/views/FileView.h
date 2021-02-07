@@ -4,9 +4,9 @@
 #include <inttypes.h>
 
 #include "View.h"
-#include "../components/ListComponent.h"
-#include "../components/TextComponent.h"
-#include "../../repository/DataRepository.h"
+#include "interface/components/ListComponent.h"
+#include "interface/components/TextComponent.h"
+#include "repository/DataRepository.h"
 
 enum SelectedType {
     EXISTING_FILE,

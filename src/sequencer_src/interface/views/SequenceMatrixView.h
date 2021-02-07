@@ -3,9 +3,9 @@
 
 #include <inttypes.h>
 
-#include "../../model/AppData.h"
-#include "../../lib/drivers/LedMatrix.h"
-#include "../../sequencer/Sequencer.h"
+#include "model/AppData.h"
+#include "lib/drivers/LedMatrix.h"
+#include "sequencer/Sequencer.h"
 
 enum class SequenceMatrixSelectionMode {
     SELECT_NONE,

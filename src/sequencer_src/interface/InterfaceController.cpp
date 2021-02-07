@@ -1,11 +1,11 @@
 #include "InterfaceController.h"
 
 #include "Hardware.h"
-#include "../model/AppData.h"
+#include "model/AppData.h"
 
 #include "graphics/GraphicsContext.h"
-#include "../repository/DataRepository.h"
-#include "../lib/util/debug.h"
+#include "repository/DataRepository.h"
+#include "lib/util/debug.h"
 
 InterfaceController::InterfaceController(Sequencer& _sequencer) :
     sequencer(_sequencer),

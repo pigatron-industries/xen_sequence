@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include <ArduinoJson.h>
 
-#include "../sequencer/midi/CompiledEvent.h"
+#include "sequencer/midi/CompiledEvent.h"
 
 enum SequenceEventFlag {
     NOTE_ON = 1,

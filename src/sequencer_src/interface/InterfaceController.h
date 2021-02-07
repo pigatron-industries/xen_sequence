@@ -3,16 +3,17 @@
 
 #include <inttypes.h>
 
-#include "../sequencer/Sequencer.h"
-#include "../sequencer/SequencerEventListener.h"
+#include "sequencer/Sequencer.h"
+#include "sequencer/SequencerEventListener.h"
+
 #include "InterfaceEvent.h"
 #include "Keyboard.h"
 #include "views/View.h"
-#include "./views/SequenceView.h"
-#include "./views/ParameterView.h"
-#include "./views/SequenceMatrixView.h"
-#include "./views/FileView.h"
-#include "./views/HelpView.h"
+#include "views/SequenceView.h"
+#include "views/ParameterView.h"
+#include "views/SequenceMatrixView.h"
+#include "views/FileView.h"
+#include "views/HelpView.h"
 
 class InterfaceController : public SequencerEventListener {
 

@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include "InterfaceEvent.h"
 
-#include "../hwconfig.h"
+#include "hwconfig.h"
 
 InputTask::InputTask(InterfaceController& _interface) :
     interface(_interface),

@@ -2,7 +2,7 @@
 #define ListComponent_h
 
 #include "Component.h"
-#include "../../lib/drivers/Display.h"
+#include "lib/drivers/Display.h"
 
 #define MAX_COMPONENTS 255
 

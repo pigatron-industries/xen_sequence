@@ -1,5 +1,5 @@
 #include "Keyboard.h"
-#include "../hwconfig.h"
+#include "hwconfig.h"
 
 const LedColour LedColour::OFF = LedColour(0, 0, 0);
 const LedColour LedColour::RED = LedColour(1, 0, 0);

@@ -1,7 +1,7 @@
 #include "Display.h"
 
 #include <ssd1351.h>
-#include "../../hwconfig.h"
+#include "hwconfig.h"
 
 Colour Colour::WHITE(255, 255, 255);
 Colour Colour::BLACK(0, 0, 0);

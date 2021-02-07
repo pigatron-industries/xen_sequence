@@ -1,7 +1,7 @@
 #include "SequenceView.h"
-#include "../Hardware.h"
-#include "../../model/AppData.h"
-#include "../../lib/util/debug.h"
+#include "interface/Hardware.h"
+#include "model/AppData.h"
+#include "lib/util/debug.h"
 
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 128

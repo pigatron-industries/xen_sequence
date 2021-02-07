@@ -1,6 +1,6 @@
 #include "LedMatrix.h"
 
-#include "../../hwconfig.h"
+#include "hwconfig.h"
 
 #define BRIGHTNESS 2
 

@@ -1,7 +1,7 @@
 #include "ParameterView.h"
-#include "../Hardware.h"
-#include "../../model/AppData.h"
-#include "../../lib/util/debug.h"
+#include "interface/Hardware.h"
+#include "model/AppData.h"
+#include "lib/util/debug.h"
 
 #include "Org_01.h"
 

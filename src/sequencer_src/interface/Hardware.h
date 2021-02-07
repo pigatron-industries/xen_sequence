@@ -3,10 +3,10 @@
 
 #include <inttypes.h>
 
-#include "../lib/drivers/Display.h"
-#include "../lib/drivers/LedMatrix.h"
-#include "../lib/drivers/Time.h"
-#include "../sequencer/midi/MidiInputService.h"
+#include "lib/drivers/Display.h"
+#include "lib/drivers/LedMatrix.h"
+#include "lib/drivers/Time.h"
+#include "sequencer/midi/MidiInputService.h"
 #include "Keyboard.h"
 
 

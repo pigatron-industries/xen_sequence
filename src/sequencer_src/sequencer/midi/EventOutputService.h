@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 #include "MidiOutputService.h"
-#include "../../model/SequenceEvent.h"
+#include "model/SequenceEvent.h"
 
 class EventOutputService {
 

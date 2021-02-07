@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-#include "../../model/SequenceEvent.h"
+#include "model/SequenceEvent.h"
 
 class EventCompiler {
 

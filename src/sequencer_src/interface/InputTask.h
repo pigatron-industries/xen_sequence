@@ -3,11 +3,11 @@
 
 #include <inttypes.h>
 
-#include "../lib/task/Task.h"
+#include "lib/task/Task.h"
 #include "InterfaceController.h"
-#include "../lib/drivers/Switch.h"
-#include "../lib/drivers/AnalogStick.h"
-#include "../lib/drivers/RotaryEncoder.h"
+#include "lib/drivers/Switch.h"
+#include "lib/drivers/AnalogStick.h"
+#include "lib/drivers/RotaryEncoder.h"
 #include "Keypad.h"
 #include "Keyboard.h"
 

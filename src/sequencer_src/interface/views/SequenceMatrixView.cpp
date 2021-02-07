@@ -1,6 +1,6 @@
 #include "SequenceMatrixView.h"
-#include "../Hardware.h"
-#include "../../lib/util/debug.h"
+#include "interface/Hardware.h"
+#include "lib/util/debug.h"
 
 #define OFF_PIXEL CRGB::Black
 #define DATA_PIXEL CRGB(0x000088)

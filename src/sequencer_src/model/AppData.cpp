@@ -1,5 +1,5 @@
 #include "AppData.h"
-#include "../lib/util/debug.h"
+#include "lib/util/debug.h"
 
 #include <Arduino.h>
 

@@ -1,6 +1,6 @@
 #include "DataRepository.h"
-#include "../model/AppData.h"
-#include "../lib/util/debug.h"
+#include "model/AppData.h"
+#include "lib/util/debug.h"
 
 DataRepository DataRepository::data;
 

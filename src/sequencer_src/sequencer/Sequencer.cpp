@@ -1,7 +1,7 @@
 #include "Sequencer.h"
 
 #include <Arduino.h>
-#include "../lib/util/debug.h"
+#include "lib/util/debug.h"
 
 Sequencer::Sequencer(EventOutputService& _eventOutputService) :
     eventOutputService(_eventOutputService) {

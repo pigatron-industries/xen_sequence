@@ -5,9 +5,9 @@
 
 #include "View.h"
 #include "SequenceMatrixView.h"
-#include "../components/IntegerParameterField.h"
-#include "../components/BooleanParameterField.h"
-#include "../../sequencer/midi/MidiEventHandler.h"
+#include "interface/components/field/IntegerParameterField.h"
+#include "interface/components/field/BooleanParameterField.h"
+#include "sequencer/midi/MidiEventHandler.h"
 
 enum ParameterViewMode {
     PARAM_MODE_BAR, // Track length
@@ -73,8 +73,10 @@ private:
     LinkedList<ParameterField*> barFields;
     IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
     IntegerParameterField barSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
+
     LinkedList<ParameterField*> channelFields;
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
+
     LinkedList<ParameterField*> eventFields;
     IntegerParameterField eventNoteField = IntegerParameterField("NOTE", 0, 128);
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);

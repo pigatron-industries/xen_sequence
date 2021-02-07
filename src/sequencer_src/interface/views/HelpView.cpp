@@ -1,5 +1,5 @@
 #include "HelpView.h"
-#include "../Hardware.h"
+#include "interface/Hardware.h"
 
 HelpView::HelpView() {
 }

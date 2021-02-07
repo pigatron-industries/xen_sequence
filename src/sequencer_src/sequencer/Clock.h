@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-#include "../lib/drivers/Timer.h"
+#include "lib/drivers/Timer.h"
 
 
 class Clock {

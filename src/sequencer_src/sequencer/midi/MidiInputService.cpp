@@ -2,8 +2,8 @@
 #include "HardwareSerial.h"
 #include "MidiConstants.h"
 
-#include "../../hwconfig.h"
-#include "../../lib/util/debug.h"
+#include "hwconfig.h"
+#include "lib/util/debug.h"
 
 #include <Arduino.h>
 
