@@ -11,7 +11,7 @@ ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenc
     barFields.add(&barLengthField);
     barFields.add(&barSpeedField);
     channelFields.add(&channelMuteField);
-    eventFields.add(&eventNoteField);
+    eventFields.add(&eventPitchField);
     eventFields.add(&eventVelocityField);
     eventFields.add(&eventGateField);
     eventFields.add(&eventDelayField);
@@ -70,9 +70,9 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
             if(selectedEvent == NULL) {
                 addEvent();
             }
-            eventNoteField.setValue(message.data1);
+            eventPitchField.setValue(message.data1);
             eventVelocityField.setValue(message.data2);
-            updateDataFromField(&eventNoteField);
+            updateDataFromField(&eventPitchField);
             updateDataFromField(&eventVelocityField);
             View::render(false);
         } else if (message.command == COMMAND_NOTEOFF) {
@@ -358,7 +358,7 @@ void ParameterView::updateSelectedEvent() {
         selectedEvent = NULL;
     }
     if(selectedEvent != NULL) {
-        eventNoteField.setValue(selectedEvent->getPitch());
+        eventPitchField.setValue(selectedEvent->getPitch());
         eventVelocityField.setValue(selectedEvent->getVelocity());
         eventGateField.setValue(selectedEvent->getGate());
         eventDelayField.setValue(selectedEvent->getDelay());
@@ -380,8 +380,8 @@ void ParameterView::updateSelectedEvent() {
 
 void ParameterView::updateDataFromField(ParameterField* field) {
     if(selectedEvent != NULL) {
-        if(field == &eventNoteField) {
-            selectedEvent->setPitch(eventNoteField.getValue());
+        if(field == &eventPitchField) {
+            selectedEvent->setPitch(eventPitchField.getValue());
         } else if(field == &eventVelocityField) {
             selectedEvent->setVelocity(eventVelocityField.getValue());
         } else if(field == &eventGateField) {

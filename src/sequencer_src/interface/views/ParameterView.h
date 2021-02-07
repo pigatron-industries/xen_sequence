@@ -5,6 +5,7 @@
 
 #include "View.h"
 #include "SequenceMatrixView.h"
+#include "interface/components/field/PitchParameterField.h"
 #include "interface/components/field/IntegerParameterField.h"
 #include "interface/components/field/BooleanParameterField.h"
 #include "sequencer/midi/MidiEventHandler.h"
@@ -78,7 +79,7 @@ private:
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
 
     LinkedList<ParameterField*> eventFields;
-    IntegerParameterField eventNoteField = IntegerParameterField("NOTE", 0, 128);
+    PitchParameterField eventPitchField = PitchParameterField("PITCH");
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
     IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");
     IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 100, " %");
