@@ -295,5 +295,6 @@ void SequenceView::drop() {
         AppData::data.setPattern(draggingFromBar, draggingFromChannel, NULL);
         AppData::data.setPattern(cursorBar, cursorChannel, pattern);
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, LedColour::OFF);
+        queueRender();
     }
 }
