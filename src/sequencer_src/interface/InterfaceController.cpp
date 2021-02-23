@@ -142,7 +142,6 @@ void InterfaceController::switchToSequenceView() {
 }
 
 void InterfaceController::play() {
-    sequencer.setBar(0); //TODO get currently selected bar?
     sequencer.play();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
 }
