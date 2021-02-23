@@ -27,6 +27,7 @@ public:
 
 private:
     String currentDirectory = String("/");
+    char lastFileName[32];
     int selectedIndex;
 
     TextComponent titleComponent;
@@ -52,6 +53,7 @@ private:
     void navigate();
 
     String getSelectedFilePath();
+    String getSelectedFileName();
     SelectedType getSelectedType();
 
 };

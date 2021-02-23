@@ -12,6 +12,7 @@ FileView::FileView() {
     titleComponent.setTextColour(Colour::WHITE);
     newFileComponent.setText(" [ NEW FILE ] ");
     newFileComponent.setTextColour(Colour::YELLOW);
+    lastFileName[0] = '\0';
 }
 
 void FileView::init() {
@@ -94,6 +95,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
 }
 
 void FileView::listFiles() {
+    selectedIndex = 0;
     DataRepository::data.loadFileList(currentDirectory);
     FileList& fileList = DataRepository::data.getFileList();
 
@@ -102,9 +104,10 @@ void FileView::listFiles() {
     for(int i = 0; i < fileList.size; i++) {
         fileComponents[i].setText(fileList.file[i].filename);
         listComponent.addComponent(&fileComponents[i]);
+        if(strcmp(fileList.file[i].filename, lastFileName) == 0) {
+            selectedIndex = i+1;
+        }
     }
-
-    selectedIndex = 0;
 }
 
 void FileView::save() {
@@ -186,19 +189,24 @@ void FileView::navigate() {
 }
 
 String FileView::getSelectedFilePath() {
+    strcpy(lastFileName, getSelectedFileName().c_str());
+    return currentDirectory + lastFileName;
+}
+
+String FileView::getSelectedFileName() {
     switch(getSelectedType()) {
         case SelectedType::NEW_FILE:
-            return currentDirectory + Hardware::time.getDateTime() + F(".seq");
+            return String(Hardware::time.getDateTime()) + F(".seq");
             break;
         case SelectedType::EXISTING_FILE:
             TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
-            return currentDirectory + component->getText();
+            return component->getText();
             break;
         case SelectedType::CHILD_DIRECTORY:
-            return currentDirectory; //TODO
+            return ""; //TODO
             break;
         case SelectedType::PARENT_DIRECTORY:
-            return currentDirectory; //TODO
+            return ""; //TODO
             break;
     }
 }
