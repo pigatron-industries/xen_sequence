@@ -29,6 +29,9 @@ SequenceView::SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceM
 }
 
 void SequenceView::init() {
+    DEBUG("SequenceView::init");
+
+    sequencer.setBar(cursorBar);
     updateSelectedPattern();
 }
 

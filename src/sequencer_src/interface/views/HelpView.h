@@ -10,6 +10,7 @@ class HelpView : public View {
 
 public:
     HelpView();
+    virtual void init();
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
 

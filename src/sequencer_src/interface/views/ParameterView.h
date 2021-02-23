@@ -38,7 +38,7 @@ class ParameterView : public View, public MidiEventHandler {
 
 public:
     ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
-    void init();
+    virtual void init();
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
     virtual void handleMidiEvent(MidiMessage message);

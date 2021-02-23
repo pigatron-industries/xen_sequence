@@ -4,6 +4,9 @@
 HelpView::HelpView() {
 }
 
+void HelpView::init() {
+}
+
 void HelpView::render(GraphicsContext& g) {
     Hardware::display.setCursor(0, 12);
     Hardware::display.setTextColour(Colour(0, 0, 255));

@@ -102,6 +102,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 if(event.data == EVENT_KEY_PRESSED) {
                     currentView = previousView;
                     Hardware::keyboard.clear();
+                    currentView->init();
                     render();
                 }
                 break;

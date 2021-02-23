@@ -21,7 +21,7 @@ public:
     static const int MAX_FILES = 255;
 
     FileView();
-    void init();
+    virtual void init();
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
