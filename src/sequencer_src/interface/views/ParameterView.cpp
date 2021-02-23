@@ -74,6 +74,9 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
             eventVelocityField.setValue(message.data2);
             updateDataFromField(&eventPitchField);
             updateDataFromField(&eventVelocityField);
+
+            //TODO advance to next tick depending on recoding mode
+
             View::render(false);
         } else if (message.command == COMMAND_NOTEOFF) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);

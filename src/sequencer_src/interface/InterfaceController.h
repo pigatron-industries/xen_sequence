@@ -36,8 +36,6 @@ private:
     FileView fileView;
     HelpView helpView;
 
-    bool recording;
-
     void switchToParameterView();
     void switchToSequenceView();
 

@@ -57,9 +57,9 @@ void Sequencer::play() {
     DEBUG("Sequencer::play")
     tickIndex = 0;
     playing = true;
+    clock.reset();
     clock.start();
     eventOutputService.system(SYSTEM_START);
-    tick();
     pulse();
 }
 
