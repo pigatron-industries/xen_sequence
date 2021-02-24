@@ -7,6 +7,11 @@
 #include "View.h"
 #include "SequenceMatrixView.h"
 
+enum MoveMode {
+    DRAG_DROP,
+    NUDGE
+};
+
 class SequenceView : public View {
 
 public:
@@ -24,15 +29,17 @@ private:
     uint16_t cursorBar;
     uint16_t scrollBar;
 
-    bool dragging;
-    uint8_t draggingFromChannel;
-    uint16_t draggingFromBar;
+    MoveMode moveMode;
+    bool moving;
+    uint8_t movingFromChannel;
+    uint16_t movingFromBar;
 
     SequencePattern* copiedPattern;
 
     void renderStatusBar();
     void renderGrid();
     void renderSequence();
+    void renderPattern(SequencePattern* pattern, short left, short top);
     void renderCursor();
 
     void loopStart();
@@ -52,8 +59,13 @@ private:
     void deletePattern();
     void copy();
     void paste();
+
+    void cycleMoveMode();
+    void setMoveMode(MoveMode moveMode);
     void drag();
     void drop();
+    void nudgeStart();
+    void nudgeEnd();
 
 };
 

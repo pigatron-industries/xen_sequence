@@ -47,7 +47,8 @@ private:
     void stop();
     // void record(bool value);
 
-    void changeLoopMode();
+    void cycleLoopMode();
+    void setLoopMode(SequencePlayMode loopMode);
 
 };
 

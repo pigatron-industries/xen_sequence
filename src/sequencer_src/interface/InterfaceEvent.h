@@ -21,30 +21,30 @@ enum InterfaceEventType {
     KEY_PREV,
     KEY_NEXT,
     //
-    KEY_LOOP,
+    KEY_LOOP_MODE,
     KEY_LOOP_START,
     KEY_LOOP_END,
-    KEY_PLACE_4,
+    KEY_PLACE_1,
     //
     KEY_VIEW,
     KEY_SELECTION,
-    KEY_PLACE_5,
-    KEY_PLACE_6,
+    KEY_FILE,
+    KEY_HELP,
     //
     KEY_ADD_DEL,
     KEY_COPY,
     KEY_PASTE,
+    KEY_PLACE_2,
+    //
+    KEY_PLACE_3,
+    KEY_PLACE_4,
+    KEY_PLACE_5,
+    KEY_PLACE_6,
+    //
+    KEY_MOVE_MODE,
     KEY_MOVE,
-    //
-    KEY_PLACE_9,
-    KEY_PLACE_10,
-    KEY_PLACE_11,
-    KEY_PLACE_12,
-    //
-    KEY_PLACE_13,
-    KEY_PLACE_14,
-    KEY_FILE,
-    KEY_HELP,
+    KEY_PLACE_7,
+    KEY_PLACE_8,
     //
     SEQUENCER_TICK
 };

@@ -38,7 +38,7 @@ InterfaceEvent HelpView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::KEY_RECORD:
         case InterfaceEventType::KEY_PLAY_STOP:
-        case InterfaceEventType::KEY_LOOP:
+        case InterfaceEventType::KEY_LOOP_MODE:
             renderPage(event.eventType);
             break;
         default:
@@ -60,17 +60,17 @@ void HelpView::renderPage(InterfaceEventType eventType) {
         case InterfaceEventType::KEY_PLAY_STOP:
             Hardware::display.println("PLAY / STOP");
             break;
-        case InterfaceEventType::KEY_LOOP:
+        case InterfaceEventType::KEY_LOOP_MODE:
             Hardware::display.println("PLAYBACK/RECORD MODE");
             Hardware::display.println();
             Hardware::display.setTextColour(Colour::GREEN);
             Hardware::display.println("GREEN  - PLAY SONG");
             Hardware::display.setTextColour(Colour::YELLOW);
             Hardware::display.println("YELLOW - LOOP SONG");
-            Hardware::display.setTextColour(Colour::RED);
-            Hardware::display.println("RED    - LOOP BAR");
             Hardware::display.setTextColour(Colour::PURPLE);
-            Hardware::display.println("PURPLE - PAUSED");
+            Hardware::display.println("PURPLE - LOOP BAR");
+            Hardware::display.setTextColour(Colour::CYAN);
+            Hardware::display.println("CYAN   - LOOP SELECTION");
             Hardware::display.setTextColour(Colour::BLUE);
             Hardware::display.println("BLUE   - ON MIDI");
             break;

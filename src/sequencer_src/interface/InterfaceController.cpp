@@ -20,6 +20,7 @@ void InterfaceController::init() {
     Hardware::display.fillScreen(Colour(0, 0, 0));
     sequenceView.init();
     render();
+    setLoopMode(sequencer.getPlayMode());
 }
 
 void InterfaceController::render() {
@@ -70,9 +71,9 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 }
                 break;
 
-            case InterfaceEventType::KEY_LOOP:
+            case InterfaceEventType::KEY_LOOP_MODE:
                 if(event.data == EVENT_KEY_PRESSED) {
-                    changeLoopMode();
+                    cycleLoopMode();
                 }
                 break;
 
@@ -158,10 +159,20 @@ void InterfaceController::stop() {
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
 }
 
-void InterfaceController::changeLoopMode() {
+void InterfaceController::cycleLoopMode() {
     SequencePlayMode playMode = sequencer.getPlayMode();
-    sequencer.setPlayMode(playMode == PLAY_SONG ? PLAY_LOOP_BAR :
-                          playMode == PLAY_LOOP_BAR ? PLAY_LOOP_SELECTION :
-                          playMode == PLAY_LOOP_SELECTION ? PLAY_LOOP_SONG : PLAY_SONG);
+    setLoopMode(playMode == PLAY_SONG ?           PLAY_LOOP_BAR :
+                playMode == PLAY_LOOP_BAR ?       PLAY_LOOP_SELECTION :
+                playMode == PLAY_LOOP_SELECTION ? PLAY_LOOP_SONG : 
+                                                  PLAY_SONG);
+}
+
+void InterfaceController::setLoopMode(SequencePlayMode loopMode) {
+    sequencer.setPlayMode(loopMode);
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_LOOP_MODE, loopMode == PLAY_SONG ?           LedColour::GREEN :
+                                                                    loopMode == PLAY_LOOP_BAR ?       LedColour::MAGENTA :
+                                                                    loopMode == PLAY_LOOP_SELECTION ? LedColour::CYAN :
+                                                                    loopMode == PLAY_LOOP_SONG ?      LedColour::YELLOW : 
+                                                                                                      LedColour::OFF);
     currentView->queueRender();
 }
