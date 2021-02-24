@@ -1,6 +1,7 @@
 #include "DataRepository.h"
 #include "model/AppData.h"
 #include "lib/util/debug.h"
+#include "./Config.h"
 
 DataRepository DataRepository::data;
 
@@ -15,6 +16,11 @@ void DataRepository::init() {
     if(!sd.exists(ROOT_DIRECTORY)) {
         DEBUG("Creating sequence directory");
         sd.mkdir(ROOT_DIRECTORY, true);
+    }
+
+    loadConfig();
+    if(strlen(Config::config.lastFile) > 0) {
+        loadSequence(Config::config.lastFile);
     }
 }
 
@@ -59,6 +65,9 @@ void DataRepository::saveSequence(String path) {
     file.sync();
     file.close();
     INFO("done.");
+
+    strcpy(Config::config.lastFile, path.c_str());
+    saveConfig();
 }
 
 void DataRepository::loadSequence(String path) {
@@ -79,6 +88,9 @@ void DataRepository::loadSequence(String path) {
 
     file.close();
     INFO("done.");
+
+    strcpy(Config::config.lastFile, path.c_str());
+    saveConfig();
 }
 
 void DataRepository::removeSequence(String path) {
@@ -108,4 +120,52 @@ void DataRepository::deserializeSequence(char* buffer, size_t size) {
     deserializeJson(doc, buffer, size);
     JsonObject docSequence = doc.as<JsonObject>();
     AppData::data.deserialize(docSequence);
+}
+
+void DataRepository::loadConfig() {
+    DEBUG("DataRepository::loadConfig");
+
+    SdFile file;
+    if(!file.open(CONFIG_FILE, FILE_READ)) {
+        ERROR("Open file failed!");
+    }
+
+    char jsonBuffer[JSON_BUF_SIZE];
+    int size = file.read(jsonBuffer, JSON_BUF_SIZE);
+
+    deserializeConfig(jsonBuffer, size);
+
+    file.close();
+}
+
+void DataRepository::saveConfig() {
+    DEBUG("DataRepository::saveConfig");
+
+    char jsonBuffer[JSON_BUF_SIZE];
+    size_t jsonSize = serializeConfig(jsonBuffer, JSON_BUF_SIZE);
+    DEBUG(jsonBuffer);
+    INFO("Writing bytes"); 
+    INFO(jsonSize);
+
+    SdFile file;
+    if(!file.open(CONFIG_FILE, O_WRONLY | O_CREAT | O_TRUNC)) {
+        ERROR("Open file failed!");
+    }
+    file.println(jsonBuffer);
+    file.sync();
+    file.close();
+}
+
+size_t DataRepository::serializeConfig(char* buffer, size_t bufferSize) {
+    DynamicJsonDocument doc(JSON_DOC_SIZE);
+    JsonObject docConfig = doc.to<JsonObject>();
+    Config::config.serialize(docConfig);
+    return serializeJson(doc, buffer, bufferSize);
+}
+
+void DataRepository::deserializeConfig(char* buffer, size_t size) {
+    DynamicJsonDocument doc(JSON_DOC_SIZE);
+    deserializeJson(doc, buffer, size);
+    JsonObject docConfig = doc.as<JsonObject>();
+    Config::config.deserialize(docConfig);
 }

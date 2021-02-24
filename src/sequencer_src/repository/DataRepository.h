@@ -8,6 +8,8 @@
 #define JSON_BUF_SIZE 16384
 #define JSON_DOC_SIZE 16384
 
+#define CONFIG_FILE "/config.json"
+
 class DataRepository {
     public:
         static DataRepository data;
@@ -21,6 +23,9 @@ class DataRepository {
         void loadSequence(String path);
         void removeSequence(String path);
 
+        void saveConfig();
+        void loadConfig();
+
     private:
         static const String ROOT_DIRECTORY;
 
@@ -31,6 +36,8 @@ class DataRepository {
 
         size_t serializeSequence(char* buffer, size_t bufferSize);
         void deserializeSequence(char* buffer, size_t bufferSize);
+        size_t serializeConfig(char* buffer, size_t bufferSize);
+        void deserializeConfig(char* buffer, size_t bufferSize);
 };
 
 #endif
