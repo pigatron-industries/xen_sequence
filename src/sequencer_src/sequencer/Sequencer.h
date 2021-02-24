@@ -12,6 +12,7 @@
 enum SequencePlayMode {
     PLAY_SONG,
     PLAY_LOOP_BAR,
+    PLAY_LOOP_SELECTION,
     PLAY_LOOP_SONG
 };
 
@@ -35,6 +36,13 @@ public:
     uint16_t prevBar();
     uint16_t getBarIndex() { return barIndex; }
     uint8_t getTickIndex() { return tickIndex; }
+    SequencePlayMode getPlayMode() { return playMode; }
+    uint16_t getLoopStart() { return loopStart; }
+    uint16_t getLoopEnd() { return loopEnd; }
+
+    void setPlayMode(SequencePlayMode playMode);
+    void setLoopStart(uint16_t loopStart) { this->loopStart = loopStart; }
+    void setLoopEnd(uint16_t loopEnd) { this->loopEnd = loopEnd; }
 
 private:
     EventOutputService& eventOutputService;
@@ -44,6 +52,8 @@ private:
 
     bool playing;
     SequencePlayMode playMode;
+    uint16_t loopStart;
+    uint16_t loopEnd;
 
     SequenceBar* currentBar;
     uint16_t barIndex = 0;

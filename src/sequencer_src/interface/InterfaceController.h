@@ -47,6 +47,8 @@ private:
     void stop();
     // void record(bool value);
 
+    void changeLoopMode();
+
 };
 
 #endif

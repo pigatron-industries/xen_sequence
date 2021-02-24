@@ -35,6 +35,9 @@ private:
     void renderSequence();
     void renderCursor();
 
+    void loopStart();
+    void loopEnd();
+
     void cursorUp();
     void cursorDown();
     void cursorLeft();

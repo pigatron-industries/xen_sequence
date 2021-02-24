@@ -95,12 +95,28 @@ void SequenceView::renderCursor() {
     short left = (cursorBar-scrollBar)*BAR_WIDTH;
     Hardware::display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
     Hardware::display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
-    Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
-    Hardware::display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
+
+    // loop limits
+    if(sequencer.getLoopStart() >= scrollBar) {
+        left = (sequencer.getLoopStart()-scrollBar)*BAR_WIDTH;
+        Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
+    }
+    if(sequencer.getLoopEnd() <= scrollBar+VISIBLE_BARS) {
+        left = (sequencer.getLoopEnd()-scrollBar)*BAR_WIDTH;
+        Hardware::display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
+    }
 }
 
 InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
+        case InterfaceEventType::KEY_LOOP_START:
+            loopStart();
+            break;
+
+        case InterfaceEventType::KEY_LOOP_END:
+            loopEnd();
+            break;
+
         case InterfaceEventType::STICK_UP:
             cursorUp();
             break;
@@ -169,6 +185,20 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
     return InterfaceEvent::NONE;
 }
 
+void SequenceView::loopStart() {
+    if(sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
+        sequencer.setLoopStart(cursorBar);
+        queueRender();
+    }
+}
+
+void SequenceView::loopEnd() {
+    if(sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
+        sequencer.setLoopEnd(cursorBar);
+        queueRender();
+    }
+}
+
 void SequenceView::cursorUp() {
     if(cursorChannel > 0) {
         cursorChannel--;
@@ -186,9 +216,11 @@ void SequenceView::cursorDown() {
 }
 
 void SequenceView::cursorLeft() {
-    uint16_t prevCursorBar = cursorBar;
-    cursorBar = sequencer.prevBar();
-    if(cursorBar != prevCursorBar) {
+    if(cursorBar != 0) {
+        cursorBar--;
+        if(sequencer.getPlayMode() == PLAY_LOOP_BAR) {
+            sequencer.setBar(cursorBar);
+        }
         if(cursorBar == scrollBar-1) {
             scrollBar--;
         }
@@ -198,9 +230,12 @@ void SequenceView::cursorLeft() {
 }
 
 void SequenceView::cursorRight() {
-    uint16_t prevCursorBar = cursorBar;
-    cursorBar = sequencer.nextBar();
-    if(cursorBar != prevCursorBar) {
+    SequenceBar* selectedBar = AppData::data.getBar(cursorBar);
+    if(!selectedBar->isEmpty()) {
+        cursorBar++;
+        if(sequencer.getPlayMode() == PLAY_LOOP_BAR) {
+            sequencer.setBar(cursorBar);
+        }
         if(cursorBar == scrollBar+VISIBLE_BARS-1) {
             scrollBar++;
         }

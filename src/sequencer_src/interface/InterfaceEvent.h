@@ -22,8 +22,8 @@ enum InterfaceEventType {
     KEY_NEXT,
     //
     KEY_LOOP,
-    KEY_PLACE_2,
-    KEY_PLACE_3,
+    KEY_LOOP_START,
+    KEY_LOOP_END,
     KEY_PLACE_4,
     //
     KEY_VIEW,

@@ -7,6 +7,8 @@ Sequencer::Sequencer(EventOutputService& _eventOutputService) :
     eventOutputService(_eventOutputService) {
     playing = false;
     playMode = PLAY_LOOP_BAR;
+    loopStart = 0;
+    loopEnd = 0;
 }
 
 void Sequencer::init() {
@@ -71,9 +73,7 @@ void Sequencer::stop() {
 }
 
 void Sequencer::reset() {
-    if(playMode != PLAY_LOOP_BAR) {
-        setBar(0);
-    }
+    setBar(loopStart);
     tickIndex = 0;
     clock.reset();
 }
@@ -83,6 +83,10 @@ uint16_t Sequencer::setBar(uint16_t _barIndex) {
     barIndex = _barIndex;
     currentBar = AppData::data.getBar(barIndex);
     clock.setTicksPerMinute(currentBar->getSpeed());
+    if(playMode == PLAY_LOOP_BAR) {
+        loopStart = barIndex;
+        loopEnd = barIndex;
+    }
     return barIndex;
 }
 
@@ -106,17 +110,32 @@ void Sequencer::tick() {
     tickIndex++;
     if(tickIndex == currentBar->getLength()) {
         tickIndex = 0;
-        if(playMode != PLAY_LOOP_BAR) {
-            barIndex++;
-            if(barIndex < AppData::data.getSequence().getLength()) {
-                setBar(barIndex);
-            } else {
-                reset();
-                if(playMode == PLAY_SONG) {
-                    clock.stop();
-                }
+        barIndex++;
+        if(barIndex <= loopEnd) {
+            setBar(barIndex);
+        } else {
+            reset();
+            if(playMode == PLAY_SONG) {
+                clock.stop();
             }
         }
+    }
+}
+
+void Sequencer::setPlayMode(SequencePlayMode playMode) { 
+    this->playMode = playMode;
+    switch(playMode) {
+        case SequencePlayMode::PLAY_SONG:
+        case SequencePlayMode::PLAY_LOOP_SONG:
+            loopStart = 0;
+            loopEnd = AppData::data.getSequence().getLength();
+            break;
+        case SequencePlayMode::PLAY_LOOP_BAR:
+            loopStart = barIndex;
+            loopEnd = barIndex;
+            break;
+        default:
+            break;
     }
 }
 

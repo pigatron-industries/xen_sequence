@@ -70,6 +70,12 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 }
                 break;
 
+            case InterfaceEventType::KEY_LOOP:
+                if(event.data == EVENT_KEY_PRESSED) {
+                    changeLoopMode();
+                }
+                break;
+
             case InterfaceEventType::KEY_FILE:
                 if(event.data == EVENT_KEY_PRESSED) {
                     stop();
@@ -150,4 +156,12 @@ void InterfaceController::play() {
 void InterfaceController::stop() {
     sequencer.stop();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
+}
+
+void InterfaceController::changeLoopMode() {
+    SequencePlayMode playMode = sequencer.getPlayMode();
+    sequencer.setPlayMode(playMode == PLAY_SONG ? PLAY_LOOP_BAR :
+                          playMode == PLAY_LOOP_BAR ? PLAY_LOOP_SELECTION :
+                          playMode == PLAY_LOOP_SELECTION ? PLAY_LOOP_SONG : PLAY_SONG);
+    currentView->queueRender();
 }

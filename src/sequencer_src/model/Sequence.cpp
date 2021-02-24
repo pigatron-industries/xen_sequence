@@ -1,5 +1,13 @@
 #include "Sequence.h"
 
+int Sequence::getLength() {
+    if(bars[bars.size()-1]->isEmpty()) {
+        return bars.size()-1; 
+    } else {
+        return bars.size(); 
+    }
+}
+
 void Sequence::serialize(JsonObject doc) {
     JsonArray docChannels = doc.createNestedArray("channels");
     for(int i = 0; i < SEQUENCE_CHANNELS; i++) {
