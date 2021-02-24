@@ -8,6 +8,12 @@ int Sequence::getLength() {
     }
 }
 
+void Sequence::deleteBar(uint16_t index) {
+    SequenceBar* bar = bars.get(index);
+    bars.remove(index);
+    delete bar;
+}
+
 void Sequence::serialize(JsonObject doc) {
     JsonArray docChannels = doc.createNestedArray("channels");
     for(int i = 0; i < SEQUENCE_CHANNELS; i++) {

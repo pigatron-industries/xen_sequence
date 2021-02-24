@@ -83,6 +83,7 @@ void SequenceView::renderSequence() {
                 // pattern being dragged
                 pattern = AppData::data.getPattern(movingFromBar, movingFromChannel);
             } else if(moving && moveMode == MoveMode::DRAG_DROP && channel == movingFromChannel && bar == movingFromBar) {
+                // empty space where pattern was dragged from
                 pattern = NULL;
             } else {
                 // pattern from sequence
@@ -383,5 +384,18 @@ void SequenceView::nudgeStart() {
 }
 
 void SequenceView::nudgeEnd() {
+    //int8_t nudgeAmountChannel = cursorChannel - movingFromChannel;
+    int16_t nudgeAmountBar = cursorBar - movingFromBar;
+
+    while(nudgeAmountBar > 0) {
+        AppData::data.newBar(movingFromBar);
+        nudgeAmountBar--;
+    }
+    while(nudgeAmountBar < 0) {
+        AppData::data.getSequence().deleteBar(movingFromBar-1);
+        nudgeAmountBar++;
+    }
+
+    queueRender();
     moving = false;
 }
