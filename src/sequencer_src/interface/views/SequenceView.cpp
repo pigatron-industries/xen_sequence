@@ -62,6 +62,7 @@ void SequenceView::renderGrid() {
         Hardware::display.drawLine(0, top, DISPLAY_WIDTH, top, GRID_COLOUR);
         top += CHANNEL_HEIGHT;
     }
+    Hardware::display.fillRect(0, 0, DISPLAY_WIDTH, STATUS_HEIGHT-1, BACKGROUND_COLOUR);
     int16_t left = 0;
     for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
         Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, GRID_COLOUR);
