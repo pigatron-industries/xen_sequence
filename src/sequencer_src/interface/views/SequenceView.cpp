@@ -288,24 +288,32 @@ void SequenceView::updateSelectedPattern() {
 
 void SequenceView::incrementPattern() {
     SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
-    uint16_t patternId = pattern->getId();
-    patternId++;
-    pattern = AppData::data.getPatternById(patternId);
-    if(pattern != NULL) {
-        AppData::data.setPattern(cursorBar, cursorChannel, pattern);
-        queueRender();
+    if(pattern == NULL) {
+        addPattern();
+    } else {
+        uint16_t patternId = pattern->getId();
+        patternId++;
+        pattern = AppData::data.getPatternById(patternId);
+        if(pattern != NULL) {
+            AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+            queueRender();
+        }
     }
 }
 
 void SequenceView::decrementPattern() {
     SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
-    int patternId = pattern->getId();
-    patternId--;
-    if(patternId > 0) {
-        pattern = AppData::data.getPatternById(patternId);
-        if(pattern != NULL) {
-            AppData::data.setPattern(cursorBar, cursorChannel, pattern);
-            queueRender();
+    if(pattern != NULL) {
+        int patternId = pattern->getId();
+        patternId--;
+        if(patternId > 0) {
+            pattern = AppData::data.getPatternById(patternId);
+            if(pattern != NULL) {
+                AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+                queueRender();
+            }
+        } else {
+            deletePattern();
         }
     }
 }
