@@ -2,6 +2,8 @@
 #include "interface/Hardware.h"
 #include "interface/components/field/ParameterField.h"
 #include "interface/components/DisplayUtils.h"
+#include "model/AppData.h"
+#include "repository/Config.h"
 #include "lib/util/debug.h"
 
 FileView::FileView() {
@@ -12,7 +14,6 @@ FileView::FileView() {
     titleComponent.setTextColour(Colour::WHITE);
     newFileComponent.setText(" [ NEW FILE ] ");
     newFileComponent.setTextColour(Colour::YELLOW);
-    lastFileName[0] = '\0';
 }
 
 void FileView::init() {
@@ -26,7 +27,8 @@ void FileView::init() {
     Hardware::keyboard.clear();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::MAGENTA);
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
-    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PREV, LedColour::RED);
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_NEXT, LedColour::RED);
 }
 
 void FileView::render(GraphicsContext& g) {
@@ -81,11 +83,20 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
             }
             break;
 
-        case InterfaceEventType::KEY_ADD_DEL: //REMOVE
+        case InterfaceEventType::KEY_PREV: //REMOVE
             if(event.data == EVENT_KEY_PRESSED) {
                 confirmRemove();
             }
             break;
+
+        case InterfaceEventType::KEY_NEXT: //CLEAR
+            if(event.data == EVENT_KEY_PRESSED) {
+                if(confirmClear()) {
+                    return InterfaceEvent(InterfaceEventType::KEY_VIEW);
+                }
+            }
+            break;
+
 
         default:
             break;
@@ -95,6 +106,8 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
 }
 
 void FileView::listFiles() {
+    DEBUG("FileView::listFiles")
+
     selectedIndex = 0;
     DataRepository::data.loadFileList(currentDirectory);
     FileList& fileList = DataRepository::data.getFileList();
@@ -104,7 +117,11 @@ void FileView::listFiles() {
     for(int i = 0; i < fileList.size; i++) {
         fileComponents[i].setText(fileList.file[i].filename);
         listComponent.addComponent(&fileComponents[i]);
-        if(strcmp(fileList.file[i].filename, lastFileName) == 0) {
+
+        DEBUG(fileList.file[i].filepath)
+        DEBUG(Config::config.lastFile)
+
+        if(strcmp(fileList.file[i].filepath, Config::config.lastFile) == 0) {
             selectedIndex = i+1;
         }
     }
@@ -125,6 +142,12 @@ void FileView::remove() {
     DataRepository::data.removeSequence(path);
     init();
     queueRender(true);
+}
+
+void FileView::clear() {
+    AppData::data.clear();
+    Config::config.lastFile[0] = '\0';
+    DataRepository::data.saveConfig();
 }
 
 bool FileView::confirmLoad() {
@@ -170,6 +193,18 @@ bool FileView::confirmRemove() {
     return false;
 }
 
+bool FileView::confirmClear() {
+    if(clearConfirmation) {
+        clear();
+        return true;
+    } else {
+        DisplayUtils::drawDialog("Clear?", 50, 16);
+        clearConfirmation = true;
+        return false;
+    }
+    return false;
+}
+
 void FileView::cancelDialog() {
     if(saveConfirmation || loadConfirmation) {
         saveConfirmation = false;
@@ -189,8 +224,7 @@ void FileView::navigate() {
 }
 
 String FileView::getSelectedFilePath() {
-    strcpy(lastFileName, getSelectedFileName().c_str());
-    return currentDirectory + lastFileName;
+    return currentDirectory + getSelectedFileName().c_str();
 }
 
 String FileView::getSelectedFileName() {
@@ -198,9 +232,10 @@ String FileView::getSelectedFileName() {
         case SelectedType::NEW_FILE:
             return String(Hardware::time.getDateTime()) + F(".seq");
             break;
-        case SelectedType::EXISTING_FILE:
-            TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
-            return component->getText();
+        case SelectedType::EXISTING_FILE: {
+                TextComponent* component = static_cast<TextComponent*>(listComponent.getComponent(selectedIndex));
+                return component->getText();
+            }
             break;
         case SelectedType::CHILD_DIRECTORY:
             return ""; //TODO
@@ -209,6 +244,7 @@ String FileView::getSelectedFileName() {
             return ""; //TODO
             break;
     }
+    return "";
 }
 
 SelectedType FileView::getSelectedType() {

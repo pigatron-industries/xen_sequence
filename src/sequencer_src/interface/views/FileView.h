@@ -27,7 +27,7 @@ public:
 
 private:
     String currentDirectory = String("/");
-    char lastFileName[32];
+    //char lastFileName[32];
     int selectedIndex;
 
     TextComponent titleComponent;
@@ -38,16 +38,19 @@ private:
     bool saveConfirmation;
     bool loadConfirmation;
     bool removeConfirmation;
+    bool clearConfirmation;
 
     void listFiles();
 
     void save();
     void load();
     void remove();
+    void clear();
 
     bool confirmLoad();
     bool confirmSave();
     bool confirmRemove();
+    bool confirmClear();
     void cancelDialog();
 
     void navigate();

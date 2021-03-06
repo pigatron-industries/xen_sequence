@@ -34,6 +34,8 @@ bool DataRepository::loadFileList(String directoryName) {
         while(entry) {
             entry.getName(fileList.file[i].filename, MAX_FILENAME_SIZE);
             entry.close();
+            String filepath = String().concat(directoryName).concat(fileList.file[i].filename);
+            strcpy(fileList.file[i].filepath, filepath.c_str());
             fileList.size++;
             i++;
             entry = dir.openNextFile();
