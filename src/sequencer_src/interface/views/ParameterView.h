@@ -90,6 +90,8 @@ private:
     void renderField(uint8_t row);
     void setDirtyScreen();
 
+    void renderKeyLeds();
+
     // events
     void record(bool value);
 
@@ -121,6 +123,8 @@ private:
     void addEvent();
     void addEvent(SequenceEvent* copy);
     void deleteEvent();
+    void clearPattern();
+
     void copy();
     void paste();
     void drag();

@@ -62,6 +62,21 @@ void ParameterView::setDirtyScreen() {
     }
 }
 
+void ParameterView::renderKeyLeds() {
+    if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
+        if(selectedEvent != NULL) {
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+        } else {
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
+        }
+    } else if (selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+    }
+}
+
 void ParameterView::handleMidiEvent(MidiMessage message) {
     if(recording && parameterViewMode == PARAM_MODE_EVENT) {
         DEBUG("ParameterView::handleMidiEvent");
@@ -132,10 +147,14 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
 
         case InterfaceEventType::KEY_ADD_DEL:
             if(event.data == EVENT_KEY_PRESSED) {
-                if(selectedEvent == NULL) {
-                    addEvent();
-                } else {
-                    deleteEvent();
+                if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
+                    if(selectedEvent == NULL) {
+                        addEvent();
+                    } else {
+                        deleteEvent();
+                    }
+                } else if (selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
+                    clearPattern();
                 }
             }
             break;
@@ -337,6 +356,7 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
             break;
     };
     setSelectedField(visibleFields->size() == 0 ? -1 : 0);
+    renderKeyLeds();
     setDirtyScreen();
 }
 
@@ -368,16 +388,14 @@ void ParameterView::updateSelectedEvent() {
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(true);
         }
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
     } else {
         for(int i = 0; i < eventFields.size(); i++) {
             eventFields.get(i)->setEnabled(false);
         }
         setDirtyScreen();
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
     }
+
+    renderKeyLeds();
     queueRender();
 }
 
@@ -414,6 +432,13 @@ void ParameterView::addEvent(SequenceEvent* copy) {
 void ParameterView::deleteEvent() {
     AppData::data.deleteEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
     updateSelectedEvent();
+}
+
+void ParameterView::clearPattern() {
+    if(selectedPattern != NULL) {
+        selectedPattern->clear();
+        queueRender();
+    }
 }
 
 void ParameterView::copy() {
