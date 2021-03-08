@@ -3,7 +3,8 @@
 
 void SequenceBar::serialize(JsonObject doc) {
     doc["length"] = length;
-    doc["speed"] = speed;
+    doc["speedDiff"] = speedDiff;
+    doc["speedMult"] = speedMult;
 
     JsonArray docPatterns = doc.createNestedArray("patterns");
     for(int i = 0; i < SEQUENCE_CHANNELS; i++) {
@@ -16,7 +17,11 @@ void SequenceBar::serialize(JsonObject doc) {
 
 void SequenceBar::deserialize(JsonObject doc) {
     length = doc["length"];
-    speed = doc["speed"];
+    speedDiff = doc["speedDiff"];
+    speedMult = doc["speedMult"];
+    if(speedMult == 0) {
+        speedMult = 1;
+    }
 
     JsonArray docPatterns = doc["patterns"];
     int i = 0;

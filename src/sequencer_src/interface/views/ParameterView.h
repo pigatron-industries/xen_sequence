@@ -11,6 +11,7 @@
 #include "sequencer/midi/MidiEventHandler.h"
 
 enum ParameterViewMode {
+    PARAM_MODE_SONG,
     PARAM_MODE_BAR, // Track length
     PARAM_MODE_CHANNEL, // Edit entire channel: Mute, length
     PARAM_MODE_EVENT //Edit note parameters
@@ -71,9 +72,14 @@ private:
     ParameterField* selectedField = NULL;
     LinkedList<ParameterField*>* visibleFields;
 
+    LinkedList<ParameterField*> songFields;
+    IntegerParameterField songSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
+    IntegerParameterField songSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
+
     LinkedList<ParameterField*> barFields;
     IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
-    IntegerParameterField barSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
+    IntegerParameterField barSpeedField = IntegerParameterField("SPEED+", 0, 960, " BPM");
+    IntegerParameterField barSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
 
     LinkedList<ParameterField*> channelFields;
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
@@ -115,9 +121,10 @@ private:
     void nextParameter();
     void prevParameter();
 
-    void updateSelectedBar();
-    void updateSelectedChannel();
-    void updateSelectedEvent();
+    void updateSongFields();
+    void updateSelectedBarFields();
+    void updateSelectedChannelFields();
+    void updateSelectedEventFields();
     void updateDataFromField(ParameterField* field);
 
     void addEvent();

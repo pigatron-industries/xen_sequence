@@ -15,12 +15,6 @@ SequenceBar* AppData::getBar(int index) {
     return sequence.getBar(index);
 }
 
-SequenceBar* AppData::newBar(int index) {
-    SequenceBar* bar = new SequenceBar();
-    sequence.getBars().add(index, bar);
-    return bar;
-}
-
 SequencePattern* AppData::getPatternById(uint8_t id) {
     for(int i = 0; i < patterns.size(); i++) {
         SequencePattern* pattern = patterns.get(i);
@@ -37,6 +31,20 @@ SequencePattern* AppData::getPattern(uint16_t barIndex, uint8_t channel) {
         return bar->getPattern(channel);
     }
     return NULL;
+}
+
+uint16_t AppData::getAbsoluteSpeed(SequenceBar* bar) {
+    return sequence.getSpeed() + bar->getSpeedDiff();
+}
+
+uint8_t AppData::getAbsoluteSpeedMult(SequenceBar* bar) {
+    return sequence.getSpeedMult() * bar->getSpeedMult();
+}
+
+SequenceBar* AppData::newBar(int index) {
+    SequenceBar* bar = new SequenceBar();
+    sequence.getBars().add(index, bar);
+    return bar;
 }
 
 SequencePattern* AppData::newPattern() {

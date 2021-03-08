@@ -15,6 +15,9 @@ void Sequence::deleteBar(uint16_t index) {
 }
 
 void Sequence::serialize(JsonObject doc) {
+    doc["speed"] = speed;
+    doc["speedMult"] = speedMult;
+
     JsonArray docChannels = doc.createNestedArray("channels");
     for(int i = 0; i < SEQUENCE_CHANNELS; i++) {
         JsonObject docChannel = docChannels.createNestedObject();
@@ -29,6 +32,15 @@ void Sequence::serialize(JsonObject doc) {
 }
 
 void Sequence::deserialize(JsonObject doc) {
+    speed = doc["speed"];
+    if(speed == 0) {
+        speed = 120;
+    }
+    speedMult = doc["speedMult"];
+    if(speedMult == 0) {
+        speedMult = 1;
+    }
+
     JsonArray docChannels = doc["channels"];
     int i = 0;
     for(JsonObject docChannel : docChannels) {

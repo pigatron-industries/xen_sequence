@@ -5,6 +5,7 @@
 
 #include "lib/drivers/Timer.h"
 
+#define MAX_PULSES_PER_TICK 96
 
 class Clock {
 
@@ -16,11 +17,12 @@ public:
     void start();
     void reset();
     void setTicksPerMinute(float tpm);
+    void setPulsesPerTick(uint16_t pulsesPerTick);
     uint16_t getPulseCount() { return pulseCount; }
 
 private:
     float ticksPerMinute;
-    uint16_t pulsesPerTick = 96;
+    uint16_t pulsesPerTick = MAX_PULSES_PER_TICK;
     long pulseTime;
 
     Timer clockTimer;

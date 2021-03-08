@@ -8,8 +8,11 @@
 ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
     sequencer(_sequencer),
     sequenceMatrixView(_sequenceMatrixView) {
+    songFields.add(&songSpeedField);
+    songFields.add(&songSpeedMultField);
     barFields.add(&barLengthField);
     barFields.add(&barSpeedField);
+    barFields.add(&barSpeedMultField);
     channelFields.add(&channelMuteField);
     eventFields.add(&eventPitchField);
     eventFields.add(&eventVelocityField);
@@ -21,7 +24,8 @@ ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenc
 void ParameterView::init() {
     DEBUG("ParameterView::init")
     barIndex = sequencer.getBarIndex();
-    updateSelectedBar();
+    updateSongFields();
+    updateSelectedBarFields();
     setParameterViewMode(parameterViewMode);
 }
 
@@ -42,7 +46,9 @@ void ParameterView::renderMode() {
     uint8_t top = 0;
     Hardware::display.setTextColour(Colour::WHITE);
     Hardware::display.setCursor(0, top+TEXT_HEIGHT);
-    Hardware::display.print(parameterViewMode == PARAM_MODE_BAR ? "BAR" : parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
+    Hardware::display.print(parameterViewMode == PARAM_MODE_SONG ? "SONG" : 
+                            parameterViewMode == PARAM_MODE_BAR ? "BAR" : 
+                            parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
 }
 
 void ParameterView::renderFields() {
@@ -205,41 +211,41 @@ void ParameterView::record(bool value) {
 
 void ParameterView::cursorUp() {
     sequenceMatrixView.cursorUp();
-    updateSelectedChannel();
-    updateSelectedEvent();
+    updateSelectedChannelFields();
+    updateSelectedEventFields();
     View::render();
 }
 
 void ParameterView::cursorDown() {
     sequenceMatrixView.cursorDown();
-    updateSelectedChannel();
-    updateSelectedEvent();
+    updateSelectedChannelFields();
+    updateSelectedEventFields();
     View::render();
 }
 
 void ParameterView::cursorLeft() {
     sequenceMatrixView.cursorLeft();
-    updateSelectedEvent();
+    updateSelectedEventFields();
     View::render();
 }
 
 void ParameterView::cursorRight() {
     sequenceMatrixView.cursorRight();
-    updateSelectedEvent();
+    updateSelectedEventFields();
     View::render();
 }
 
 void ParameterView::nextBar() {
     barIndex = sequencer.nextBar();
-    updateSelectedBar();
-    updateSelectedEvent();
+    updateSelectedBarFields();
+    updateSelectedEventFields();
     queueRender();
 }
 
 void ParameterView::prevBar() {
     barIndex = sequencer.prevBar();
-    updateSelectedBar();
-    updateSelectedEvent();
+    updateSelectedBarFields();
+    updateSelectedEventFields();
     queueRender();
 }
 
@@ -301,11 +307,12 @@ void ParameterView::prevParameter() {
 void ParameterView::setBar(uint16_t _barIndex) {
     barIndex = _barIndex;
     sequenceMatrixView.setBar(barIndex);
-    updateSelectedBar();
+    updateSelectedBarFields();
 };
 
 void ParameterView::cycleSelectionMode() {
     switch(parameterViewMode) {
+        case PARAM_MODE_SONG:
         case PARAM_MODE_BAR:
             setSelectionMode(ParameterViewSelectionMode::SELECT_NONE);
             break;
@@ -328,16 +335,21 @@ void ParameterView::setSelectionMode(ParameterViewSelectionMode _selectionMode) 
 }
 
 void ParameterView::cycleParameterViewMode() {
-    setParameterViewMode(parameterViewMode == PARAM_MODE_BAR ? PARAM_MODE_CHANNEL :
-                         parameterViewMode == PARAM_MODE_CHANNEL ? PARAM_MODE_EVENT :
-                         PARAM_MODE_BAR);
+    setParameterViewMode(parameterViewMode == PARAM_MODE_SONG ? PARAM_MODE_BAR :
+                         parameterViewMode == PARAM_MODE_BAR ? PARAM_MODE_CHANNEL :
+                         parameterViewMode == PARAM_MODE_CHANNEL ? PARAM_MODE_EVENT : PARAM_MODE_SONG);
 }
 
-void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
+void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
     DEBUG("ParameterView::setParameterViewMode"); 
-    DEBUG(_parameterViewMode);
-    parameterViewMode = _parameterViewMode;
+    DEBUG(parameterViewMode);
+    this->parameterViewMode = parameterViewMode;
     switch(parameterViewMode) {
+        case PARAM_MODE_SONG:
+            visibleFields = &songFields;
+            sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
+            setSelectionMode(ParameterViewSelectionMode::SELECT_NONE);
+            break;
         case PARAM_MODE_BAR:
             visibleFields = &barFields;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
@@ -352,7 +364,7 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
             visibleFields = &eventFields;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_EVENT);
             setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
-            updateSelectedEvent();
+            updateSelectedEventFields();
             break;
     };
     setSelectedField(visibleFields->size() == 0 ? -1 : 0);
@@ -360,21 +372,27 @@ void ParameterView::setParameterViewMode(ParameterViewMode _parameterViewMode) {
     setDirtyScreen();
 }
 
-void ParameterView::updateSelectedBar() {
+void ParameterView::updateSongFields() {
+    songSpeedField.setValue(AppData::data.getSequence().getSpeed());
+    songSpeedMultField.setValue(AppData::data.getSequence().getSpeedMult());
+}
+
+void ParameterView::updateSelectedBarFields() {
     bar = AppData::data.getBar(barIndex);
     barLengthField.setValue(bar->getLength());
-    barSpeedField.setValue(bar->getSpeed());
+    barSpeedField.setValue(bar->getSpeedDiff());
+    barSpeedMultField.setValue(bar->getSpeedMult());
     sequenceMatrixView.setBar(barIndex);
 }
 
-void ParameterView::updateSelectedChannel() {
+void ParameterView::updateSelectedChannelFields() {
     selectedPattern = bar->getPattern(sequenceMatrixView.getSelectCursorChannel());
     SequenceChannel selectedChannel = AppData::data.getChannel(sequenceMatrixView.getSelectCursorChannel());
     channelMuteField.setValue(selectedChannel.getMute());
 }
 
-void ParameterView::updateSelectedEvent() {
-    updateSelectedChannel();
+void ParameterView::updateSelectedEventFields() {
+    updateSelectedChannelFields();
     if(selectedPattern != NULL) {
         selectedEvent = selectedPattern->getEvent(sequenceMatrixView.getSelectCursorTick());
     } else {
@@ -412,26 +430,41 @@ void ParameterView::updateDataFromField(ParameterField* field) {
         }
     }
     if(field == &barSpeedField) {
-        bar->setSpeed(barSpeedField.getValue());
+        bar->setSpeedDiff(barSpeedField.getValue());
         if(sequencer.getBarIndex() == barIndex) {
-            sequencer.setBar(barIndex);
+            sequencer.updateBarSpeed();
+        }
+    } else if(field == &barSpeedMultField) {
+        bar->setSpeedMult(barSpeedMultField.getValue());
+        if(sequencer.getBarIndex() == barIndex) {
+            sequencer.updateBarSpeed();
+        }
+    } else if(field == &songSpeedField) {
+        AppData::data.getSequence().setSpeed(songSpeedField.getValue());
+        if(sequencer.getBarIndex() == barIndex) {
+            sequencer.updateBarSpeed();
+        }
+    } else if(field == &songSpeedMultField) {
+        AppData::data.getSequence().setSpeedMult(songSpeedMultField.getValue());
+        if(sequencer.getBarIndex() == barIndex) {
+            sequencer.updateBarSpeed();
         }
     }
 }
 
 void ParameterView::addEvent() {
     AppData::data.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
-    updateSelectedEvent();
+    updateSelectedEventFields();
 }
 
 void ParameterView::addEvent(SequenceEvent* copy) {
     AppData::data.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick(), copy);
-    updateSelectedEvent();
+    updateSelectedEventFields();
 }
 
 void ParameterView::deleteEvent() {
     AppData::data.deleteEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
-    updateSelectedEvent();
+    updateSelectedEventFields();
 }
 
 void ParameterView::clearPattern() {

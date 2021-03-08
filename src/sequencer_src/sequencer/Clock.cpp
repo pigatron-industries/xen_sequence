@@ -12,11 +12,17 @@ void Clock::setTicksPerMinute(float tpm) {
     clockTimer.setWaitTime(pulseTime);
 }
 
+void Clock::setPulsesPerTick(uint16_t pulsesPerTick) { 
+    this->pulsesPerTick = pulsesPerTick;
+    pulseTime = ((60/ticksPerMinute)*1000000)/pulsesPerTick;
+    clockTimer.setWaitTime(pulseTime);
+}
+
 bool Clock::update() {
     if(running && !clockTimer.isRunning()) {
         clockTimer.start();
         pulseCount++;
-        if(pulseCount == pulsesPerTick) {
+        if(pulseCount >= pulsesPerTick) {
             pulseCount = 0;
         }
         return true;

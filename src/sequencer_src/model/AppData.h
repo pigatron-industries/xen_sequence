@@ -7,28 +7,31 @@
 class AppData {
 
 public:
-    static constexpr float DATA_VERSION = 0.1;
+    static constexpr float DATA_VERSION = 0.2;
     static AppData data;
 
     Sequence& getSequence() { return sequence; }
     LinkedList<SequencePattern*>& getPatterns() { return patterns; }
 
     SequenceBar* getBar(int index);
-    SequenceBar* newBar(int index);
-
     SequencePattern* getPatternById(uint8_t id);
     SequencePattern* getPattern(uint16_t barIndex, uint8_t channel);
-    SequencePattern* newPattern();
-    SequencePattern* newPattern(uint16_t barIndex, uint8_t channel);
-    SequencePattern* copyPattern(SequencePattern* pattern);
+    SequenceChannel& getChannel(uint8_t index);
+    uint16_t getAbsoluteSpeed(SequenceBar* bar);
+    uint8_t getAbsoluteSpeedMult(SequenceBar* bar);
+
     void setPattern(uint16_t barIndex, uint8_t channel, SequencePattern* pattern);
 
+    SequenceBar* newBar(int index);
+    SequencePattern* newPattern();
+    SequencePattern* newPattern(uint16_t barIndex, uint8_t channel);
     SequenceEvent* newEvent(uint8_t tick, SequencePattern* pattern);
     SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
     SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceEvent* copy);
+
     void deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
 
-    SequenceChannel& getChannel(uint8_t index);
+    SequencePattern* copyPattern(SequencePattern* pattern);
 
     void clear();
 

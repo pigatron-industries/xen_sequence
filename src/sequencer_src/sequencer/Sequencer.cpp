@@ -82,12 +82,18 @@ uint16_t Sequencer::setBar(uint16_t _barIndex) {
     DEBUG("Sequencer::setBar");
     barIndex = _barIndex;
     currentBar = AppData::data.getBar(barIndex);
-    clock.setTicksPerMinute(currentBar->getSpeed());
+    updateBarSpeed();
     if(playMode == PLAY_LOOP_BAR) {
         loopStart = barIndex;
         loopEnd = barIndex;
     }
     return barIndex;
+}
+
+void Sequencer::updateBarSpeed() {
+    uint8_t multiplier = AppData::data.getAbsoluteSpeedMult(currentBar);
+    clock.setTicksPerMinute(AppData::data.getAbsoluteSpeed(currentBar) * multiplier);
+    //clock.setPulsesPerTick(MAX_PULSES_PER_TICK / multiplier);
 }
 
 uint16_t Sequencer::nextBar() {
