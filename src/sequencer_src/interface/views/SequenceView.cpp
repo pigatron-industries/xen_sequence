@@ -6,8 +6,8 @@
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 128
 
-#define STATUS_HEIGHT 15
-#define CHANNEL_HEIGHT 14
+#define GRID_TOP 15
+#define CHANNEL_HEIGHT 12
 #define BAR_WIDTH 19
 
 #define VISIBLE_BARS DISPLAY_WIDTH / BAR_WIDTH + 1
@@ -52,20 +52,32 @@ void SequenceView::render(GraphicsContext& g) {
 
 
 void SequenceView::renderStatusBar() {
-    Hardware::display.setTextColour(Colour(255, 255, 255));
+    Hardware::display.setTextColour(GRID_TEXT_COLOUR);
+    Hardware::display.fillRect(0, DISPLAY_HEIGHT-16, DISPLAY_WIDTH, 16, BACKGROUND_COLOUR);
+
+    // top row
+    Hardware::display.setCursor(1, DISPLAY_HEIGHT-9);
+    Hardware::display.print(moveMode == PATTERN_MOVE ? "PTN-MV" :
+                            moveMode == PATTERN_COPY ? "PTN-CP" :
+                            moveMode == BAR_MOVE     ? "BAR-MV" :
+                            moveMode == BAR_COPY     ? "BAR-CP" : "");
+
+    // bottom row
+    Hardware::display.setCursor(1, DISPLAY_HEIGHT-1);
+    Hardware::display.print("");
 }
 
 void SequenceView::renderGrid() {
     Hardware::display.setTextColour(GRID_TEXT_COLOUR);
-    int16_t top = STATUS_HEIGHT;
+    int16_t top = GRID_TOP;
     for(int16_t channel = 0; channel < SEQUENCE_CHANNELS+1; channel++) {
         Hardware::display.drawLine(0, top, DISPLAY_WIDTH, top, GRID_COLOUR);
         top += CHANNEL_HEIGHT;
     }
-    Hardware::display.fillRect(0, 0, DISPLAY_WIDTH, STATUS_HEIGHT-1, BACKGROUND_COLOUR);
+    Hardware::display.fillRect(0, 0, DISPLAY_WIDTH, GRID_TOP-1, BACKGROUND_COLOUR);
     int16_t left = 0;
     for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
-        Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, GRID_COLOUR);
+        Hardware::display.drawLine(left, GRID_TOP, left, GRID_TOP + CHANNEL_HEIGHT*8, GRID_COLOUR);
         Hardware::display.setCursor(left, 12);
         Hardware::display.print(bar, HEX);
         left += BAR_WIDTH;
@@ -74,7 +86,7 @@ void SequenceView::renderGrid() {
 
 void SequenceView::renderSequence() {
     Hardware::display.setTextColour(DATA_TEXT_COLOUR);
-    short top = STATUS_HEIGHT;
+    short top = GRID_TOP;
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         short left = 0;
         for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
@@ -100,7 +112,7 @@ void SequenceView::renderSequence() {
 void SequenceView::renderPattern(SequencePattern* pattern, short left, short top) {
     if(pattern != NULL) {
         Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
-        Hardware::display.setCursor(left+5, top+9);
+        Hardware::display.setCursor(left+5, top+8);
         Hardware::display.print(pattern->getId(), HEX);
     } else {
         Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, BACKGROUND_COLOUR);
@@ -108,7 +120,7 @@ void SequenceView::renderPattern(SequencePattern* pattern, short left, short top
 }
 
 void SequenceView::renderCursor() {
-    short top = STATUS_HEIGHT+(cursorChannel*CHANNEL_HEIGHT);
+    short top = GRID_TOP+(cursorChannel*CHANNEL_HEIGHT);
     short left = (cursorBar-scrollBar)*BAR_WIDTH;
     Hardware::display.drawRect(left, top, BAR_WIDTH+1, CHANNEL_HEIGHT+1, CURSOR_COLOUR);
     Hardware::display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
@@ -116,11 +128,11 @@ void SequenceView::renderCursor() {
     // loop limits
     if(sequencer.getLoopStart() >= scrollBar) {
         left = (sequencer.getLoopStart()-scrollBar)*BAR_WIDTH;
-        Hardware::display.drawLine(left, STATUS_HEIGHT, left, DISPLAY_HEIGHT, CURSOR_COLOUR);
+        Hardware::display.drawLine(left, GRID_TOP, left, GRID_TOP + CHANNEL_HEIGHT*8, CURSOR_COLOUR);
     }
     if(sequencer.getLoopEnd() <= scrollBar+VISIBLE_BARS) {
         left = (sequencer.getLoopEnd()-scrollBar)*BAR_WIDTH;
-        Hardware::display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
+        Hardware::display.drawLine(left+BAR_WIDTH, GRID_TOP, left+BAR_WIDTH, GRID_TOP + CHANNEL_HEIGHT*8, CURSOR_COLOUR);
     }
 }
 
@@ -198,18 +210,6 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
                 } else {
                     addPattern();
                 }
-            }
-            break;
-
-        case InterfaceEventType::KEY_COPY:
-            if(event.data == EVENT_KEY_PRESSED) {
-                copy();
-            }
-            break;
-
-        case InterfaceEventType::KEY_PASTE:
-            if(event.data == EVENT_KEY_PRESSED) {
-                paste();
             }
             break;
 
@@ -362,9 +362,8 @@ void SequenceView::copy() {
     SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
     if(pattern != NULL) {
         copiedPattern = AppData::data.copyPattern(pattern);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY2, LedColour::BLUE);
         queueRender();
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PASTE, LedColour::BLUE);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
     }
 }
 
@@ -373,6 +372,7 @@ void SequenceView::paste() {
     if(copiedPattern != NULL) {
         AppData::data.setPattern(cursorBar, cursorChannel, copiedPattern);
         renderKeyLedsPattern();
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY2, LedColour::OFF);
         queueRender();
     }
 }
@@ -387,6 +387,7 @@ void SequenceView::cycleMoveMode() {
 void SequenceView::setMoveMode(MoveMode moveMode) {
     this->moveMode = moveMode;
     renderKeyLedsMoveMode();
+    queueRender();
 }
 
 void SequenceView::moveStart() {
