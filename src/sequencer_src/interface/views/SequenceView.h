@@ -67,6 +67,7 @@ private:
 
     void cycleMoveMode();
     void setMoveMode(MoveMode moveMode);
+
     void moveStart();
     void patternMoveEnd();
     void patternCopyEnd();

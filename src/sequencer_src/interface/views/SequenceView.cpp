@@ -213,6 +213,14 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
             }
             break;
 
+        case InterfaceEventType::KEY_COPY2:
+            if(event.data == EVENT_KEY_PRESSED) {
+                copy();
+            } else if (event.data == EVENT_KEY_RELEASED) {
+                paste();
+            }
+            break;
+
         case InterfaceEventType::KEY_MOVE_MODE:
             if(event.data == EVENT_KEY_PRESSED) {
                 cycleMoveMode();
@@ -364,6 +372,7 @@ void SequenceView::paste() {
     DEBUG("SequenceView::paste")
     if(copiedPattern != NULL) {
         AppData::data.setPattern(cursorBar, cursorChannel, copiedPattern);
+        renderKeyLedsPattern();
         queueRender();
     }
 }

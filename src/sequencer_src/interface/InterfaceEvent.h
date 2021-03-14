@@ -43,7 +43,7 @@ enum InterfaceEventType {
     //
     KEY_MOVE_MODE,
     KEY_MOVE,
-    KEY_PLACE_7,
+    KEY_COPY2,
     KEY_PLACE_8,
     //
     SEQUENCER_TICK
