@@ -70,6 +70,12 @@ SequencePattern* AppData::copyPattern(SequencePattern* sourcePattern) {
     return pattern;
 }
 
+SequenceBar* AppData::copyBar(SequenceBar* sourceBar, int newBarIndex) {
+    SequenceBar* newBar = AppData::newBar(newBarIndex);
+    newBar->copy(sourceBar);
+    return newBar;
+}
+
 void AppData::setPattern(uint16_t barIndex, uint8_t channel, SequencePattern* pattern) {
     SequenceBar* bar = getBar(barIndex);
     if(bar != NULL) {

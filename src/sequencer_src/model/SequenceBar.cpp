@@ -1,6 +1,16 @@
 #include "SequenceBar.h"
 #include "AppData.h"
 
+void SequenceBar::copy(SequenceBar* sourceBar) {
+    for(int channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
+        patterns[channel] = sourceBar->getPattern(channel);
+    }
+    length = sourceBar->getLength();
+    speedDiff = sourceBar->getSpeedDiff();
+    speedMult = sourceBar->getSpeedMult();
+    empty = sourceBar->isEmpty();
+}
+
 void SequenceBar::serialize(JsonObject doc) {
     doc["length"] = length;
     doc["speedDiff"] = speedDiff;

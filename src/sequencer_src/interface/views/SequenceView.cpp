@@ -32,7 +32,7 @@ void SequenceView::init() {
     DEBUG("SequenceView::init");
 
     sequencer.setBar(cursorBar);
-    updateSelectedPattern();
+    renderKeyLeds();
     setMoveMode(moveMode);
 }
 
@@ -80,10 +80,10 @@ void SequenceView::renderSequence() {
         for(int16_t bar = scrollBar; bar < scrollBar+VISIBLE_BARS; bar++) {
 
             SequencePattern* pattern = NULL;
-            if(moving && moveMode == MoveMode::DRAG_DROP && channel == cursorChannel && bar == cursorBar) {
+            if(moving && (moveMode == MoveMode::PATTERN_MOVE || moveMode == MoveMode::PATTERN_COPY) && channel == cursorChannel && bar == cursorBar) {
                 // pattern being dragged
                 pattern = AppData::data.getPattern(movingFromBar, movingFromChannel);
-            } else if(moving && moveMode == MoveMode::DRAG_DROP && channel == movingFromChannel && bar == movingFromBar) {
+            } else if(moving && moveMode == MoveMode::PATTERN_MOVE && channel == movingFromChannel && bar == movingFromBar) {
                 // empty space where pattern was dragged from
                 pattern = NULL;
             } else {
@@ -122,6 +122,32 @@ void SequenceView::renderCursor() {
         left = (sequencer.getLoopEnd()-scrollBar)*BAR_WIDTH;
         Hardware::display.drawLine(left+BAR_WIDTH, STATUS_HEIGHT, left+BAR_WIDTH, DISPLAY_HEIGHT, CURSOR_COLOUR);
     }
+}
+
+void SequenceView::renderKeyLeds() {
+    renderKeyLedsPattern();
+    renderKeyLedsMoveMode();
+}
+
+void SequenceView::renderKeyLedsPattern() {
+    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
+    if(pattern != NULL) {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+    } else {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
+    }
+}
+
+void SequenceView::renderKeyLedsMoveMode() {
+    LedColour moveModeColour = moveMode == MoveMode::PATTERN_MOVE ? LedColour::GREEN :
+                               moveMode == MoveMode::PATTERN_COPY ? LedColour::YELLOW :
+                               moveMode == MoveMode::BAR_MOVE ?  LedColour::BLUE :
+                               moveMode == MoveMode::BAR_COPY ?  LedColour::MAGENTA :
+                                                                 LedColour::OFF;
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE_MODE, moveModeColour);
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, moveModeColour);
 }
 
 InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
@@ -194,17 +220,17 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
             break;
 
         case InterfaceEventType::KEY_MOVE:
-            if(moveMode == MoveMode::DRAG_DROP) {
-                if(event.data == EVENT_KEY_PRESSED) {
-                    drag();
-                } else if(event.data == EVENT_KEY_RELEASED) {
-                    drop();
-                }
-            } else if(moveMode == MoveMode::NUDGE) {
-                if(event.data == EVENT_KEY_PRESSED) {
-                    nudgeStart();
-                } else if(event.data == EVENT_KEY_RELEASED) {
-                    nudgeEnd();
+            if(event.data == EVENT_KEY_PRESSED) {
+                moveStart();
+            } else if (event.data == EVENT_KEY_RELEASED) {
+                if(moveMode == MoveMode::PATTERN_MOVE) {
+                    patternMoveEnd();
+                } else if(moveMode == MoveMode::PATTERN_COPY) {
+                    patternCopyEnd();
+                } else if(moveMode == MoveMode::BAR_MOVE) {
+                    barMoveEnd();
+                } else if(moveMode == MoveMode::BAR_COPY) {
+                    barCopyEnd();
                 }
             }
             break;
@@ -234,7 +260,7 @@ void SequenceView::cursorUp() {
     if(cursorChannel > 0) {
         cursorChannel--;
         queueRender();
-        updateSelectedPattern();
+        renderKeyLedsPattern();
     }
 }
 
@@ -242,7 +268,7 @@ void SequenceView::cursorDown() {
     if(cursorChannel < SEQUENCE_CHANNELS-1) {
         cursorChannel++;
         queueRender();
-        updateSelectedPattern();
+        renderKeyLedsPattern();
     }
 }
 
@@ -255,7 +281,7 @@ void SequenceView::cursorLeft() {
         if(cursorBar == scrollBar-1) {
             scrollBar--;
         }
-        updateSelectedPattern();
+        renderKeyLedsPattern();
         queueRender();
     }
 }
@@ -270,19 +296,8 @@ void SequenceView::cursorRight() {
         if(cursorBar == scrollBar+VISIBLE_BARS-1) {
             scrollBar++;
         }
-        updateSelectedPattern();
+        renderKeyLedsPattern();
         queueRender();
-    }
-}
-
-void SequenceView::updateSelectedPattern() {
-    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
-    if(pattern != NULL) {
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
-    } else {
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
     }
 }
 
@@ -324,13 +339,13 @@ void SequenceView::addPattern() {
     if(pattern != NULL) {
         AppData::data.setPattern(cursorBar, cursorChannel, pattern);
     }
-    updateSelectedPattern();
+    renderKeyLedsPattern();
     queueRender();
 }
 
 void SequenceView::deletePattern() {
     AppData::data.setPattern(cursorBar, cursorChannel, NULL);
-    updateSelectedPattern();
+    renderKeyLedsPattern();
     queueRender();
 }
 
@@ -354,45 +369,39 @@ void SequenceView::paste() {
 }
 
 void SequenceView::cycleMoveMode() {
-    setMoveMode(moveMode == DRAG_DROP ? NUDGE : 
-                                        DRAG_DROP);
+    setMoveMode(moveMode == PATTERN_MOVE ? PATTERN_COPY : 
+                moveMode == PATTERN_COPY ? BAR_MOVE :
+                moveMode == BAR_MOVE  ? BAR_COPY : 
+                                        PATTERN_MOVE);
 }
 
 void SequenceView::setMoveMode(MoveMode moveMode) {
     this->moveMode = moveMode;
-    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE_MODE, moveMode == MoveMode::DRAG_DROP ? LedColour::CYAN :
-                                                                    moveMode == MoveMode::NUDGE ?     LedColour::MAGENTA :
-                                                                                                      LedColour::OFF);
+    renderKeyLedsMoveMode();
 }
 
-void SequenceView::drag() {
-    SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
-    if(pattern != NULL) {
-        movingFromChannel = cursorChannel;
-        movingFromBar = cursorBar;
-        moving = true;
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, LedColour::BLUE);
-    }
-}
-
-void SequenceView::drop() {
-    if(moving) {
-        SequencePattern* pattern = AppData::data.getPattern(movingFromBar, movingFromChannel);
-        AppData::data.setPattern(movingFromBar, movingFromChannel, NULL);
-        AppData::data.setPattern(cursorBar, cursorChannel, pattern);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, LedColour::OFF);
-        queueRender();
-    }
-    moving = false;
-}
-
-void SequenceView::nudgeStart() {
+void SequenceView::moveStart() {
     movingFromChannel = cursorChannel;
     movingFromBar = cursorBar;
     moving = true;
 }
 
-void SequenceView::nudgeEnd() {
+void SequenceView::patternMoveEnd() {
+    SequencePattern* pattern = AppData::data.getPattern(movingFromBar, movingFromChannel);
+    AppData::data.setPattern(movingFromBar, movingFromChannel, NULL);
+    AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+    moving = false;
+    queueRender();
+}
+
+void SequenceView::patternCopyEnd() {
+    SequencePattern* pattern = AppData::data.getPattern(movingFromBar, movingFromChannel);
+    AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+    moving = false;
+    queueRender();
+}
+
+void SequenceView::barMoveEnd() {
     //int8_t nudgeAmountChannel = cursorChannel - movingFromChannel;
     int16_t nudgeAmountBar = cursorBar - movingFromBar;
 
@@ -405,6 +414,24 @@ void SequenceView::nudgeEnd() {
         nudgeAmountBar++;
     }
 
-    queueRender();
     moving = false;
+    queueRender();
+}
+
+void SequenceView::barCopyEnd() {
+    //int8_t nudgeAmountChannel = cursorChannel - movingFromChannel;
+    int16_t nudgeAmountBar = cursorBar - movingFromBar;
+
+    while(nudgeAmountBar > 0) {
+        SequenceBar* sourceBar = AppData::data.getBar(movingFromBar);
+        AppData::data.copyBar(sourceBar, movingFromBar+1);
+        nudgeAmountBar--;
+    }
+    while(nudgeAmountBar < 0) {
+        AppData::data.getSequence().deleteBar(movingFromBar);
+        nudgeAmountBar++;
+    }
+
+    moving = false;
+    queueRender();
 }

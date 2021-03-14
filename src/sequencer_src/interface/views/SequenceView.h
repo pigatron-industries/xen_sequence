@@ -8,8 +8,10 @@
 #include "SequenceMatrixView.h"
 
 enum MoveMode {
-    DRAG_DROP,
-    NUDGE
+    PATTERN_MOVE,
+    PATTERN_COPY,
+    BAR_MOVE,
+    BAR_COPY
 };
 
 class SequenceView : public View {
@@ -36,11 +38,16 @@ private:
 
     SequencePattern* copiedPattern;
 
+    //rendering
     void renderStatusBar();
     void renderGrid();
     void renderSequence();
     void renderPattern(SequencePattern* pattern, short left, short top);
     void renderCursor();
+
+    void renderKeyLeds();
+    void renderKeyLedsPattern();
+    void renderKeyLedsMoveMode();
 
     void loopStart();
     void loopEnd();
@@ -49,8 +56,6 @@ private:
     void cursorDown();
     void cursorLeft();
     void cursorRight();
-
-    void updateSelectedPattern();
 
     void incrementPattern();
     void decrementPattern();
@@ -62,10 +67,11 @@ private:
 
     void cycleMoveMode();
     void setMoveMode(MoveMode moveMode);
-    void drag();
-    void drop();
-    void nudgeStart();
-    void nudgeEnd();
+    void moveStart();
+    void patternMoveEnd();
+    void patternCopyEnd();
+    void barMoveEnd();
+    void barCopyEnd();
 
 };
 

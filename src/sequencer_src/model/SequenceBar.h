@@ -26,6 +26,8 @@ public:
     void setSpeedDiff(uint16_t speedDiff) { this->speedDiff = speedDiff; }
     void setSpeedMult(uint8_t speedMult) { this->speedMult = speedMult; }
 
+    void copy(SequenceBar* sourceBar);
+
     void serialize(JsonObject doc);
     void deserialize(JsonObject doc);
 

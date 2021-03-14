@@ -31,7 +31,9 @@ public:
 
     void deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
 
-    SequencePattern* copyPattern(SequencePattern* pattern);
+    SequencePattern* copyPattern(SequencePattern* sourcePattern);
+    SequenceBar* copyBar(SequenceBar* sourceBar, int newBarIndex);
+    void copyBarPatterns(SequenceBar* fromBar, SequenceBar* toBar);
 
     void clear();
 
