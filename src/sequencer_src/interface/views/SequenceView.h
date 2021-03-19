@@ -30,13 +30,14 @@ private:
     uint8_t cursorChannel;
     uint16_t cursorBar;
     uint16_t scrollBar;
+    SequencePattern* selectedPattern = NULL;
 
     MoveMode moveMode;
     bool moving;
     uint8_t movingFromChannel;
     uint16_t movingFromBar;
 
-    SequencePattern* copiedPattern;
+    SequencePattern* copiedPattern = NULL;
 
     //rendering
     void renderStatusBar();
@@ -56,6 +57,7 @@ private:
     void cursorDown();
     void cursorLeft();
     void cursorRight();
+    void setSelectedPattern();
 
     void incrementPattern();
     void decrementPattern();

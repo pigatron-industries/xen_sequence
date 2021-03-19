@@ -15,6 +15,7 @@
 #define GRID_COLOUR Colour(20, 20, 20)
 #define GRID_TEXT_COLOUR Colour(127, 127, 127)
 #define DATA_COLOUR Colour(0, 40, 80)
+#define DATA_SELECTED_COLOUR Colour(0, 20, 40)
 #define DATA_TEXT_COLOUR Colour::WHITE
 #define CURSOR_COLOUR Colour::RED
 #define BACKGROUND_COLOUR Colour::BLACK
@@ -32,6 +33,7 @@ void SequenceView::init() {
     DEBUG("SequenceView::init");
 
     sequencer.setBar(cursorBar);
+    setSelectedPattern();
     renderKeyLeds();
     setMoveMode(moveMode);
 }
@@ -111,7 +113,7 @@ void SequenceView::renderSequence() {
 
 void SequenceView::renderPattern(SequencePattern* pattern, short left, short top) {
     if(pattern != NULL) {
-        Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, DATA_COLOUR);
+        Hardware::display.fillRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, pattern == selectedPattern ? DATA_SELECTED_COLOUR : DATA_COLOUR);
         Hardware::display.setCursor(left+5, top+8);
         Hardware::display.print(pattern->getId(), HEX);
     } else {
@@ -267,16 +269,18 @@ void SequenceView::loopEnd() {
 void SequenceView::cursorUp() {
     if(cursorChannel > 0) {
         cursorChannel--;
-        queueRender();
+        setSelectedPattern();
         renderKeyLedsPattern();
+        queueRender();
     }
 }
 
 void SequenceView::cursorDown() {
     if(cursorChannel < SEQUENCE_CHANNELS-1) {
         cursorChannel++;
-        queueRender();
+        setSelectedPattern();
         renderKeyLedsPattern();
+        queueRender();
     }
 }
 
@@ -289,6 +293,7 @@ void SequenceView::cursorLeft() {
         if(cursorBar == scrollBar-1) {
             scrollBar--;
         }
+        setSelectedPattern();
         renderKeyLedsPattern();
         queueRender();
     }
@@ -304,9 +309,14 @@ void SequenceView::cursorRight() {
         if(cursorBar == scrollBar+VISIBLE_BARS-1) {
             scrollBar++;
         }
+        setSelectedPattern();
         renderKeyLedsPattern();
         queueRender();
     }
+}
+
+void SequenceView::setSelectedPattern() {
+    selectedPattern = AppData::data.getPattern(cursorBar, cursorChannel);
 }
 
 void SequenceView::incrementPattern() {
@@ -319,6 +329,7 @@ void SequenceView::incrementPattern() {
         pattern = AppData::data.getPatternById(patternId);
         if(pattern != NULL) {
             AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+            setSelectedPattern();
             queueRender();
         }
     }
@@ -333,6 +344,7 @@ void SequenceView::decrementPattern() {
             pattern = AppData::data.getPatternById(patternId);
             if(pattern != NULL) {
                 AppData::data.setPattern(cursorBar, cursorChannel, pattern);
+                setSelectedPattern();
                 queueRender();
             }
         } else {
@@ -347,12 +359,14 @@ void SequenceView::addPattern() {
     if(pattern != NULL) {
         AppData::data.setPattern(cursorBar, cursorChannel, pattern);
     }
+    setSelectedPattern();
     renderKeyLedsPattern();
     queueRender();
 }
 
 void SequenceView::deletePattern() {
     AppData::data.setPattern(cursorBar, cursorChannel, NULL);
+    setSelectedPattern();
     renderKeyLedsPattern();
     queueRender();
 }
@@ -371,6 +385,7 @@ void SequenceView::paste() {
     DEBUG("SequenceView::paste")
     if(copiedPattern != NULL) {
         AppData::data.setPattern(cursorBar, cursorChannel, copiedPattern);
+        setSelectedPattern();
         renderKeyLedsPattern();
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY2, LedColour::OFF);
         queueRender();
