@@ -19,7 +19,7 @@ public:
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
-//protected:
+protected:
     ListComponent fields;
 
     int8_t selectedFieldIndex = 0;

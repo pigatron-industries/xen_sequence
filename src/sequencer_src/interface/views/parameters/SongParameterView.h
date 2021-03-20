@@ -19,7 +19,7 @@ public:
     virtual void init();
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
-//private:
+private:
     IntegerParameterField songSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
     IntegerParameterField songSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
 

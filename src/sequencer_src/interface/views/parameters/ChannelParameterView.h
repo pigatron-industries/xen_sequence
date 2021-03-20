@@ -19,7 +19,7 @@ public:
     void setChannel(SequenceChannel* channel);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
-//private:
+private:
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
 
     SequenceChannel* channel;

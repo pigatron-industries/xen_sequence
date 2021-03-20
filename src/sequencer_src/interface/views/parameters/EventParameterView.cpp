@@ -38,6 +38,15 @@ InterfaceEvent EventParameterView::handleEvent(InterfaceEvent event) {
     return InterfaceEvent::NONE;
 }
 
+void EventParameterView::handleMidiEvent(MidiMessage message) {
+    if(message.command == COMMAND_NOTEON) {
+        eventPitchField.setValue(message.data1);
+        eventVelocityField.setValue(message.data2);
+        updateDataFromField(&eventPitchField);
+        updateDataFromField(&eventVelocityField);
+    }
+}
+
 void EventParameterView::updateDataFromField(ParameterField* field) {
     if(event != NULL) {
         if(field == &eventPitchField) {

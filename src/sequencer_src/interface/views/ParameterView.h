@@ -44,9 +44,7 @@ private:
     bool dirtyScreen = true;
 
     uint16_t barIndex = 0;
-    SequenceBar* bar;
     SequencePattern* selectedPattern;
-    SequenceEvent* selectedEvent;
 
     SequenceEvent* copiedEvent;
     bool dragging;

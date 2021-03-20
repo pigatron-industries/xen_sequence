@@ -17,9 +17,11 @@ class EventParameterView : public AbstractParameterView {
 public:
     EventParameterView();
     void setEvent(SequenceEvent* event);
+    SequenceEvent* getEvent() { return event; }
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
+    void handleMidiEvent(MidiMessage message);
 
-//private:
+private:
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
     IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");

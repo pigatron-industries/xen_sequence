@@ -17,9 +17,10 @@ class BarParameterView : public AbstractParameterView {
 public:
     BarParameterView();
     void setBar(SequenceBar* bar);
+    SequenceBar* getBar() { return bar; }
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
-//private:
+private:
     IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
     IntegerParameterField barSpeedField = IntegerParameterField("SPEED+", 0, 960, " BPM");
     IntegerParameterField barSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
