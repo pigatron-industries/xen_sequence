@@ -25,9 +25,9 @@ void IntegerParameterField::decrement(int16_t amount) {
 }
 
 void IntegerParameterField::render(GraphicsContext& g) { 
-    if(enabled) {
+    if(visible) {
         ParameterField::render(g);
-        if(dirtyValue) {
+        if(dirtyValue || g.full) {
             Hardware::display.print(value);
             Hardware::display.print(unit);
             dirtyValue = false;

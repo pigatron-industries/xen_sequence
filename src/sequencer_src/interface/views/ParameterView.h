@@ -8,6 +8,7 @@
 #include "interface/components/field/PitchParameterField.h"
 #include "interface/components/field/IntegerParameterField.h"
 #include "interface/components/field/BooleanParameterField.h"
+#include "interface/components/ListComponent.h"
 #include "sequencer/midi/MidiEventHandler.h"
 
 enum ParameterViewMode {
@@ -70,21 +71,21 @@ private:
 
     int8_t selectedFieldIndex = 0;
     ParameterField* selectedField = NULL;
-    LinkedList<ParameterField*>* visibleFields;
+    ListComponent* visibleFields;
 
-    LinkedList<ParameterField*> songFields;
+    ListComponent songFields;
     IntegerParameterField songSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
     IntegerParameterField songSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
 
-    LinkedList<ParameterField*> barFields;
+    ListComponent barFields;
     IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
     IntegerParameterField barSpeedField = IntegerParameterField("SPEED+", 0, 960, " BPM");
     IntegerParameterField barSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
 
-    LinkedList<ParameterField*> channelFields;
+    ListComponent channelFields;
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
 
-    LinkedList<ParameterField*> eventFields;
+    ListComponent eventFields;
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
     IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");
@@ -92,8 +93,6 @@ private:
 
     // rendering
     void renderMode();
-    void renderFields(GraphicsContext& g);
-    void renderField(uint8_t row);
     void setDirtyScreen();
 
     void renderKeyLeds();

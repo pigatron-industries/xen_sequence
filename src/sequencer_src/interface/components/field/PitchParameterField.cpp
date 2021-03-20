@@ -21,9 +21,9 @@ void PitchParameterField::decrement(int16_t amount) {
 }
 
 void PitchParameterField::render(GraphicsContext& g) {
-    if(enabled) {
+    if(visible) {
         ParameterField::render(g);
-        if(dirtyValue) {
+        if(dirtyValue || g.full) {
             Hardware::display.print(noteNames[value]);
             dirtyValue = false;
         }

@@ -1,4 +1,5 @@
 #include "ListComponent.h"
+#include "lib/util/debug.h"
 
 void ListComponent::render(GraphicsContext& g) {
     for(int i = 0; i < componentCount; i++) {

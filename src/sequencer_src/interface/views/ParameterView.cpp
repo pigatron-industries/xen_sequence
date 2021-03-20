@@ -8,16 +8,16 @@
 ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
     sequencer(_sequencer),
     sequenceMatrixView(_sequenceMatrixView) {
-    songFields.add(&songSpeedField);
-    songFields.add(&songSpeedMultField);
-    barFields.add(&barLengthField);
-    barFields.add(&barSpeedField);
-    barFields.add(&barSpeedMultField);
-    channelFields.add(&channelMuteField);
-    eventFields.add(&eventPitchField);
-    eventFields.add(&eventVelocityField);
-    eventFields.add(&eventGateField);
-    eventFields.add(&eventDelayField);
+    songFields.addComponent(&songSpeedField);
+    songFields.addComponent(&songSpeedMultField);
+    barFields.addComponent(&barLengthField);
+    barFields.addComponent(&barSpeedField);
+    barFields.addComponent(&barSpeedMultField);
+    channelFields.addComponent(&channelMuteField);
+    eventFields.addComponent(&eventPitchField);
+    eventFields.addComponent(&eventVelocityField);
+    eventFields.addComponent(&eventGateField);
+    eventFields.addComponent(&eventDelayField);
     Hardware::midiInputService.addEventHandler(this);
 }
 
@@ -31,11 +31,10 @@ void ParameterView::init() {
 
 void ParameterView::render(GraphicsContext& g) {
     DEBUG("ParameterView::render");
-    if(g.full) {
-        setDirtyScreen();
-    }
     renderMode();
-    renderFields(g);
+
+    g.yPos += FIELD_HEIGHT;
+    visibleFields->render(g);
 
     sequenceMatrixView.render();
 
@@ -51,20 +50,11 @@ void ParameterView::renderMode() {
                             parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
 }
 
-void ParameterView::renderFields(GraphicsContext& g) {
-    // TODO replace with ListComponent
-    g.yPos += FIELD_HEIGHT;
-    for(uint8_t row = 0; row < visibleFields->size(); row++) {
-        visibleFields->get(row)->render(g);
-        g.yPos += visibleFields->get(row)->getHeight();
-    }
-}
-
 void ParameterView::setDirtyScreen() {
     dirtyScreen = true;
-    for(int i = 0; i < visibleFields->size(); i++) {
-        visibleFields->get(i)->setDirty();
-    }
+    // for(int i = 0; i < visibleFields->size(); i++) {
+    //     visibleFields->get(i)->setDirty();
+    // }
 }
 
 void ParameterView::renderKeyLeds() {
@@ -271,8 +261,8 @@ void ParameterView::setSelectedField(int8_t fieldIndex) {
     if(selectedField != NULL) {
         selectedField->setSelected(false);
     }
-    if(selectedFieldIndex >= 0 && visibleFields->size() > selectedFieldIndex) {
-        selectedField = visibleFields->get(selectedFieldIndex);
+    if(selectedFieldIndex >= 0 && visibleFields->getSize() > selectedFieldIndex) {
+        selectedField = (ParameterField*)visibleFields->getComponent(selectedFieldIndex);
         selectedField->setSelected(true);
     } else {
         selectedField = NULL;
@@ -280,8 +270,8 @@ void ParameterView::setSelectedField(int8_t fieldIndex) {
 }
 
 ParameterField* ParameterView::getSelectedField() {
-    if(selectedFieldIndex >= 0 && visibleFields->size() > selectedFieldIndex) {
-        return visibleFields->get(selectedFieldIndex);
+    if(selectedFieldIndex >= 0 && visibleFields->getSize() > selectedFieldIndex) {
+        return (ParameterField*)visibleFields->getComponent(selectedFieldIndex);
     } else {
         return NULL;
     }
@@ -289,7 +279,7 @@ ParameterField* ParameterView::getSelectedField() {
 
 void ParameterView::nextParameter() {
     int8_t newFieldIndex = selectedFieldIndex+1;
-    if(newFieldIndex >= visibleFields->size()) {
+    if(newFieldIndex >= visibleFields->getSize()) {
         newFieldIndex = 0;
     }
     setSelectedField(newFieldIndex);
@@ -298,7 +288,7 @@ void ParameterView::nextParameter() {
 void ParameterView::prevParameter() {
     int8_t newFieldIndex = selectedFieldIndex-1;
     if(newFieldIndex < 0) {
-        newFieldIndex = visibleFields->size()-1;
+        newFieldIndex = visibleFields->getSize()-1;
     }
     setSelectedField(newFieldIndex);
 }
@@ -366,9 +356,9 @@ void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
             updateSelectedEventFields();
             break;
     };
-    setSelectedField(visibleFields->size() == 0 ? -1 : 0);
+    setSelectedField(visibleFields->getSize() == 0 ? -1 : 0);
     renderKeyLeds();
-    setDirtyScreen();
+    queueRender(true);
 }
 
 void ParameterView::updateSongFields() {
@@ -402,18 +392,17 @@ void ParameterView::updateSelectedEventFields() {
         eventVelocityField.setValue(selectedEvent->getVelocity());
         eventGateField.setValue(selectedEvent->getGate());
         eventDelayField.setValue(selectedEvent->getDelay());
-        for(int i = 0; i < eventFields.size(); i++) {
-            eventFields.get(i)->setEnabled(true);
+        for(int i = 0; i < eventFields.getSize(); i++) {
+            eventFields.getComponent(i)->setVisibility(true);
         }
     } else {
-        for(int i = 0; i < eventFields.size(); i++) {
-            eventFields.get(i)->setEnabled(false);
+        for(int i = 0; i < eventFields.getSize(); i++) {
+            eventFields.getComponent(i)->setVisibility(false);
         }
-        setDirtyScreen();
     }
 
     renderKeyLeds();
-    queueRender();
+    queueRender(true);
 }
 
 void ParameterView::updateDataFromField(ParameterField* field) {

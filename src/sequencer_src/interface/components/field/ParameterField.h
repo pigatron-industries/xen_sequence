@@ -18,13 +18,11 @@ public:
     virtual void decrement(int16_t amount) = 0;
     virtual void render(GraphicsContext& graphicsContext);
 
-    void setEnabled(bool _enabled) { enabled = _enabled; dirtyLabel = true; dirtyValue = true; }
     void setSelected(bool _selected) { selected = _selected; dirtyValue = true; }
     void setDirty() { dirtyLabel = true; dirtyValue = true; }
 
 protected:
     const char* name;
-    bool enabled = true;
     bool selected = false;
     bool dirtyLabel = true;
     bool dirtyValue = true;

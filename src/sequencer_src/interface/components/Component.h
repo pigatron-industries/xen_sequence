@@ -15,9 +15,12 @@ public:
     uint8_t getHeight() { return height; }
     uint8_t getWidth() { return width; }
 
+    void setVisibility(bool visible) { this->visible = visible; }
+
 protected:
     uint8_t height;
     uint8_t width;
+    bool visible = true;
 
 };
 

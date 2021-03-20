@@ -13,8 +13,10 @@ void BooleanParameterField::decrement(int16_t amount) {
 }
 
 void BooleanParameterField::render(GraphicsContext& g) {
-    if(enabled) {
+    if(visible) {
         ParameterField::render(g);
-        Hardware::display.print(value ? "ON" : "OFF");
+        if(dirtyValue || g.full) {
+            Hardware::display.print(value ? "ON" : "OFF");
+        }
     }
 }
