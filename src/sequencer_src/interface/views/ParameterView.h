@@ -92,7 +92,7 @@ private:
 
     // rendering
     void renderMode();
-    void renderFields();
+    void renderFields(GraphicsContext& g);
     void renderField(uint8_t row);
     void setDirtyScreen();
 

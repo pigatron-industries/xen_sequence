@@ -1,6 +1,6 @@
 #include "DisplayUtils.h"
 
-#include "../Hardware.h"
+#include "interface/Hardware.h"
 
 #define TEXT_HEIGHT 7
 

@@ -20,11 +20,11 @@ void PitchParameterField::decrement(int16_t amount) {
     dirtyValue = true;
 }
 
-void PitchParameterField::render(Display& display, uint8_t row) {
+void PitchParameterField::render(GraphicsContext& g) {
     if(enabled) {
-        ParameterField::render(display, row);
+        ParameterField::render(g);
         if(dirtyValue) {
-            display.print(noteNames[value]);
+            Hardware::display.print(noteNames[value]);
             dirtyValue = false;
         }
     }

@@ -2,7 +2,6 @@
 #define StringComponent_h
 
 #include "Component.h"
-#include "interface/Hardware.h"
 
 class TextComponent : public Component {
 

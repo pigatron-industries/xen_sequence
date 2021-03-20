@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include "interface/graphics/GraphicsContext.h"
+#include "interface/Hardware.h"
 
 class Component : public Focusable {
 

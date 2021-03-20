@@ -12,9 +12,9 @@ void BooleanParameterField::decrement(int16_t amount) {
     value = !value;
 }
 
-void BooleanParameterField::render(Display& display, uint8_t row) {
+void BooleanParameterField::render(GraphicsContext& g) {
     if(enabled) {
-        ParameterField::render(display, row);
-        display.print(value ? "ON" : "OFF");
+        ParameterField::render(g);
+        Hardware::display.print(value ? "ON" : "OFF");
     }
 }

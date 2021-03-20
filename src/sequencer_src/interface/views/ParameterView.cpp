@@ -35,7 +35,7 @@ void ParameterView::render(GraphicsContext& g) {
         setDirtyScreen();
     }
     renderMode();
-    renderFields();
+    renderFields(g);
 
     sequenceMatrixView.render();
 
@@ -51,14 +51,13 @@ void ParameterView::renderMode() {
                             parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
 }
 
-void ParameterView::renderFields() {
+void ParameterView::renderFields(GraphicsContext& g) {
+    // TODO replace with ListComponent
+    g.yPos += FIELD_HEIGHT;
     for(uint8_t row = 0; row < visibleFields->size(); row++) {
-        renderField(row);
+        visibleFields->get(row)->render(g);
+        g.yPos += visibleFields->get(row)->getHeight();
     }
-}
-
-void ParameterView::renderField(uint8_t row) {
-    visibleFields->get(row)->render(Hardware::display, row+1);
 }
 
 void ParameterView::setDirtyScreen() {
@@ -254,7 +253,7 @@ void ParameterView::fieldIncrement(int amount) {
     if(field != NULL) {
         field->increment(amount);
         updateDataFromField(field);
-        renderField(selectedFieldIndex);
+        queueRender();
     }
 }
 
@@ -263,7 +262,7 @@ void ParameterView::fieldDecrement(int amount) {
     if(field != NULL) {
         field->decrement(amount);
         updateDataFromField(field);
-        renderField(selectedFieldIndex);
+        queueRender();
     }
 }
 

@@ -24,12 +24,12 @@ void IntegerParameterField::decrement(int16_t amount) {
     dirtyValue = true;
 }
 
-void IntegerParameterField::render(Display& display, uint8_t row) {
+void IntegerParameterField::render(GraphicsContext& g) { 
     if(enabled) {
-        ParameterField::render(display, row);
+        ParameterField::render(g);
         if(dirtyValue) {
-            display.print(value);
-            display.print(unit);
+            Hardware::display.print(value);
+            Hardware::display.print(unit);
             dirtyValue = false;
         }
     }

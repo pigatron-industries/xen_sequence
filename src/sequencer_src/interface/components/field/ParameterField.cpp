@@ -2,27 +2,27 @@
 
 ParameterField::ParameterField(const char* _name) :
     name(_name) {
+    height = FIELD_HEIGHT;
+    width = FIELD_WIDTH;
 }
 
-void ParameterField::render(Display& display, uint8_t row) {
-    uint8_t top = row*FIELD_HEIGHT;
-
+void ParameterField::render(GraphicsContext& g) {
     if(dirtyLabel) {
-        display.setTextColour(Colour(0, 128, 255));
-        display.setCursor(0, top+TEXT_HEIGHT);
-        display.print(name);
+        Hardware::display.setTextColour(Colour(0, 128, 255));
+        Hardware::display.setCursor(0, g.yPos+TEXT_HEIGHT);
+        Hardware::display.print(name);
         dirtyLabel = false;
     }
 
     if(dirtyValue) {
         if(selected) {
-            display.fillRect(FIELD_NAME_WIDTH-2, top+1, FIELD_VALUE_WIDTH, TEXT_HEIGHT+2, Colour(255, 255, 0));
-            display.setTextColour(Colour(0, 0, 0));
+            Hardware::display.fillRect(FIELD_NAME_WIDTH-2, g.yPos+1, FIELD_VALUE_WIDTH, TEXT_HEIGHT+2, Colour(255, 255, 0));
+            Hardware::display.setTextColour(Colour(0, 0, 0));
         } else {
-            display.fillRect(FIELD_NAME_WIDTH-2, top+1, FIELD_VALUE_WIDTH, TEXT_HEIGHT+2, Colour(0, 0, 0));
-            display.setTextColour(Colour(255, 255, 0));
+            Hardware::display.fillRect(FIELD_NAME_WIDTH-2, g.yPos+1, FIELD_VALUE_WIDTH, TEXT_HEIGHT+2, Colour(0, 0, 0));
+            Hardware::display.setTextColour(Colour(255, 255, 0));
         }
     }
 
-    display.setCursor(FIELD_NAME_WIDTH, top+TEXT_HEIGHT);
+    Hardware::display.setCursor(FIELD_NAME_WIDTH, g.yPos+TEXT_HEIGHT);
 }

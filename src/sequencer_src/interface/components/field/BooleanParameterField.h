@@ -9,7 +9,7 @@ public:
     BooleanParameterField(const char* _name);
     void increment(int16_t amount);
     void decrement(int16_t amount);
-    void render(Display& display, uint8_t row);
+    virtual void render(GraphicsContext& graphicsContext);
 
     void setValue(bool _value) { value = _value; }
     bool getValue() { return value; }

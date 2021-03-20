@@ -1,5 +1,4 @@
 #include "Component.h"
-#include "interface/Hardware.h"
 #include "interface/views/Org_01.h"
 #include "lib/util/debug.h"
 

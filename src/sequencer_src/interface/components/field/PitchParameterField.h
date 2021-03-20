@@ -9,7 +9,7 @@ public:
     PitchParameterField(const char* _name);
     void increment(int16_t amount);
     void decrement(int16_t amount);
-    void render(Display& display, uint8_t row);
+    virtual void render(GraphicsContext& graphicsContext);
 
     void setValue(int16_t _value) { value = _value; dirtyValue = true; }
     uint16_t getValue() { return value; }
