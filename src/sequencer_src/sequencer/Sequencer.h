@@ -20,8 +20,9 @@ enum SequencePlayMode {
 class Sequencer {
 
 public:
-    Sequencer(EventOutputService& _eventOutputService);
-    void init();
+    static Sequencer sequencer;
+    Sequencer();
+    void init(MidiOutputService* midiOutputService);
     void addEventListener(SequencerEventListener* eventListener);
     void execute();
 
@@ -36,6 +37,7 @@ public:
     uint16_t nextBar();
     uint16_t prevBar();
     uint16_t getBarIndex() { return barIndex; }
+    SequenceBar* getCurrentBar() { return currentBar; }
     uint8_t getTickIndex() { return tickIndex; }
     SequencePlayMode getPlayMode() { return playMode; }
     uint16_t getLoopStart() { return loopStart; }
@@ -46,7 +48,7 @@ public:
     void setLoopEnd(uint16_t loopEnd) { this->loopEnd = loopEnd; }
 
 private:
-    EventOutputService& eventOutputService;
+    EventOutputService eventOutputService;
     EventCompiler eventCompiler;
     Clock clock;
     LinkedList<SequencerEventListener*> eventListeners;

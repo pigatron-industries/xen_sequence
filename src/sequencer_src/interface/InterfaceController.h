@@ -18,15 +18,13 @@
 class InterfaceController : public SequencerEventListener {
 
 public:
-    InterfaceController(Sequencer& _sequencer);
+    InterfaceController();
     void init();
     void render();
     void handleEvent(InterfaceEvent event);
     virtual void onTick();
 
 private:
-    Sequencer& sequencer;
-
     View* currentView;
     View* previousView;
 

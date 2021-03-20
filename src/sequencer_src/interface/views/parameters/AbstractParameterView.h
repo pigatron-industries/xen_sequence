@@ -24,6 +24,12 @@ public:
 
     int8_t selectedFieldIndex = 0;
     ParameterField* selectedField = NULL;
+
+    void prevParameter();
+    void nextParameter();
+    void setSelectedField(int index);
+    void fieldIncrement(int amount);
+    void fieldDecrement(int amount);
 };
 
 #endif

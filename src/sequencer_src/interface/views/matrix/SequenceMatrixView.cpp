@@ -11,8 +11,7 @@
 
 
 
-SequenceMatrixView::SequenceMatrixView(Sequencer& _sequencer):
-    sequencer(_sequencer) {
+SequenceMatrixView::SequenceMatrixView() {
 }
 
 void SequenceMatrixView::render() {
@@ -57,8 +56,8 @@ void SequenceMatrixView::renderSelectCursor() {
 }
 
 void SequenceMatrixView::renderPlayCursor() {
-    uint8_t playCursorTick = sequencer.getTickIndex();
-    if(sequencer.isPlaying() && sequencer.getBarIndex() == barIndex) {
+    uint8_t playCursorTick = Sequencer::sequencer.getTickIndex();
+    if(Sequencer::sequencer.isPlaying() && Sequencer::sequencer.getBarIndex() == barIndex) {
         for(int channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
             CRGB colour = Hardware::ledMatrix.getPixel(channel, playCursorTick);
             colour += PLAY_CURSOR_PIXEL;

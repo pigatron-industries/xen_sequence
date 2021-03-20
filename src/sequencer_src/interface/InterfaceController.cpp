@@ -7,20 +7,19 @@
 #include "repository/DataRepository.h"
 #include "lib/util/debug.h"
 
-InterfaceController::InterfaceController(Sequencer& _sequencer) :
-    sequencer(_sequencer),
-    sequenceMatrixView(_sequencer),
-    sequenceView(_sequencer, sequenceMatrixView),
-    parameterView(_sequencer, sequenceMatrixView) {
+InterfaceController::InterfaceController() :
+    sequenceMatrixView(),
+    sequenceView(sequenceMatrixView),
+    parameterView(sequenceMatrixView) {
       currentView = &sequenceView;
-      sequencer.addEventListener(this);
 }
 
 void InterfaceController::init() {
+    Sequencer::sequencer.addEventListener(this);
     Hardware::display.fillScreen(Colour(0, 0, 0));
     sequenceView.init();
     render();
-    setLoopMode(sequencer.getPlayMode());
+    setLoopMode(Sequencer::sequencer.getPlayMode());
 }
 
 void InterfaceController::render() {
@@ -29,7 +28,6 @@ void InterfaceController::render() {
 
 void InterfaceController::handleEvent(InterfaceEvent event) {
     DEBUG("InterfaceController::handleEvent")
-    DEBUG(event.eventType)
     
     if(isSequenceView()) {
 
@@ -63,7 +61,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
 
             case InterfaceEventType::KEY_PLAY_STOP:
                 if(event.data == EVENT_KEY_PRESSED) {
-                    if(sequencer.isPlaying()) {
+                    if(Sequencer::sequencer.isPlaying()) {
                         stop();
                     } else {
                         play();
@@ -150,17 +148,17 @@ void InterfaceController::switchToSequenceView() {
 }
 
 void InterfaceController::play() {
-    sequencer.play();
+    Sequencer::sequencer.play();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::GREEN);
 }
 
 void InterfaceController::stop() {
-    sequencer.stop();
+    Sequencer::sequencer.stop();
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
 }
 
 void InterfaceController::cycleLoopMode() {
-    SequencePlayMode playMode = sequencer.getPlayMode();
+    SequencePlayMode playMode = Sequencer::sequencer.getPlayMode();
     setLoopMode(playMode == PLAY_SONG ?           PLAY_LOOP_BAR :
                 playMode == PLAY_LOOP_BAR ?       PLAY_LOOP_SELECTION :
                 playMode == PLAY_LOOP_SELECTION ? PLAY_LOOP_SONG : 
@@ -168,7 +166,7 @@ void InterfaceController::cycleLoopMode() {
 }
 
 void InterfaceController::setLoopMode(SequencePlayMode loopMode) {
-    sequencer.setPlayMode(loopMode);
+    Sequencer::sequencer.setPlayMode(loopMode);
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_LOOP_MODE, loopMode == PLAY_SONG ?           LedColour::GREEN :
                                                                     loopMode == PLAY_LOOP_BAR ?       LedColour::MAGENTA :
                                                                     loopMode == PLAY_LOOP_SELECTION ? LedColour::CYAN :

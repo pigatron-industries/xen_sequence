@@ -5,15 +5,14 @@
 
 #include "Org_01.h"
 
-ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
-    sequencer(_sequencer),
+ParameterView::ParameterView(SequenceMatrixView& _sequenceMatrixView) :
     sequenceMatrixView(_sequenceMatrixView) {
     Hardware::midiInputService.addEventHandler(this);
 }
 
 void ParameterView::init() {
     DEBUG("ParameterView::init")
-    barIndex = sequencer.getBarIndex();
+    barIndex = Sequencer::sequencer.getBarIndex();
     songParameterView.init();
     updateSelectedBarFields();
     setParameterViewMode(parameterViewMode);
@@ -73,8 +72,8 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
             // TODO put this code in EventParameterView
             eventParameterView.eventPitchField.setValue(message.data1);
             eventParameterView.eventVelocityField.setValue(message.data2);
-            updateDataFromField(&eventParameterView.eventPitchField);
-            updateDataFromField(&eventParameterView.eventVelocityField);
+            eventParameterView.updateDataFromField(&eventParameterView.eventPitchField);
+            eventParameterView.updateDataFromField(&eventParameterView.eventVelocityField);
 
             //TODO advance to next tick depending on recoding mode
 
@@ -104,17 +103,11 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
             cursorRight();
             break;
 
+        //TODO allow queue render to work from sub components
         case InterfaceEventType::DATA_PRESS:
-            nextParameter();
-            View::render();
-            break;
-
         case InterfaceEventType::DATA_INCREMENT:
-            fieldIncrement(event.data);
-            break;
-
         case InterfaceEventType::DATA_DECREMENT:
-            fieldDecrement(event.data);
+            queueRender();
             break;
 
         case InterfaceEventType::KEY_RECORD: 
@@ -180,7 +173,7 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
             break;
     }
 
-
+    visibleParameterView->handleEvent(event);
     return InterfaceEvent::NONE;
 }
 
@@ -216,72 +209,17 @@ void ParameterView::cursorRight() {
 }
 
 void ParameterView::nextBar() {
-    barIndex = sequencer.nextBar();
+    barIndex = Sequencer::sequencer.nextBar();
     updateSelectedBarFields();
     updateSelectedEventFields();
     queueRender();
 }
 
 void ParameterView::prevBar() {
-    barIndex = sequencer.prevBar();
+    barIndex = Sequencer::sequencer.prevBar();
     updateSelectedBarFields();
     updateSelectedEventFields();
     queueRender();
-}
-
-void ParameterView::fieldIncrement(int amount) {
-    ParameterField* field = getSelectedField();
-    if(field != NULL) {
-        field->increment(amount);
-        updateDataFromField(field);
-        queueRender();
-    }
-}
-
-void ParameterView::fieldDecrement(int amount) {
-    ParameterField* field = getSelectedField();
-    if(field != NULL) {
-        field->decrement(amount);
-        updateDataFromField(field);
-        queueRender();
-    }
-}
-
-void ParameterView::setSelectedField(int8_t fieldIndex) {
-    selectedFieldIndex = fieldIndex;
-    if(selectedField != NULL) {
-        selectedField->setSelected(false);
-    }
-    if(selectedFieldIndex >= 0 && visibleParameterView->fields.getSize() > selectedFieldIndex) {
-        selectedField = (ParameterField*)visibleParameterView->fields.getComponent(selectedFieldIndex);
-        selectedField->setSelected(true);
-    } else {
-        selectedField = NULL;
-    }
-}
-
-ParameterField* ParameterView::getSelectedField() {
-    if(selectedFieldIndex >= 0 && visibleParameterView->fields.getSize() > selectedFieldIndex) {
-        return (ParameterField*)visibleParameterView->fields.getComponent(selectedFieldIndex);
-    } else {
-        return NULL;
-    }
-}
-
-void ParameterView::nextParameter() {
-    int8_t newFieldIndex = selectedFieldIndex+1;
-    if(newFieldIndex >= visibleParameterView->fields.getSize()) {
-        newFieldIndex = 0;
-    }
-    setSelectedField(newFieldIndex);
-}
-
-void ParameterView::prevParameter() {
-    int8_t newFieldIndex = selectedFieldIndex-1;
-    if(newFieldIndex < 0) {
-        newFieldIndex = visibleParameterView->fields.getSize()-1;
-    }
-    setSelectedField(newFieldIndex);
 }
 
 void ParameterView::setBar(uint16_t _barIndex) {
@@ -347,7 +285,6 @@ void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
             updateSelectedEventFields();
             break;
     };
-    setSelectedField(visibleParameterView->fields.getSize() == 0 ? -1 : 0);
     renderKeyLeds();
     queueRender(true);
 }
@@ -375,41 +312,6 @@ void ParameterView::updateSelectedEventFields() {
     eventParameterView.setEvent(selectedEvent);
     renderKeyLeds();
     queueRender(true);
-}
-
-void ParameterView::updateDataFromField(ParameterField* field) {
-    if(selectedEvent != NULL) {
-        if(field == &eventParameterView.eventPitchField) {
-            selectedEvent->setPitch(eventParameterView.eventPitchField.getValue());
-        } else if(field == &eventParameterView.eventVelocityField) {
-            selectedEvent->setVelocity(eventParameterView.eventVelocityField.getValue());
-        } else if(field == &eventParameterView.eventGateField) {
-            selectedEvent->setGate(eventParameterView.eventGateField.getValue());
-        } else if(field == &eventParameterView.eventDelayField) {
-            selectedEvent->setDelay(eventParameterView.eventDelayField.getValue());
-        }
-    }
-    if(field == &barParameterView.barSpeedField) {
-        bar->setSpeedDiff(barParameterView.barSpeedField.getValue());
-        if(sequencer.getBarIndex() == barIndex) {
-            sequencer.updateBarSpeed();
-        }
-    } else if(field == &barParameterView.barSpeedMultField) {
-        bar->setSpeedMult(barParameterView.barSpeedMultField.getValue());
-        if(sequencer.getBarIndex() == barIndex) {
-            sequencer.updateBarSpeed();
-        }
-    } else if(field == &songParameterView.songSpeedField) {
-        AppData::data.getSequence().setSpeed(songParameterView.songSpeedField.getValue());
-        if(sequencer.getBarIndex() == barIndex) {
-            sequencer.updateBarSpeed();
-        }
-    } else if(field == &songParameterView.songSpeedMultField) {
-        AppData::data.getSequence().setSpeedMult(songParameterView.songSpeedMultField.getValue());
-        if(sequencer.getBarIndex() == barIndex) {
-            sequencer.updateBarSpeed();
-        }
-    }
 }
 
 void ParameterView::addEvent() {

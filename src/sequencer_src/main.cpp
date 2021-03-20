@@ -18,11 +18,9 @@
 
 // sequencer
 MidiOutputService midiOutputSevice = MidiOutputService(Serial3);
-EventOutputService eventOutputService = EventOutputService(midiOutputSevice);
-Sequencer sequencer = Sequencer(eventOutputService);
 
 // user interface
-InterfaceController interfaceController = InterfaceController(sequencer);
+InterfaceController interfaceController = InterfaceController();
 InputTask inputTask = InputTask(interfaceController);
 
 
@@ -36,13 +34,13 @@ void setup() {
 
     Hardware::init();
     DataRepository::data.init();
-    sequencer.init();
+    Sequencer::sequencer.init(&midiOutputSevice);
     inputTask.init();
     interfaceController.init();
     midiOutputSevice.init();
 }
 
 void loop() {
-    sequencer.execute();
+    Sequencer::sequencer.execute();
     inputTask.execute();
 }

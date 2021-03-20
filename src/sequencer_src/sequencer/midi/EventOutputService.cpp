@@ -1,7 +1,10 @@
 #include "EventOutputService.h"
 
-EventOutputService::EventOutputService(MidiOutputService& _midiOutputService) :
-    midiOutputService(_midiOutputService) {
+EventOutputService::EventOutputService() {
+}
+
+void EventOutputService::init(MidiOutputService* midiOutputService) {
+    this->midiOutputService = midiOutputService;
 }
 
 void EventOutputService::event(uint8_t channel, uint16_t pulseCount, SequenceEvent* event) {
@@ -12,11 +15,11 @@ void EventOutputService::event(uint8_t channel, uint16_t pulseCount, SequenceEve
 
     MidiMessage* message;
     while((message = compiledEvent.getNextMessageAtPulse(pulseCount)) != NULL) {
-        midiOutputService.sendMessage(*message);
+        midiOutputService->sendMessage(*message);
     }
 }
 
 void EventOutputService::system(uint8_t command) {
     MidiMessage message = MidiMessage(command);
-    midiOutputService.sendMessage(message);
+    midiOutputService->sendMessage(message);
 }

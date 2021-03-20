@@ -16,8 +16,8 @@ class EventParameterView : public AbstractParameterView {
 
 public:
     EventParameterView();
-
     void setEvent(SequenceEvent* event);
+    virtual InterfaceEvent handleEvent(InterfaceEvent event);
 
 //private:
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
@@ -26,6 +26,8 @@ public:
     IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 100, " %");
 
     SequenceEvent* event;
+
+    void updateDataFromField(ParameterField* field);
 };
 
 #endif

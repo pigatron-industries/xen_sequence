@@ -20,8 +20,7 @@
 #define CURSOR_COLOUR Colour::RED
 #define BACKGROUND_COLOUR Colour::BLACK
 
-SequenceView::SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
-        sequencer(_sequencer),
+SequenceView::SequenceView(SequenceMatrixView& _sequenceMatrixView) :
         sequenceMatrixView(_sequenceMatrixView) {
     cursorChannel = 0;
     cursorBar = 0;
@@ -32,7 +31,7 @@ SequenceView::SequenceView(Sequencer& _sequencer, SequenceMatrixView& _sequenceM
 void SequenceView::init() {
     DEBUG("SequenceView::init");
 
-    sequencer.setBar(cursorBar);
+    Sequencer::sequencer.setBar(cursorBar);
     setSelectedPattern();
     renderKeyLeds();
     setMoveMode(moveMode);
@@ -128,12 +127,12 @@ void SequenceView::renderCursor() {
     Hardware::display.drawRect(left+1, top+1, BAR_WIDTH-1, CHANNEL_HEIGHT-1, CURSOR_COLOUR);
 
     // loop limits
-    if(sequencer.getLoopStart() >= scrollBar) {
-        left = (sequencer.getLoopStart()-scrollBar)*BAR_WIDTH;
+    if(Sequencer::sequencer.getLoopStart() >= scrollBar) {
+        left = (Sequencer::sequencer.getLoopStart()-scrollBar)*BAR_WIDTH;
         Hardware::display.drawLine(left, GRID_TOP, left, GRID_TOP + CHANNEL_HEIGHT*8, CURSOR_COLOUR);
     }
-    if(sequencer.getLoopEnd() <= scrollBar+VISIBLE_BARS) {
-        left = (sequencer.getLoopEnd()-scrollBar)*BAR_WIDTH;
+    if(Sequencer::sequencer.getLoopEnd() <= scrollBar+VISIBLE_BARS) {
+        left = (Sequencer::sequencer.getLoopEnd()-scrollBar)*BAR_WIDTH;
         Hardware::display.drawLine(left+BAR_WIDTH, GRID_TOP, left+BAR_WIDTH, GRID_TOP + CHANNEL_HEIGHT*8, CURSOR_COLOUR);
     }
 }
@@ -253,15 +252,15 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
 }
 
 void SequenceView::loopStart() {
-    if(sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
-        sequencer.setLoopStart(cursorBar);
+    if(Sequencer::sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
+        Sequencer::sequencer.setLoopStart(cursorBar);
         queueRender();
     }
 }
 
 void SequenceView::loopEnd() {
-    if(sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
-        sequencer.setLoopEnd(cursorBar);
+    if(Sequencer::sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
+        Sequencer::sequencer.setLoopEnd(cursorBar);
         queueRender();
     }
 }
@@ -287,8 +286,8 @@ void SequenceView::cursorDown() {
 void SequenceView::cursorLeft() {
     if(cursorBar != 0) {
         cursorBar--;
-        if(sequencer.getPlayMode() == PLAY_LOOP_BAR) {
-            sequencer.setBar(cursorBar);
+        if(Sequencer::sequencer.getPlayMode() == PLAY_LOOP_BAR) {
+            Sequencer::sequencer.setBar(cursorBar);
         }
         if(cursorBar == scrollBar-1) {
             scrollBar--;
@@ -303,8 +302,8 @@ void SequenceView::cursorRight() {
     SequenceBar* selectedBar = AppData::data.getBar(cursorBar);
     if(!selectedBar->isEmpty()) {
         cursorBar++;
-        if(sequencer.getPlayMode() == PLAY_LOOP_BAR) {
-            sequencer.setBar(cursorBar);
+        if(Sequencer::sequencer.getPlayMode() == PLAY_LOOP_BAR) {
+            Sequencer::sequencer.setBar(cursorBar);
         }
         if(cursorBar == scrollBar+VISIBLE_BARS-1) {
             scrollBar++;

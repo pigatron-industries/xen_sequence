@@ -3,15 +3,17 @@
 #include <Arduino.h>
 #include "lib/util/debug.h"
 
-Sequencer::Sequencer(EventOutputService& _eventOutputService) :
-    eventOutputService(_eventOutputService) {
+Sequencer Sequencer::sequencer;
+
+Sequencer::Sequencer() {
     playing = false;
     playMode = PLAY_LOOP_BAR;
     loopStart = 0;
     loopEnd = 0;
 }
 
-void Sequencer::init() {
+void Sequencer::init(MidiOutputService* midiOutputService) {
+    eventOutputService.init(midiOutputService);
     setBar(0);
 }
 

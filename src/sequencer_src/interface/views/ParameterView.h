@@ -28,7 +28,7 @@ enum class ParameterViewSelectionMode {
 class ParameterView : public View, public MidiEventHandler {
 
 public:
-    ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView);
+    ParameterView(SequenceMatrixView& _sequenceMatrixView);
     virtual void init();
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
@@ -37,7 +37,6 @@ public:
     void setBar(uint16_t _barIndex);
 
 private:
-    Sequencer& sequencer;
     SequenceMatrixView& sequenceMatrixView;
 
     bool recording;
@@ -58,8 +57,6 @@ private:
     ParameterViewMode parameterViewMode = PARAM_MODE_EVENT;
     ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_EVENT;
 
-    int8_t selectedFieldIndex = 0;
-    ParameterField* selectedField = NULL;
     AbstractParameterView* visibleParameterView;
 
     SongParameterView songParameterView;
@@ -92,14 +89,12 @@ private:
     void cycleParameterViewMode();
     void setParameterViewMode(ParameterViewMode _parameterViewMode);
     ParameterField* getSelectedField();
-    void setSelectedField(int8_t fieldIndex);
     void nextParameter();
     void prevParameter();
 
     void updateSelectedBarFields();
     void updateSelectedChannelFields();
     void updateSelectedEventFields();
-    void updateDataFromField(ParameterField* field);
 
     void addEvent();
     void addEvent(SequenceEvent* copy);
