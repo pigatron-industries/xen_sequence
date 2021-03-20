@@ -5,7 +5,7 @@
 
 #include "interface/InterfaceEvent.h"
 #include "View.h"
-#include "SequenceMatrixView.h"
+#include "matrix/SequenceMatrixView.h"
 
 enum MoveMode {
     PATTERN_MOVE,

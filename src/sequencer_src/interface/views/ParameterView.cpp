@@ -8,23 +8,13 @@
 ParameterView::ParameterView(Sequencer& _sequencer, SequenceMatrixView& _sequenceMatrixView) :
     sequencer(_sequencer),
     sequenceMatrixView(_sequenceMatrixView) {
-    songFields.addComponent(&songSpeedField);
-    songFields.addComponent(&songSpeedMultField);
-    barFields.addComponent(&barLengthField);
-    barFields.addComponent(&barSpeedField);
-    barFields.addComponent(&barSpeedMultField);
-    channelFields.addComponent(&channelMuteField);
-    eventFields.addComponent(&eventPitchField);
-    eventFields.addComponent(&eventVelocityField);
-    eventFields.addComponent(&eventGateField);
-    eventFields.addComponent(&eventDelayField);
     Hardware::midiInputService.addEventHandler(this);
 }
 
 void ParameterView::init() {
     DEBUG("ParameterView::init")
     barIndex = sequencer.getBarIndex();
-    updateSongFields();
+    songParameterView.init();
     updateSelectedBarFields();
     setParameterViewMode(parameterViewMode);
 }
@@ -34,7 +24,7 @@ void ParameterView::render(GraphicsContext& g) {
     renderMode();
 
     g.yPos += FIELD_HEIGHT;
-    visibleFields->render(g);
+    visibleParameterView->render(g);
 
     sequenceMatrixView.render();
 
@@ -80,10 +70,11 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
             if(selectedEvent == NULL) {
                 addEvent();
             }
-            eventPitchField.setValue(message.data1);
-            eventVelocityField.setValue(message.data2);
-            updateDataFromField(&eventPitchField);
-            updateDataFromField(&eventVelocityField);
+            // TODO put this code in EventParameterView
+            eventParameterView.eventPitchField.setValue(message.data1);
+            eventParameterView.eventVelocityField.setValue(message.data2);
+            updateDataFromField(&eventParameterView.eventPitchField);
+            updateDataFromField(&eventParameterView.eventVelocityField);
 
             //TODO advance to next tick depending on recoding mode
 
@@ -261,8 +252,8 @@ void ParameterView::setSelectedField(int8_t fieldIndex) {
     if(selectedField != NULL) {
         selectedField->setSelected(false);
     }
-    if(selectedFieldIndex >= 0 && visibleFields->getSize() > selectedFieldIndex) {
-        selectedField = (ParameterField*)visibleFields->getComponent(selectedFieldIndex);
+    if(selectedFieldIndex >= 0 && visibleParameterView->fields.getSize() > selectedFieldIndex) {
+        selectedField = (ParameterField*)visibleParameterView->fields.getComponent(selectedFieldIndex);
         selectedField->setSelected(true);
     } else {
         selectedField = NULL;
@@ -270,8 +261,8 @@ void ParameterView::setSelectedField(int8_t fieldIndex) {
 }
 
 ParameterField* ParameterView::getSelectedField() {
-    if(selectedFieldIndex >= 0 && visibleFields->getSize() > selectedFieldIndex) {
-        return (ParameterField*)visibleFields->getComponent(selectedFieldIndex);
+    if(selectedFieldIndex >= 0 && visibleParameterView->fields.getSize() > selectedFieldIndex) {
+        return (ParameterField*)visibleParameterView->fields.getComponent(selectedFieldIndex);
     } else {
         return NULL;
     }
@@ -279,7 +270,7 @@ ParameterField* ParameterView::getSelectedField() {
 
 void ParameterView::nextParameter() {
     int8_t newFieldIndex = selectedFieldIndex+1;
-    if(newFieldIndex >= visibleFields->getSize()) {
+    if(newFieldIndex >= visibleParameterView->fields.getSize()) {
         newFieldIndex = 0;
     }
     setSelectedField(newFieldIndex);
@@ -288,7 +279,7 @@ void ParameterView::nextParameter() {
 void ParameterView::prevParameter() {
     int8_t newFieldIndex = selectedFieldIndex-1;
     if(newFieldIndex < 0) {
-        newFieldIndex = visibleFields->getSize()-1;
+        newFieldIndex = visibleParameterView->fields.getSize()-1;
     }
     setSelectedField(newFieldIndex);
 }
@@ -335,49 +326,42 @@ void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
     this->parameterViewMode = parameterViewMode;
     switch(parameterViewMode) {
         case PARAM_MODE_SONG:
-            visibleFields = &songFields;
+            visibleParameterView = &songParameterView;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
             setSelectionMode(ParameterViewSelectionMode::SELECT_NONE);
             break;
         case PARAM_MODE_BAR:
-            visibleFields = &barFields;
+            visibleParameterView = &barParameterView;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_NONE);
             setSelectionMode(ParameterViewSelectionMode::SELECT_NONE);
             break;
         case PARAM_MODE_CHANNEL:
-            visibleFields = &channelFields;
+            visibleParameterView = &channelParameterView;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_CHANNEL);
             setSelectionMode(ParameterViewSelectionMode::SELECT_CHANNEL);
             break;
         case PARAM_MODE_EVENT:
-            visibleFields = &eventFields;
+            visibleParameterView = &eventParameterView;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_EVENT);
             setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
             updateSelectedEventFields();
             break;
     };
-    setSelectedField(visibleFields->getSize() == 0 ? -1 : 0);
+    setSelectedField(visibleParameterView->fields.getSize() == 0 ? -1 : 0);
     renderKeyLeds();
     queueRender(true);
 }
 
-void ParameterView::updateSongFields() {
-    songSpeedField.setValue(AppData::data.getSequence().getSpeed());
-    songSpeedMultField.setValue(AppData::data.getSequence().getSpeedMult());
-}
-
 void ParameterView::updateSelectedBarFields() {
     bar = AppData::data.getBar(barIndex);
-    barLengthField.setValue(bar->getLength());
-    barSpeedField.setValue(bar->getSpeedDiff());
-    barSpeedMultField.setValue(bar->getSpeedMult());
+    barParameterView.setBar(bar);
     sequenceMatrixView.setBar(barIndex);
 }
 
 void ParameterView::updateSelectedChannelFields() {
     selectedPattern = bar->getPattern(sequenceMatrixView.getSelectCursorChannel());
-    SequenceChannel selectedChannel = AppData::data.getChannel(sequenceMatrixView.getSelectCursorChannel());
-    channelMuteField.setValue(selectedChannel.getMute());
+    SequenceChannel* selectedChannel = &AppData::data.getChannel(sequenceMatrixView.getSelectCursorChannel());
+    channelParameterView.setChannel(selectedChannel);
 }
 
 void ParameterView::updateSelectedEventFields() {
@@ -387,53 +371,41 @@ void ParameterView::updateSelectedEventFields() {
     } else {
         selectedEvent = NULL;
     }
-    if(selectedEvent != NULL) {
-        eventPitchField.setValue(selectedEvent->getPitch());
-        eventVelocityField.setValue(selectedEvent->getVelocity());
-        eventGateField.setValue(selectedEvent->getGate());
-        eventDelayField.setValue(selectedEvent->getDelay());
-        for(int i = 0; i < eventFields.getSize(); i++) {
-            eventFields.getComponent(i)->setVisibility(true);
-        }
-    } else {
-        for(int i = 0; i < eventFields.getSize(); i++) {
-            eventFields.getComponent(i)->setVisibility(false);
-        }
-    }
-
+    
+    eventParameterView.setEvent(selectedEvent);
     renderKeyLeds();
     queueRender(true);
 }
 
 void ParameterView::updateDataFromField(ParameterField* field) {
     if(selectedEvent != NULL) {
-        if(field == &eventPitchField) {
-            selectedEvent->setPitch(eventPitchField.getValue());
-        } else if(field == &eventVelocityField) {
-            selectedEvent->setVelocity(eventVelocityField.getValue());
-        } else if(field == &eventGateField) {
-            selectedEvent->setGate(eventGateField.getValue());
-        } else if(field == &eventDelayField) {
-            selectedEvent->setDelay(eventDelayField.getValue());
+        if(field == &eventParameterView.eventPitchField) {
+            selectedEvent->setPitch(eventParameterView.eventPitchField.getValue());
+        } else if(field == &eventParameterView.eventVelocityField) {
+            selectedEvent->setVelocity(eventParameterView.eventVelocityField.getValue());
+        } else if(field == &eventParameterView.eventGateField) {
+            selectedEvent->setGate(eventParameterView.eventGateField.getValue());
+        } else if(field == &eventParameterView.eventDelayField) {
+            selectedEvent->setDelay(eventParameterView.eventDelayField.getValue());
         }
     }
-    if(field == &barSpeedField) {
-        bar->setSpeedDiff(barSpeedField.getValue());
+    if(field == &barParameterView.barSpeedField) {
+        bar->setSpeedDiff(barParameterView.barSpeedField.getValue());
         if(sequencer.getBarIndex() == barIndex) {
             sequencer.updateBarSpeed();
         }
-    } else if(field == &barSpeedMultField) {
-        bar->setSpeedMult(barSpeedMultField.getValue());
+    } else if(field == &barParameterView.barSpeedMultField) {
+        bar->setSpeedMult(barParameterView.barSpeedMultField.getValue());
         if(sequencer.getBarIndex() == barIndex) {
             sequencer.updateBarSpeed();
         }
-    } else if(field == &songSpeedField) {
-        AppData::data.getSequence().setSpeed(songSpeedField.getValue());
+    } else if(field == &songParameterView.songSpeedField) {
+        AppData::data.getSequence().setSpeed(songParameterView.songSpeedField.getValue());
         if(sequencer.getBarIndex() == barIndex) {
             sequencer.updateBarSpeed();
         }
-    } else if(field == &songSpeedMultField) {
-        AppData::data.getSequence().setSpeedMult(songSpeedMultField.getValue());
+    } else if(field == &songParameterView.songSpeedMultField) {
+        AppData::data.getSequence().setSpeedMult(songParameterView.songSpeedMultField.getValue());
         if(sequencer.getBarIndex() == barIndex) {
             sequencer.updateBarSpeed();
         }

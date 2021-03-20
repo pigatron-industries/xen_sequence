@@ -11,9 +11,9 @@
 #include "views/View.h"
 #include "views/SequenceView.h"
 #include "views/ParameterView.h"
-#include "views/SequenceMatrixView.h"
 #include "views/FileView.h"
 #include "views/HelpView.h"
+#include "views/matrix/SequenceMatrixView.h"
 
 class InterfaceController : public SequencerEventListener {
 

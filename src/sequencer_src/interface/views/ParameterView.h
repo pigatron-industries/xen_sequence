@@ -4,11 +4,11 @@
 #include <inttypes.h>
 
 #include "View.h"
-#include "SequenceMatrixView.h"
-#include "interface/components/field/PitchParameterField.h"
-#include "interface/components/field/IntegerParameterField.h"
-#include "interface/components/field/BooleanParameterField.h"
-#include "interface/components/ListComponent.h"
+#include "matrix/SequenceMatrixView.h"
+#include "parameters/BarParameterView.h"
+#include "parameters/ChannelParameterView.h"
+#include "parameters/EventParameterView.h"
+#include "parameters/SongParameterView.h"
 #include "sequencer/midi/MidiEventHandler.h"
 
 enum ParameterViewMode {
@@ -22,17 +22,6 @@ enum class ParameterViewSelectionMode {
     SELECT_NONE,
     SELECT_CHANNEL,
     SELECT_EVENT
-};
-
-enum Parameter {
-    PARAM_SELECT,
-    PARAM_BAR_LENGTH,
-    PARAM_BAR_BPM,
-    PARAM_CHANNEL_MUTE,
-    PARAM_EVENT_PITCH,
-    PARAM_EVENT_GATE,
-    PARAM_EVENT_DELAY,
-    PARAM_EVENT_RATCHET,
 };
 
 
@@ -71,25 +60,12 @@ private:
 
     int8_t selectedFieldIndex = 0;
     ParameterField* selectedField = NULL;
-    ListComponent* visibleFields;
+    AbstractParameterView* visibleParameterView;
 
-    ListComponent songFields;
-    IntegerParameterField songSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
-    IntegerParameterField songSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
-
-    ListComponent barFields;
-    IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
-    IntegerParameterField barSpeedField = IntegerParameterField("SPEED+", 0, 960, " BPM");
-    IntegerParameterField barSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
-
-    ListComponent channelFields;
-    BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
-
-    ListComponent eventFields;
-    PitchParameterField eventPitchField = PitchParameterField("PITCH");
-    IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
-    IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");
-    IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 100, " %");
+    SongParameterView songParameterView;
+    BarParameterView barParameterView;
+    ChannelParameterView channelParameterView;
+    EventParameterView eventParameterView;
 
     // rendering
     void renderMode();
@@ -120,7 +96,6 @@ private:
     void nextParameter();
     void prevParameter();
 
-    void updateSongFields();
     void updateSelectedBarFields();
     void updateSelectedChannelFields();
     void updateSelectedEventFields();
