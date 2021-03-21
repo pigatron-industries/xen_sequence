@@ -36,15 +36,15 @@ enum InterfaceEventType {
     KEY_PASTE,
     KEY_PLACE_2,
     //
+    KEY_FUNCTION,
     KEY_PLACE_3,
     KEY_PLACE_4,
     KEY_PLACE_5,
-    KEY_PLACE_6,
     //
-    KEY_MOVE_MODE,
     KEY_MOVE,
+    KEY_PLACE_6,
     KEY_COPY2,
-    KEY_PLACE_8,
+    KEY_PLACE_7,
     //
     SEQUENCER_TICK
 };

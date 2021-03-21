@@ -159,12 +159,21 @@ void SequenceView::renderKeyLedsMoveMode() {
                                moveMode == MoveMode::BAR_MOVE ?  LedColour::BLUE :
                                moveMode == MoveMode::BAR_COPY ?  LedColour::MAGENTA :
                                                                  LedColour::OFF;
-    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE_MODE, moveModeColour);
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, moveModeColour);
 }
 
 InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
+        case InterfaceEventType::KEY_FUNCTION:
+            if(event.data == EVENT_KEY_PRESSED) {
+                function = true;
+                Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_FUNCTION, LedColour::GREEN);
+            } else if (event.data == EVENT_KEY_RELEASED) {
+                function = false;
+                Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_FUNCTION, LedColour::OFF);
+            }
+            break;
+
         case InterfaceEventType::KEY_LOOP_START:
             loopStart();
             break;
@@ -222,16 +231,12 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
             }
             break;
 
-        case InterfaceEventType::KEY_MOVE_MODE:
-            if(event.data == EVENT_KEY_PRESSED) {
-                cycleMoveMode();
-            }
-            break;
-
         case InterfaceEventType::KEY_MOVE:
-            if(event.data == EVENT_KEY_PRESSED) {
+            if(function && event.data == EVENT_KEY_PRESSED) {
+                cycleMoveMode();
+            } else if (!function && event.data == EVENT_KEY_PRESSED) {
                 moveStart();
-            } else if (event.data == EVENT_KEY_RELEASED) {
+            } else if (!function && event.data == EVENT_KEY_RELEASED) {
                 if(moveMode == MoveMode::PATTERN_MOVE) {
                     patternMoveEnd();
                 } else if(moveMode == MoveMode::PATTERN_COPY) {
