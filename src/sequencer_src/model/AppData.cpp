@@ -126,7 +126,21 @@ SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_
     return event;
 }
 
-void AppData::deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
+SequenceTickEvents* AppData::newTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceTickEvents* copy) {
+    SequenceBar* bar = getBar(barIndex);
+    if(bar == NULL) {
+        bar = newBar(barIndex);
+    }
+    SequencePattern* pattern = bar->getPattern(channelIndex);
+    if(pattern == NULL) {
+        pattern = newPattern(barIndex, channelIndex);
+    }
+    SequenceTickEvents* tickEvents = new SequenceTickEvents(copy);
+    pattern->setTickEvents(tickIndex, tickEvents);
+    return tickEvents;
+}
+
+void AppData::deleteTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
     SequenceBar* bar = getBar(barIndex);
     if(bar == NULL) {
         return;
@@ -135,7 +149,7 @@ void AppData::deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickI
     if(pattern == NULL) {
         return;
     }
-    pattern->deleteEvent(tickIndex);
+    pattern->deleteTickEvents(tickIndex);
 }
 
 SequenceChannel& AppData::getChannel(uint8_t index) {

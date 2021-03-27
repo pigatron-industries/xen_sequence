@@ -8,9 +8,10 @@ EventParameterView::EventParameterView() {
     setSelectedField(0);
 }
 
-void EventParameterView::setEvent(SequenceEvent* event) {
-    this->event = event;
-    if(event != NULL) {
+void EventParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
+    this->tickEvents = tickEvents;
+    if(tickEvents != NULL) {
+        SequenceEvent* event = tickEvents->getEvent(0); // TODO temporarily only use first event on list
         eventPitchField.setValue(event->getPitch());
         eventVelocityField.setValue(event->getVelocity());
         eventGateField.setValue(event->getGate());
@@ -44,10 +45,13 @@ void EventParameterView::handleMidiEvent(MidiMessage message) {
         eventVelocityField.setValue(message.data2);
         updateDataFromField(&eventPitchField);
         updateDataFromField(&eventVelocityField);
+    } else if (message.command == COMMAND_CONTROL_CHANGE) {
+        //TODO
     }
 }
 
 void EventParameterView::updateDataFromField(ParameterField* field) {
+    SequenceEvent* event = tickEvents->getEvent(0); // TODO temporarily only use first event on list
     if(event != NULL) {
         if(field == &eventPitchField) {
             event->setPitch(eventPitchField.getValue());

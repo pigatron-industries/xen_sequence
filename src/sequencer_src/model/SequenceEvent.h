@@ -9,8 +9,8 @@
 enum SequenceEventFlag {
     NOTE_ON = 1,
     NOTE_OFF = 2,
-    CTRL1 = 4,
-    CTRL2 = 8
+    CONTROL1 = 4,
+    CONTROL2 = 8
 };
 
 

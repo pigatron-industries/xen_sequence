@@ -7,10 +7,10 @@ SequencePattern::~SequencePattern() {
 void SequencePattern::copy(SequencePattern* sourcePattern) {
     clear();
     for(int i = 0; i < sourcePattern->getEvents().size(); i++) {
-        SequenceEvent* sourceEvent = sourcePattern->getEvent(i);
-        if(sourceEvent != NULL) {
-            SequenceEvent* newEvent = new SequenceEvent(sourceEvent);
-            addEvent(i, newEvent);
+        SequenceTickEvents* sourceTickEvents = sourcePattern->getTickEvents(i);
+        if(sourceTickEvents != NULL) {
+            SequenceTickEvents* tickEvents = new SequenceTickEvents(sourceTickEvents);
+            setTickEvents(i, tickEvents);
         }
     }
 }
@@ -19,23 +19,38 @@ void SequencePattern::addEvent(uint8_t index, SequenceEvent* event) {
     while(events.size() <= index) {
         events.add(NULL);
     }
-    deleteEvent(index);
-    events.set(index, event);
+    SequenceTickEvents* tickEvents = events.get(index);
+    if(tickEvents == NULL) {
+        tickEvents = new SequenceTickEvents();
+        events.set(index, tickEvents);
+    }
+
+    tickEvents->addEvent(event);
 }
 
-void SequencePattern::deleteEvent(uint8_t index) {
-    SequenceEvent* existingEvent = events.get(index);
-    if(existingEvent != NULL) {
+void SequencePattern::setTickEvents(uint8_t index, SequenceTickEvents* tickEvents) {
+    while(events.size() <= index) {
+        events.add(NULL);
+    }
+    if(events.get(index) != NULL) {
+        delete events.get(index);
+    }
+    events.set(index, tickEvents);
+}
+
+void SequencePattern::deleteTickEvents(uint8_t index) {
+    SequenceTickEvents* tickEvents = events.get(index);
+    if(tickEvents != NULL) {
         events.set(index, NULL);
-        delete existingEvent;
+        delete tickEvents;
     }
 }
 
 void SequencePattern::clear() {
     for(int i = 0; i < events.size(); i++) {
-        SequenceEvent* event = events.get(i);
-        if(event != NULL) {
-            delete event;
+        SequenceTickEvents* tickEvents = events.get(i);
+        if(tickEvents != NULL) {
+            delete tickEvents;
         }
     }
     events.clear();
@@ -43,23 +58,35 @@ void SequencePattern::clear() {
 
 void SequencePattern::serialize(JsonObject doc) {
     doc["id"] = id;
-    JsonArray docEvents = doc.createNestedArray("events");
+    JsonArray docTicks = doc.createNestedArray("ticks");
     for(int i = 0; i < events.size(); i++) {
         if(events[i] != NULL) {
-            JsonObject docEvent = docEvents.createNestedObject();
-            docEvent["pos"] = i;
-            events[i]->serialize(docEvent);
+            JsonObject docTick = docTicks.createNestedObject();
+            docTick["pos"] = i;
+            JsonArray docEvents = docTick.createNestedArray("events");
+            events[i]->serialize(docEvents);
         }
     }
 }
 
 void SequencePattern::deserialize(JsonObject doc) {
     id = doc["id"];
+
+    // old version
     JsonArray docEvents = doc["events"];
     for(JsonObject docEvent : docEvents) {
         int pos = docEvent["pos"];
         SequenceEvent* event = new SequenceEvent();
         addEvent(pos, event);
         event->deserialize(docEvent);
+    }
+
+    //new version
+    JsonArray docTicks = doc["ticks"];
+    for(JsonObject docTick : docTicks) {
+        int pos = docTick["pos"];
+        SequenceTickEvents* tickEvents = new SequenceTickEvents();
+        setTickEvents(pos, tickEvents);
+        tickEvents->deserialize(docTick["events"]);
     }
 }
