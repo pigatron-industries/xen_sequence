@@ -9,15 +9,15 @@
 #include "interface/components/field/BooleanParameterField.h"
 #include "interface/components/ListComponent.h"
 #include "sequencer/midi/MidiEventHandler.h"
-#include "model/SequenceEvent.h"
+#include "model/SequenceTickEvents.h"
 
 
 class EventParameterView : public AbstractParameterView {
 
 public:
     EventParameterView();
-    void setEvent(SequenceEvent* event);
-    SequenceEvent* getEvent() { return event; }
+    void setTickEvents(SequenceTickEvents* tickEvents);
+    SequenceTickEvents* getTickEvents() { return tickEvents; }
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
     void handleMidiEvent(MidiMessage message);
 
@@ -27,7 +27,7 @@ private:
     IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");
     IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 100, " %");
 
-    SequenceEvent* event;
+    SequenceTickEvents* tickEvents;
 
     void updateDataFromField(ParameterField* field);
 };

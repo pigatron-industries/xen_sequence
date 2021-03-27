@@ -40,7 +40,7 @@ void Sequencer::pulse() {
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         SequencePattern* pattern = currentBar->getPattern(channel);
         if(pattern != NULL) {
-            SequenceEvent* event = pattern->getEvent(tickIndex);
+            SequenceTickEvents* event = pattern->getTickEvents(tickIndex);
             if(event != NULL) {
                 if(clock.getPulseCount() == 0 && event->isCompileNeeded()) {
                     eventCompiler.compileEvent(event, channel);

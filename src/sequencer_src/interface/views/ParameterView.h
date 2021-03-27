@@ -46,7 +46,7 @@ private:
     uint16_t barIndex = 0;
     SequencePattern* selectedPattern;
 
-    SequenceEvent* copiedEvent;
+    SequenceTickEvents* copiedEvent;
     bool dragging;
     int draggingFromBar;
     int draggingFromChannel;
@@ -95,7 +95,7 @@ private:
     void updateSelectedEventFields();
 
     void addEvent();
-    void addEvent(SequenceEvent* copy);
+    void addEvent(SequenceTickEvents* copy);
     void deleteEvent();
     void clearPattern();
 

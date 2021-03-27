@@ -28,8 +28,9 @@ public:
     SequenceEvent* newEvent(uint8_t tick, SequencePattern* pattern);
     SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
     SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceEvent* copy);
+    SequenceTickEvents* newTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceTickEvents* copy);
 
-    void deleteEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
+    void deleteTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
 
     SequencePattern* copyPattern(SequencePattern* sourcePattern);
     SequenceBar* copyBar(SequenceBar* sourceBar, int newBarIndex);

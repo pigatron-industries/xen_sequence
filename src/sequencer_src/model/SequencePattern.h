@@ -5,7 +5,7 @@
 #include <inttypes.h>
 #include <ArduinoJson.h>
 
-#include "SequenceEvent.h"
+#include "SequenceTickEvents.h"
 
 #define MAX_PATTERN_ID 255
 
@@ -18,10 +18,11 @@ public:
     void copy(SequencePattern* event);
 
     uint8_t getId() { return id; }
-    LinkedList<SequenceEvent*>& getEvents() { return events; }
-    SequenceEvent* getEvent(uint8_t index) { return events.get(index); };
+    LinkedList<SequenceTickEvents*>& getEvents() { return events; }
+    SequenceTickEvents* getTickEvents(uint8_t index) { return events.get(index); };
     void addEvent(uint8_t index, SequenceEvent* event);
-    void deleteEvent(uint8_t index);
+    void setTickEvents(uint8_t index, SequenceTickEvents* event);
+    void deleteTickEvents(uint8_t index);
     void clear();
 
     void serialize(JsonObject doc);
@@ -29,7 +30,7 @@ public:
 
 private:
     uint8_t id;
-    LinkedList<SequenceEvent*> events;
+    LinkedList<SequenceTickEvents*> events;
 
 };
 
