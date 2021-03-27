@@ -1,4 +1,5 @@
 #include "SequenceTickEvents.h"
+#include "event/SequenceEventFactory.h"
 
 SequenceTickEvents::~SequenceTickEvents() {
     clearEvents();
@@ -12,7 +13,7 @@ void SequenceTickEvents::copy(SequenceTickEvents* sourceTickEvents) {
     clearEvents();
     for(int i = 0; i < sourceTickEvents->getSize(); i++) {
         SequenceEvent* sourceEvent = sourceTickEvents->getEvent(i);
-        SequenceEvent* newEvent = new SequenceEvent(sourceEvent);
+        SequenceEvent* newEvent = sourceEvent->clone();
         events.add(newEvent);
     }
     compiled = false;
@@ -39,14 +40,16 @@ void SequenceTickEvents::clearEvents() {
 void SequenceTickEvents::serialize(JsonArray doc) {
     for(int i = 0; i < events.size(); i++) {
         JsonObject docEvent = doc.createNestedObject();
-        events.get(i)->serialize(docEvent);
+        SequenceEvent* event = events.get(i);
+        docEvent["type"] = event->getEventType();
+        event->serialize(docEvent);
     }
 }
 
 void SequenceTickEvents::deserialize(JsonArray doc) {
     for(JsonObject docEvent : doc) {
-        SequenceEvent* event = new SequenceEvent();
-        addEvent(event);
+        SequenceEvent* event = SequenceEventFactory::create(docEvent["type"]);
         event->deserialize(docEvent);
+        addEvent(event);
     }
 }

@@ -22,10 +22,10 @@ public:
     void handleMidiEvent(MidiMessage message);
 
 private:
+    IntegerParameterField eventStartField = IntegerParameterField("START", 0, 100, " %");
+    IntegerParameterField eventStopField = IntegerParameterField("STOP", 0, 100, " %");
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
-    IntegerParameterField eventGateField = IntegerParameterField("GATE", 0, 100, " %");
-    IntegerParameterField eventDelayField = IntegerParameterField("DELAY", 0, 100, " %");
 
     SequenceTickEvents* tickEvents;
 

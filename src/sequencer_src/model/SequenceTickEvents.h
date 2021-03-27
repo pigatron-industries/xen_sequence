@@ -1,11 +1,11 @@
-#ifndef SequenceEventList_h
-#define SequenceEventList_h
+#ifndef SequenceTickEvents_h
+#define SequenceTickEvents_h
 
 #include <LinkedList.h>
 #include <inttypes.h>
 #include <ArduinoJson.h>
 
-#include "SequenceEvent.h"
+#include "event/SequenceEvent.h"
 #include "midi/CompiledEvents.h"
 
 class SequenceTickEvents {

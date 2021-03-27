@@ -9,7 +9,6 @@
 #include "interface/components/field/BooleanParameterField.h"
 #include "interface/components/ListComponent.h"
 #include "sequencer/midi/MidiEventHandler.h"
-#include "model/SequenceEvent.h"
 
 
 class SongParameterView : public AbstractParameterView {

@@ -1,21 +1,25 @@
 #include "EventParameterView.h"
 
 EventParameterView::EventParameterView() {
+    fields.addComponent(&eventStartField);
+    fields.addComponent(&eventStopField);
     fields.addComponent(&eventPitchField);
     fields.addComponent(&eventVelocityField);
-    fields.addComponent(&eventGateField);
-    fields.addComponent(&eventDelayField);
     setSelectedField(0);
 }
+
+#include "model/event/NoteEvent.h"
 
 void EventParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
     this->tickEvents = tickEvents;
     if(tickEvents != NULL) {
-        SequenceEvent* event = tickEvents->getEvent(0); // TODO temporarily only use first event on list
+        NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); // TODO temporarily only use first event on list
+
+        eventStartField.setValue(event->getStart());
+        eventStopField.setValue(event->getStop());
         eventPitchField.setValue(event->getPitch());
         eventVelocityField.setValue(event->getVelocity());
-        eventGateField.setValue(event->getGate());
-        eventDelayField.setValue(event->getDelay());
+        
         for(int i = 0; i < fields.getSize(); i++) {
             fields.getComponent(i)->setVisibility(true);
         }
@@ -51,16 +55,17 @@ void EventParameterView::handleMidiEvent(MidiMessage message) {
 }
 
 void EventParameterView::updateDataFromField(ParameterField* field) {
-    SequenceEvent* event = tickEvents->getEvent(0); // TODO temporarily only use first event on list
+    // TODO temporarily only use first event on list
+    NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); 
     if(event != NULL) {
-        if(field == &eventPitchField) {
+        if(field == &eventStartField) {
+            event->setStart(eventStartField.getValue());
+        } else if(field == &eventStopField) {
+            event->setStop(eventStopField.getValue());
+        } else if(field == &eventPitchField) {
             event->setPitch(eventPitchField.getValue());
         } else if(field == &eventVelocityField) {
             event->setVelocity(eventVelocityField.getValue());
-        } else if(field == &eventGateField) {
-            event->setGate(eventGateField.getValue());
-        } else if(field == &eventDelayField) {
-            event->setDelay(eventDelayField.getValue());
         }
         tickEvents->setCompiled(false);
     }

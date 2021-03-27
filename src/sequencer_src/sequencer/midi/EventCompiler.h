@@ -13,7 +13,6 @@ public:
 
 private:
     void clearCompiledEvent(CompiledEvents& event);
-    void compileEvent(CompiledEvents& messages, SequenceEvent* event, uint8_t channel);
 
 };
 

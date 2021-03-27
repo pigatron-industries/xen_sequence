@@ -1,5 +1,6 @@
 #include "AppData.h"
 #include "lib/util/debug.h"
+#include "model/event/SequenceEventFactory.h"
 
 #include <Arduino.h>
 
@@ -92,11 +93,11 @@ uint8_t AppData::getUnusedPatternId() {
     return 0;
 }
 
-SequenceEvent* AppData::newEvent(uint8_t tick, SequencePattern* pattern) {
-    SequenceEvent* event = new SequenceEvent();
-    pattern->addEvent(tick, event);
-    return event;
-}
+// SequenceEvent* AppData::newEvent(uint8_t tick, SequencePattern* pattern) {
+//     SequenceEvent* event = new SequenceEvent();
+//     pattern->addEvent(tick, event);
+//     return event;
+// }
 
 SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
     SequenceBar* bar = getBar(barIndex);
@@ -107,24 +108,24 @@ SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_
     if(pattern == NULL) {
         pattern = newPattern(barIndex, channelIndex);
     }
-    SequenceEvent* event = new SequenceEvent();
+    SequenceEvent* event = SequenceEventFactory::create(EventType::NOTE_EVENT);
     pattern->addEvent(tickIndex, event);
     return event;
 }
 
-SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceEvent* copy) {
-    SequenceBar* bar = getBar(barIndex);
-    if(bar == NULL) {
-        bar = newBar(barIndex);
-    }
-    SequencePattern* pattern = bar->getPattern(channelIndex);
-    if(pattern == NULL) {
-        pattern = newPattern(barIndex, channelIndex);
-    }
-    SequenceEvent* event = new SequenceEvent(copy);
-    pattern->addEvent(tickIndex, event);
-    return event;
-}
+// SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceEvent* copy) {
+//     SequenceBar* bar = getBar(barIndex);
+//     if(bar == NULL) {
+//         bar = newBar(barIndex);
+//     }
+//     SequencePattern* pattern = bar->getPattern(channelIndex);
+//     if(pattern == NULL) {
+//         pattern = newPattern(barIndex, channelIndex);
+//     }
+//     SequenceEvent* event = new SequenceEvent(copy);
+//     pattern->addEvent(tickIndex, event);
+//     return event;
+// }
 
 SequenceTickEvents* AppData::newTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceTickEvents* copy) {
     SequenceBar* bar = getBar(barIndex);

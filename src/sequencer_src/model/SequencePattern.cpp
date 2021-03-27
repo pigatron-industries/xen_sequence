@@ -1,4 +1,5 @@
 #include "SequencePattern.h"
+#include "model/event/SequenceEventFactory.h"
 
 SequencePattern::~SequencePattern() {
     clear();
@@ -76,7 +77,7 @@ void SequencePattern::deserialize(JsonObject doc) {
     JsonArray docEvents = doc["events"];
     for(JsonObject docEvent : docEvents) {
         int pos = docEvent["pos"];
-        SequenceEvent* event = new SequenceEvent();
+        SequenceEvent* event = SequenceEventFactory::create(docEvent["type"]);
         addEvent(pos, event);
         event->deserialize(docEvent);
     }
