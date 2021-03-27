@@ -42,13 +42,11 @@ void Sequencer::pulse() {
         if(pattern != NULL) {
             SequenceTickEvents* tickEvents = pattern->getTickEvents(tickIndex);
             if(tickEvents != NULL) {
-                SequenceEvent* event = tickEvents->getEvent(0); // TODO process all events in list
-                if(event != NULL) {
-                    if(clock.getPulseCount() == 0 && event->isCompileNeeded()) {
-                        eventCompiler.compileEvent(event, channel);
-                    }
-                    eventOutputService.event(channel, clock.getPulseCount(), event);
+                if(clock.getPulseCount() == 0 && !tickEvents->isCompiled()) {
+                    eventCompiler.compileTickEvents(tickEvents, channel);
                 }
+                
+                eventOutputService.event(channel, clock.getPulseCount(), tickEvents);
             }
         }
     }

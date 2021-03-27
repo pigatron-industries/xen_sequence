@@ -62,5 +62,6 @@ void EventParameterView::updateDataFromField(ParameterField* field) {
         } else if(field == &eventDelayField) {
             event->setDelay(eventDelayField.getValue());
         }
+        tickEvents->setCompiled(false);
     }
 }

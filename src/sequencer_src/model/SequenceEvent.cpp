@@ -5,7 +5,6 @@ SequenceEvent::SequenceEvent() {
     velocity = 64;
     gate = 48;
     delay = 0;
-    compileNeeded = true;
 }
 
 SequenceEvent::SequenceEvent(SequenceEvent* event) {
@@ -17,7 +16,6 @@ void SequenceEvent::copy(SequenceEvent* event) {
     velocity = event->velocity;
     gate = event->gate;
     delay = event->delay;
-    compileNeeded = true;
 }
 
 void SequenceEvent::serialize(JsonObject doc) {

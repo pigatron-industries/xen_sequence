@@ -15,14 +15,17 @@ void SequenceTickEvents::copy(SequenceTickEvents* sourceTickEvents) {
         SequenceEvent* newEvent = new SequenceEvent(sourceEvent);
         events.add(newEvent);
     }
+    compiled = false;
 }
 
 void SequenceTickEvents::addEvent(SequenceEvent* event) {
     events.add(event);
+    compiled = false;
 }
 
 void SequenceTickEvents::deleteEvent(int index) {
     delete events.remove(index);
+    compiled = false;
 }
 
 void SequenceTickEvents::clearEvents() {
@@ -30,6 +33,7 @@ void SequenceTickEvents::clearEvents() {
         delete events.get(i);
     }
     events.clear();
+    compiled = false;
 }
 
 void SequenceTickEvents::serialize(JsonArray doc) {

@@ -1,6 +1,5 @@
 #include "MidiInputService.h"
 #include "HardwareSerial.h"
-#include "MidiConstants.h"
 
 #include "hwconfig.h"
 #include "lib/util/debug.h"

@@ -3,16 +3,17 @@
 
 #include <inttypes.h>
 
-#include "model/SequenceEvent.h"
+#include "model/SequenceTickEvents.h"
 
 class EventCompiler {
 
 public:
     EventCompiler();
-    void compileEvent(SequenceEvent* event, uint8_t channel);
+    void compileTickEvents(SequenceTickEvents* event, uint8_t channel);
 
 private:
-    void clearCompiledEvent(CompiledEvent& event);
+    void clearCompiledEvent(CompiledEvents& event);
+    void compileEvent(CompiledEvents& messages, SequenceEvent* event, uint8_t channel);
 
 };
 

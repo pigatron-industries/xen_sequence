@@ -7,14 +7,14 @@ void EventOutputService::init(MidiOutputService* midiOutputService) {
     this->midiOutputService = midiOutputService;
 }
 
-void EventOutputService::event(uint8_t channel, uint16_t pulseCount, SequenceEvent* event) {
-    CompiledEvent& compiledEvent = event->getCompiledEvent();
+void EventOutputService::event(uint8_t channel, uint16_t pulseCount, SequenceTickEvents* tickEvents) {
+    CompiledEvents& compiledEvents = tickEvents->getCompiledEvents();
     if(pulseCount == 0) {
-        compiledEvent.reset();
+        compiledEvents.reset();
     }
 
     MidiMessage* message;
-    while((message = compiledEvent.getNextMessageAtPulse(pulseCount)) != NULL) {
+    while((message = compiledEvents.getNextMessageAtPulse(pulseCount)) != NULL) {
         midiOutputService->sendMessage(*message);
     }
 }

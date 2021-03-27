@@ -1,7 +1,7 @@
 #ifndef MidiEventHandler_h
 #define MidiEventHandler_h
 
-#include "MidiMessage.h"
+#include "model/midi/MidiMessage.h"
 
 class MidiEventHandler {
     public:

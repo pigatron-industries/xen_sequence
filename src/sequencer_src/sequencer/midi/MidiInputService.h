@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 #include <Arduino.h>
-#include "MidiMessage.h"
+#include "model/midi/MidiMessage.h"
 #include "MidiEventHandler.h"
 
 #define SYSEX_BUFFER_SIZE 100

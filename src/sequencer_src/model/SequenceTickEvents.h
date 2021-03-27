@@ -6,6 +6,7 @@
 #include <ArduinoJson.h>
 
 #include "SequenceEvent.h"
+#include "midi/CompiledEvents.h"
 
 class SequenceTickEvents {
 
@@ -21,11 +22,17 @@ public:
     void deleteEvent(int index);
     void clearEvents();
 
+    CompiledEvents& getCompiledEvents() { return compiledEvents; }
+    bool isCompiled() { return compiled; }
+    void setCompiled(bool compiled) { this->compiled = compiled; }
+
     void serialize(JsonArray doc);
     void deserialize(JsonArray doc);
 
 private:
     LinkedList<SequenceEvent*> events;
+    CompiledEvents compiledEvents;
+    bool compiled = false;
 
     void copy(SequenceTickEvents* sourceTickEvents);
 
