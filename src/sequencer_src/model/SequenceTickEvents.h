@@ -11,7 +11,7 @@ class SequenceTickEvents {
 
 public:
     SequenceTickEvents() {}
-    SequenceTickEvents(SequenceTickEvents* tickEvents);
+    SequenceTickEvents(SequenceTickEvents* sourceTickEvents);
     ~SequenceTickEvents();
 
     SequenceEvent* getEvent(int index) { return events.get(index); }
@@ -19,6 +19,7 @@ public:
 
     void addEvent(SequenceEvent* event);
     void deleteEvent(int index);
+    void clearEvents();
 
     void serialize(JsonArray doc);
     void deserialize(JsonArray doc);
@@ -26,7 +27,7 @@ public:
 private:
     LinkedList<SequenceEvent*> events;
 
-    void copy(SequenceTickEvents* tickEvents);
+    void copy(SequenceTickEvents* sourceTickEvents);
 
 };
 

@@ -1,29 +1,48 @@
 #include "SequenceTickEvents.h"
 
 SequenceTickEvents::~SequenceTickEvents() {
-    //TODO delete all events
+    clearEvents();
 }
 
-SequenceTickEvents::SequenceTickEvents(SequenceTickEvents* tickEvents) {
-    copy(tickEvents);
+SequenceTickEvents::SequenceTickEvents(SequenceTickEvents* sourceTickEvents) {
+    copy(sourceTickEvents);
 }
 
-void copy(SequenceTickEvents* tickEvents) {
-
+void SequenceTickEvents::copy(SequenceTickEvents* sourceTickEvents) {
+    clearEvents();
+    for(int i = 0; i < sourceTickEvents->getSize(); i++) {
+        SequenceEvent* sourceEvent = sourceTickEvents->getEvent(i);
+        SequenceEvent* newEvent = new SequenceEvent(sourceEvent);
+        events.add(newEvent);
+    }
 }
 
-void addEvent(SequenceEvent* event) {
-    //TODO
+void SequenceTickEvents::addEvent(SequenceEvent* event) {
+    events.add(event);
 }
 
-void deleteEvent(int index) {
-    //TODO
+void SequenceTickEvents::deleteEvent(int index) {
+    delete events.remove(index);
 }
 
-void serialize(JsonArray doc) {
-    //TODO
+void SequenceTickEvents::clearEvents() {
+    for(int i = 0; i < events.size(); i++) {
+        delete events.get(i);
+    }
+    events.clear();
 }
 
-void deserialize(JsonArray doc) {
-    ///TODO
+void SequenceTickEvents::serialize(JsonArray doc) {
+    for(int i = 0; i < events.size(); i++) {
+        JsonObject docEvent = doc.createNestedObject();
+        events.get(i)->serialize(docEvent);
+    }
+}
+
+void SequenceTickEvents::deserialize(JsonArray doc) {
+    for(JsonObject docEvent : doc) {
+        SequenceEvent* event = new SequenceEvent();
+        addEvent(event);
+        event->deserialize(docEvent);
+    }
 }
