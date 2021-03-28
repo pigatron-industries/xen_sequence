@@ -21,17 +21,19 @@ public:
 	Colour() {}
 	Colour(int16_t _r, int16_t _g, int16_t _b) : r(_r), g(_g), b(_b) {}
 
-    static Colour WHITE;
-    static Colour BLACK;
-    static Colour RED;
-    static Colour GREEN;
-    static Colour BLUE;
-    static Colour YELLOW;
-    static Colour PURPLE;
-    static Colour CYAN;
+    static const Colour WHITE;
+    static const Colour BLACK;
+    static const Colour RED;
+    static const Colour GREEN;
+    static const Colour BLUE;
+    static const Colour YELLOW;
+    static const Colour PURPLE;
+    static const Colour CYAN;
 
-    static Colour ORANGE;
+    static const Colour ORANGE;
+    static const Colour DARK_RED;
 };
+
 
 
 class Display : public Print {

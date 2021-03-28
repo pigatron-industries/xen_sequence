@@ -13,19 +13,6 @@ void SongParameterView::init() {
     songSpeedMultField.setValue(AppData::data.getSequence().getSpeedMult());
 }
 
-InterfaceEvent SongParameterView::handleEvent(InterfaceEvent event) {
-    AbstractParameterView::handleEvent(event);
-    switch(event.eventType) {
-        case InterfaceEventType::DATA_DECREMENT:
-        case InterfaceEventType::DATA_INCREMENT:
-            updateDataFromField(selectedField);
-            break;
-        default:
-            break;
-    }
-    return InterfaceEvent::NONE;
-}
-
 void SongParameterView::updateDataFromField(ParameterField* field) {
     if(field == &songSpeedField) {
         AppData::data.getSequence().setSpeed(songSpeedField.getValue());

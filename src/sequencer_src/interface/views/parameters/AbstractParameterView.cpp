@@ -7,28 +7,39 @@ void AbstractParameterView::init() {
 
 void AbstractParameterView::render(GraphicsContext& g) {
     DEBUG("AbstractParameterView::render");
-    Serial.println(g.yPos);
     fields.render(g);
 }
 
 InterfaceEvent AbstractParameterView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::DATA_PRESS:
-            nextParameter();
+            changeSelectMode();
             break;
 
         case InterfaceEventType::DATA_INCREMENT:
-            fieldIncrement(event.data);
+            if(ParameterField::selectMode == ParameterField::SelectMode::VALUE) {
+                fieldIncrement(event.data);
+            } else {
+                nextParameter();
+            }
             break;
 
         case InterfaceEventType::DATA_DECREMENT:
-            fieldDecrement(event.data);
+            if(ParameterField::selectMode == ParameterField::SelectMode::VALUE) {
+                fieldDecrement(event.data);
+            } else {
+                prevParameter();
+            }
             break;
 
         default:
             break;
     }
     return InterfaceEvent::NONE;
+}
+
+void AbstractParameterView::changeSelectMode() {
+    selectedField->setSelectMode(ParameterField::selectMode == ParameterField::SelectMode::FIELD ? ParameterField::SelectMode::VALUE : ParameterField::SelectMode::FIELD);
 }
 
 void AbstractParameterView::prevParameter() {
@@ -60,7 +71,7 @@ void AbstractParameterView::setSelectedField(int index) {
 void AbstractParameterView::fieldIncrement(int amount) {
     if(selectedField != NULL) {
         selectedField->increment(amount);
-        //updateDataFromField(field);
+        updateDataFromField(selectedField);
         //queueRender();
     }
 }
@@ -68,7 +79,7 @@ void AbstractParameterView::fieldIncrement(int amount) {
 void AbstractParameterView::fieldDecrement(int amount) {
     if(selectedField != NULL) {
         selectedField->decrement(amount);
-        //updateDataFromField(field);
+        updateDataFromField(selectedField);
         //queueRender();
     }
 }

@@ -18,8 +18,10 @@ public:
     EventParameterView();
     void setTickEvents(SequenceTickEvents* tickEvents);
     SequenceTickEvents* getTickEvents() { return tickEvents; }
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
     void handleMidiEvent(MidiMessage message);
+
+protected:
+    virtual void updateDataFromField(ParameterField* field);
 
 private:
     IntegerParameterField eventStartField = IntegerParameterField("START", 0, 100, " %");
@@ -29,7 +31,6 @@ private:
 
     SequenceTickEvents* tickEvents;
 
-    void updateDataFromField(ParameterField* field);
 };
 
 #endif

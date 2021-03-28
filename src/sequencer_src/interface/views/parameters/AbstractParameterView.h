@@ -24,6 +24,8 @@ protected:
     int8_t selectedFieldIndex = 0;
     ParameterField* selectedField = NULL;
 
+    virtual void updateDataFromField(ParameterField* field) = 0;
+    void changeSelectMode();
     void prevParameter();
     void nextParameter();
     void setSelectedField(int index);

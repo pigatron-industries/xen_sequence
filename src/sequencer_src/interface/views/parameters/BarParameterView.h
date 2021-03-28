@@ -18,7 +18,9 @@ public:
     BarParameterView();
     void setBar(SequenceBar* bar);
     SequenceBar* getBar() { return bar; }
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
+
+protected:
+    virtual void updateDataFromField(ParameterField* field);
 
 private:
     IntegerParameterField barLengthField = IntegerParameterField("LENGTH", 1, 255);
@@ -27,7 +29,6 @@ private:
 
     SequenceBar* bar;
 
-    void updateDataFromField(ParameterField* field);
 };
 
 #endif

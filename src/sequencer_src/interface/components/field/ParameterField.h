@@ -13,6 +13,12 @@
 class ParameterField : public Component {
 
 public:
+    enum SelectMode {
+        FIELD,
+        VALUE
+    };
+    static SelectMode selectMode;
+
     ParameterField(const char* _name);
     virtual void increment(int16_t amount) = 0;
     virtual void decrement(int16_t amount) = 0;
@@ -20,10 +26,12 @@ public:
 
     void setSelected(bool _selected) { selected = _selected; dirtyValue = true; }
     void setDirty() { dirtyLabel = true; dirtyValue = true; }
+    void setSelectMode(SelectMode selectMode);
 
 protected:
     const char* name;
     bool selected = false;
+
     bool dirtyLabel = true;
     bool dirtyValue = true;
 

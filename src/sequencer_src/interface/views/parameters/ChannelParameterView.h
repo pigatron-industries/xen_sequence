@@ -17,14 +17,15 @@ class ChannelParameterView : public AbstractParameterView {
 public:
     ChannelParameterView();
     void setChannel(SequenceChannel* channel);
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
+
+protected:
+    virtual void updateDataFromField(ParameterField* field);
 
 private:
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
 
     SequenceChannel* channel;
 
-    void updateDataFromField(ParameterField* field);
 };
 
 #endif

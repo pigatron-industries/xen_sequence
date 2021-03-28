@@ -16,13 +16,14 @@ class SongParameterView : public AbstractParameterView {
 public:
     SongParameterView();
     virtual void init();
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
+
+protected:
+    virtual void updateDataFromField(ParameterField* field);
 
 private:
     IntegerParameterField songSpeedField = IntegerParameterField("SPEED", 30, 960, " BPM");
     IntegerParameterField songSpeedMultField = IntegerParameterField("SPEEDX", 0, 4, "");
 
-    void updateDataFromField(ParameterField* field);
 };
 
 #endif

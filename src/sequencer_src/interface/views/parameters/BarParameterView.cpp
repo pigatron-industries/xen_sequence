@@ -15,19 +15,6 @@ void BarParameterView::setBar(SequenceBar* bar) {
     barSpeedMultField.setValue(bar->getSpeedMult());
 }
 
-InterfaceEvent BarParameterView::handleEvent(InterfaceEvent event) {
-    AbstractParameterView::handleEvent(event);
-    switch(event.eventType) {
-        case InterfaceEventType::DATA_DECREMENT:
-        case InterfaceEventType::DATA_INCREMENT:
-            updateDataFromField(selectedField);
-            break;
-        default:
-            break;
-    }
-    return InterfaceEvent::NONE;
-}
-
 void BarParameterView::updateDataFromField(ParameterField* field) {
     if(field == &barSpeedField) {
         bar->setSpeedDiff(barSpeedField.getValue());

@@ -30,19 +30,6 @@ void EventParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
     }
 }
 
-InterfaceEvent EventParameterView::handleEvent(InterfaceEvent event) {
-    AbstractParameterView::handleEvent(event);
-    switch(event.eventType) {
-        case InterfaceEventType::DATA_DECREMENT:
-        case InterfaceEventType::DATA_INCREMENT:
-            updateDataFromField(selectedField);
-            break;
-        default:
-            break;
-    }
-    return InterfaceEvent::NONE;
-}
-
 void EventParameterView::handleMidiEvent(MidiMessage message) {
     if(message.command == COMMAND_NOTEON) {
         eventPitchField.setValue(message.data1);
