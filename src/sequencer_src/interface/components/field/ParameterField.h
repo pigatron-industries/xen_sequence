@@ -6,9 +6,12 @@
 
 #define FIELD_HEIGHT 11
 #define TEXT_HEIGHT 7
-#define FIELD_NAME_WIDTH 45
-#define FIELD_VALUE_WIDTH 45
+#define FIELD_NAME_WIDTH 48
+#define FIELD_VALUE_WIDTH 80
 #define FIELD_WIDTH 128 // TODO get max width of display
+
+#define VALUE_COLOUR Colour::YELLOW
+#define SELECTED_COLOUR Colour::ORANGE
 
 class ParameterField : public Component {
 

@@ -79,13 +79,9 @@ void RangeParameterField::render(GraphicsContext& g) {
 }
 
 Colour RangeParameterField::valueColour(Value value) {
-    if(selected) {
-        if(value == selectedValue) {
-            return Colour::DARK_RED;
-        } else {
-            return Colour::BLACK;
-        }
+    if(value == selectedValue) {
+        return SELECTED_COLOUR;
     } else {
-        return Colour::YELLOW;
+        return VALUE_COLOUR;
     }
 }
