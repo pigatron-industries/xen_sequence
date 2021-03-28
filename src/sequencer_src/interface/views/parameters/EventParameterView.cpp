@@ -1,8 +1,7 @@
 #include "EventParameterView.h"
 
 EventParameterView::EventParameterView() {
-    fields.addComponent(&eventStartField);
-    fields.addComponent(&eventStopField);
+    fields.addComponent(&noteOnOffField);
     fields.addComponent(&eventPitchField);
     fields.addComponent(&eventVelocityField);
     setSelectedField(0);
@@ -15,8 +14,8 @@ void EventParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
     if(tickEvents != NULL) {
         NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); // TODO temporarily only use first event on list
 
-        eventStartField.setValue(event->getStart());
-        eventStopField.setValue(event->getStop());
+        noteOnOffField.setMinValue(event->getStart());
+        noteOnOffField.setMaxValue(event->getStop());
         eventPitchField.setValue(event->getPitch());
         eventVelocityField.setValue(event->getVelocity());
         
@@ -45,10 +44,9 @@ void EventParameterView::updateDataFromField(ParameterField* field) {
     // TODO temporarily only use first event on list
     NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); 
     if(event != NULL) {
-        if(field == &eventStartField) {
-            event->setStart(eventStartField.getValue());
-        } else if(field == &eventStopField) {
-            event->setStop(eventStopField.getValue());
+        if(field == &noteOnOffField) {
+            event->setStart(noteOnOffField.getMinValue());
+            event->setStop(noteOnOffField.getMaxValue());
         } else if(field == &eventPitchField) {
             event->setPitch(eventPitchField.getValue());
         } else if(field == &eventVelocityField) {

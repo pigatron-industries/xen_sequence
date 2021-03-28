@@ -22,8 +22,8 @@ public:
     ParameterField(const char* _name);
     virtual void increment(int16_t amount) = 0;
     virtual void decrement(int16_t amount) = 0;
-    virtual void render(GraphicsContext& graphicsContext);
     virtual void changeSelectMode();
+    virtual void render(GraphicsContext& graphicsContext);
 
     void setSelected(bool _selected) { selected = _selected; dirtyValue = true; }
     void setDirty() { dirtyLabel = true; dirtyValue = true; }
@@ -34,6 +34,8 @@ protected:
 
     bool dirtyLabel = true;
     bool dirtyValue = true;
+
+
 
 };
 

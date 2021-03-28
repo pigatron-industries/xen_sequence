@@ -7,6 +7,7 @@
 #include "interface/components/field/PitchParameterField.h"
 #include "interface/components/field/IntegerParameterField.h"
 #include "interface/components/field/BooleanParameterField.h"
+#include "interface/components/field/RangeParameterField.h"
 #include "interface/components/ListComponent.h"
 #include "sequencer/midi/MidiEventHandler.h"
 #include "model/SequenceTickEvents.h"
@@ -24,8 +25,7 @@ protected:
     virtual void updateDataFromField(ParameterField* field);
 
 private:
-    IntegerParameterField eventStartField = IntegerParameterField("START", 0, 100, " %");
-    IntegerParameterField eventStopField = IntegerParameterField("STOP", 0, 100, " %");
+    RangeParameterField noteOnOffField = RangeParameterField("ON/OFF", 0, 100);
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
 
