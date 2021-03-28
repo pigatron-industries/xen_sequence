@@ -23,10 +23,10 @@ public:
     virtual void increment(int16_t amount) = 0;
     virtual void decrement(int16_t amount) = 0;
     virtual void render(GraphicsContext& graphicsContext);
+    virtual void changeSelectMode();
 
     void setSelected(bool _selected) { selected = _selected; dirtyValue = true; }
     void setDirty() { dirtyLabel = true; dirtyValue = true; }
-    void setSelectMode(SelectMode selectMode);
 
 protected:
     const char* name;

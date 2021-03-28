@@ -25,7 +25,6 @@ protected:
     ParameterField* selectedField = NULL;
 
     virtual void updateDataFromField(ParameterField* field) = 0;
-    void changeSelectMode();
     void prevParameter();
     void nextParameter();
     void setSelectedField(int index);

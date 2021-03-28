@@ -13,7 +13,7 @@ void AbstractParameterView::render(GraphicsContext& g) {
 InterfaceEvent AbstractParameterView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::DATA_PRESS:
-            changeSelectMode();
+            selectedField->changeSelectMode();
             break;
 
         case InterfaceEventType::DATA_INCREMENT:
@@ -36,10 +36,6 @@ InterfaceEvent AbstractParameterView::handleEvent(InterfaceEvent event) {
             break;
     }
     return InterfaceEvent::NONE;
-}
-
-void AbstractParameterView::changeSelectMode() {
-    selectedField->setSelectMode(ParameterField::selectMode == ParameterField::SelectMode::FIELD ? ParameterField::SelectMode::VALUE : ParameterField::SelectMode::FIELD);
 }
 
 void AbstractParameterView::prevParameter() {

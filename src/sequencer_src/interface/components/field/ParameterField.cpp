@@ -34,7 +34,7 @@ void ParameterField::render(GraphicsContext& g) {
     Hardware::display.setCursor(FIELD_NAME_WIDTH, g.yPos+TEXT_HEIGHT);
 }
 
-void ParameterField::setSelectMode(SelectMode selectMode) {
-    ParameterField::selectMode = selectMode;
+void ParameterField::changeSelectMode() {
+    ParameterField::selectMode = ParameterField::selectMode == ParameterField::SelectMode::FIELD ? ParameterField::SelectMode::VALUE : ParameterField::SelectMode::FIELD;
     dirtyValue = true;
 }
