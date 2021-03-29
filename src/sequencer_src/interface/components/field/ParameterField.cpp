@@ -22,9 +22,9 @@ void ParameterField::render(GraphicsContext& g) {
     }
 
     if(dirtyValue || g.full) {
-        Hardware::display.fillRect(FIELD_NAME_WIDTH-2, g.yPos+1, FIELD_VALUE_WIDTH, TEXT_HEIGHT+2, Colour::BLACK);
+        Hardware::display.fillRect(FIELD_NAME_WIDTH-2, g.yPos, FIELD_VALUE_WIDTH+2, height, Colour::BLACK);
         if(selected) {
-            Hardware::display.drawRect(FIELD_NAME_WIDTH-2, g.yPos+1, FIELD_VALUE_WIDTH, TEXT_HEIGHT+2, selectMode == SelectMode::FIELD ? SELECTED_COLOUR : VALUE_COLOUR);
+            Hardware::display.drawRect(FIELD_NAME_WIDTH-2, g.yPos, FIELD_VALUE_WIDTH+2, height, selectMode == SelectMode::FIELD ? SELECTED_COLOUR : VALUE_COLOUR);
             Hardware::display.setTextColour(selectMode == SelectMode::FIELD ? VALUE_COLOUR : SELECTED_COLOUR);
         } else {
             Hardware::display.setTextColour(VALUE_COLOUR);

@@ -67,12 +67,22 @@ void RangeParameterField::render(GraphicsContext& g) {
     if(visible) {
         ParameterField::render(g);
         if(dirtyValue || g.full) {
-            Hardware::display.setTextColour(valueColour(Value::MIN));
-            Hardware::display.print(minValue);
-            Hardware::display.setTextColour(Colour::BLACK);
-            Hardware::display.print(" - ");
-            Hardware::display.setTextColour(valueColour(Value::MAX));
-            Hardware::display.print(maxValue);
+
+            //TODO calculate x positions properly
+            int minPos = FIELD_NAME_WIDTH;
+            int maxPos = FIELD_WIDTH;
+            int minValuePos = FIELD_NAME_WIDTH+minValue;
+            int maxValuePos = FIELD_NAME_WIDTH+maxValue;
+            Hardware::display.fillRect(minValuePos, g.yPos+2, maxValuePos-minValuePos, height-4, Colour::YELLOW);
+            Hardware::display.drawLine(minValuePos, g.yPos+2, minValuePos, g.yPos+height-3, valueColour(Value::MIN));
+            Hardware::display.drawLine(maxValuePos, g.yPos+2, maxValuePos, g.yPos+height-3, valueColour(Value::MAX));
+
+            // Hardware::display.setTextColour(valueColour(Value::MIN));
+            // Hardware::display.print(minValue);
+            // Hardware::display.setTextColour(Colour::BLACK);
+            // Hardware::display.print(" - ");
+            // Hardware::display.setTextColour(valueColour(Value::MAX));
+            // Hardware::display.print(maxValue);
             dirtyValue = false;
         }
     }
