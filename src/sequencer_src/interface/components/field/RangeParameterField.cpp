@@ -1,35 +1,36 @@
 #include "RangeParameterField.h"
 
 RangeParameterField::RangeParameterField(const char* name, int16_t min, int16_t max) :
-    ParameterField(name) {
+    ParameterField(name), 
+    scale(min, max, FIELD_NAME_WIDTH, FIELD_WIDTH-3) {
         this->min = min;
         this->max = max;
         selectedValue = Value::NONE;
 }
 
-void RangeParameterField::setMinValue(int16_t minVvalue) { 
-    this->minValue = minValue; 
+void RangeParameterField::setStartValue(int16_t startValue) { 
+    this->startValue = startValue; 
     dirtyValue = true; 
 }
 
-void RangeParameterField::setMaxValue(int16_t maxValue) { 
-    this->maxValue = maxValue; 
-    if(this->maxValue <= minValue) {
-        this->maxValue = minValue + 1;
+void RangeParameterField::setStopValue(int16_t stopValue) { 
+    this->stopValue = stopValue; 
+    if(this->stopValue <= startValue) {
+        this->stopValue = startValue + 1;
     }
-    dirtyValue = true; 
+    dirtyValue = true;
 }
 
 void RangeParameterField::increment(int16_t amount) {
     if(selectedValue == Value::MIN) {
-        minValue += amount;
-        if(minValue >= maxValue) {
-            minValue = maxValue - 1;
+        startValue += amount;
+        if(startValue >= stopValue) {
+            startValue = stopValue - 1;
         }
     } else {
-        maxValue += amount;
-        if(maxValue > max) {
-            maxValue = max;
+        stopValue += amount;
+        if(stopValue > max) {
+            stopValue = max;
         }
     }
     dirtyValue = true;
@@ -37,14 +38,14 @@ void RangeParameterField::increment(int16_t amount) {
 
 void RangeParameterField::decrement(int16_t amount) {
     if(selectedValue == Value::MIN) {
-        minValue -= amount;
-        if(minValue < min) {
-            minValue = min;
+        startValue -= amount;
+        if(startValue < min) {
+            startValue = min;
         }
     } else {
-        maxValue -= amount;
-        if(maxValue <= minValue) {
-            maxValue = minValue + 1;
+        stopValue -= amount;
+        if(stopValue <= startValue) {
+            stopValue = startValue + 1;
         }
     }
     dirtyValue = true;
@@ -68,14 +69,11 @@ void RangeParameterField::render(GraphicsContext& g) {
         ParameterField::render(g);
         if(dirtyValue || g.full) {
 
-            //TODO calculate x positions properly
-            int minPos = FIELD_NAME_WIDTH;
-            int maxPos = FIELD_WIDTH;
-            int minValuePos = FIELD_NAME_WIDTH+minValue;
-            int maxValuePos = FIELD_NAME_WIDTH+maxValue;
-            Hardware::display.fillRect(minValuePos, g.yPos+2, maxValuePos-minValuePos, height-4, Colour::YELLOW);
-            Hardware::display.drawLine(minValuePos, g.yPos+2, minValuePos, g.yPos+height-3, valueColour(Value::MIN));
-            Hardware::display.drawLine(maxValuePos, g.yPos+2, maxValuePos, g.yPos+height-3, valueColour(Value::MAX));
+            int startPos = scale.convert(startValue);
+            int stopPos = scale.convert(stopValue);
+            Hardware::display.fillRect(startPos, g.yPos+2, stopPos-startPos, height-4, Colour::YELLOW);
+            Hardware::display.drawLine(startPos, g.yPos+2, startPos, g.yPos+height-3, valueColour(Value::MIN));
+            Hardware::display.drawLine(stopPos, g.yPos+2, stopPos, g.yPos+height-3, valueColour(Value::MAX));
 
             // Hardware::display.setTextColour(valueColour(Value::MIN));
             // Hardware::display.print(minValue);
