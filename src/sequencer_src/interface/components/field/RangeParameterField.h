@@ -2,6 +2,7 @@
 #define RangeParameterField_h
 
 #include "ParameterField.h"
+#include "lib/util/RangeScale.h"
 
 class RangeParameterField : public ParameterField {
 
@@ -18,17 +19,19 @@ public:
     virtual void changeSelectMode();
     virtual void render(GraphicsContext& graphicsContext);
 
-    void setMinValue(int16_t minVvalue);
-    void setMaxValue(int16_t maxValue);
-    uint16_t getMinValue() { return minValue; }
-    uint16_t getMaxValue() { return maxValue; }
+    void setStartValue(int16_t startValue);
+    void setStopValue(int16_t stopValue);
+    uint16_t getStartValue() { return startValue; }
+    uint16_t getStopValue() { return stopValue; }
 
 private:
     Value selectedValue;
-    int16_t minValue;
-    int16_t maxValue;
+    int16_t startValue;
+    int16_t stopValue;
     int16_t min;
     int16_t max;
+
+    RangeScale scale;
 
     Colour valueColour(Value field);
 

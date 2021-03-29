@@ -14,8 +14,8 @@ void EventParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
     if(tickEvents != NULL) {
         NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); // TODO temporarily only use first event on list
 
-        noteOnOffField.setMinValue(event->getStart());
-        noteOnOffField.setMaxValue(event->getStop());
+        noteOnOffField.setStartValue(event->getStart());
+        noteOnOffField.setStopValue(event->getStop());
         eventPitchField.setValue(event->getPitch());
         eventVelocityField.setValue(event->getVelocity());
         
@@ -45,8 +45,8 @@ void EventParameterView::updateDataFromField(ParameterField* field) {
     NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); 
     if(event != NULL) {
         if(field == &noteOnOffField) {
-            event->setStart(noteOnOffField.getMinValue());
-            event->setStop(noteOnOffField.getMaxValue());
+            event->setStart(noteOnOffField.getStartValue());
+            event->setStop(noteOnOffField.getStopValue());
         } else if(field == &eventPitchField) {
             event->setPitch(eventPitchField.getValue());
         } else if(field == &eventVelocityField) {
