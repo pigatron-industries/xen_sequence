@@ -1,22 +1,30 @@
 #include "EventParameterView.h"
 #include "model/event/NoteEvent.h"
 
+const char* EventParameterView::EVENT_TYPE_NAMES[] = { "NOTE", "CONTROL" };
+
 EventParameterView::EventParameterView() {
 }
 
 void EventParameterView::addFields(ListComponent* fields) {
+    fields->addComponent(&eventTypeField);
     fields->addComponent(&noteOnOffField);
     fields->addComponent(&eventPitchField);
     fields->addComponent(&eventVelocityField);
+    fields->addComponent(&lineComponent);
 }
 
 void EventParameterView::setEvent(SequenceEvent* event) {
+    eventTypeField.setVisibility(false);
     noteOnOffField.setVisibility(false);
     eventPitchField.setVisibility(false);
     eventVelocityField.setVisibility(false);
+    lineComponent.setVisibility(false);
 
     this->event = event;
     if(event != NULL) {
+        eventTypeField.setVisibility(true);
+        lineComponent.setVisibility(true);
         if(event->getEventType() == EventType::NOTE_EVENT) {
             NoteEvent* noteEvent = (NoteEvent*)event;
             noteOnOffField.setStartValue(noteEvent->getStart());

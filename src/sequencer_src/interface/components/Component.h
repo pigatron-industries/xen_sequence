@@ -15,13 +15,16 @@ public:
     uint8_t getHeight() { return height; }
     uint8_t getWidth() { return width; }
     bool getVisibility() { return visible; }
+    bool getFocusable() { return focusable; }
 
     void setVisibility(bool visible) { this->visible = visible; }
+    void setFocusable(bool focusable) { this->focusable = focusable; }
 
 protected:
     uint8_t height;
     uint8_t width;
     bool visible = true;
+    bool focusable = false;
 
 };
 

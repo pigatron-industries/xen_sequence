@@ -3,8 +3,10 @@
 
 void ListComponent::render(GraphicsContext& g) {
     for(int i = 0; i < componentCount; i++) {
-        components[i]->render(g);
-        g.yPos += components[i]->getHeight();
+        if(components[i]->getVisibility()) {
+            components[i]->render(g);
+            g.yPos += components[i]->getHeight();
+        }
     }
 }
 

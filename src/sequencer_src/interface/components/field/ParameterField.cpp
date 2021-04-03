@@ -7,9 +7,11 @@ ParameterField::ParameterField(const char* _name) :
     name(_name) {
     height = FIELD_HEIGHT;
     width = FIELD_WIDTH;
+    setFocusable(true);
 }
 
 void ParameterField::render(GraphicsContext& g) {
+    DEBUG("ParameterField::render")
     if(!visible) {
         return;
     }
