@@ -27,7 +27,6 @@ public:
 
 
 private:
-    EventType eventType;
     uint8_t start = 0;
     uint8_t stop;
     uint8_t pitch;

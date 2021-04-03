@@ -48,7 +48,7 @@ void ParameterView::setDirtyScreen() {
 
 void ParameterView::renderKeyLeds() {
     if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
-        if(eventParameterView.getTickEvents() != NULL) {
+        if(tickEventsParameterView.getTickEvents() != NULL) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
         } else {
@@ -68,14 +68,14 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
 
         if(message.command == COMMAND_NOTEON) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
-            if(eventParameterView.getTickEvents() == NULL) {
+            if(tickEventsParameterView.getTickEvents() == NULL) {
                 addEvent();
             }
         } else if (message.command == COMMAND_NOTEOFF) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
         }
 
-        eventParameterView.handleMidiEvent(message);
+        tickEventsParameterView.handleMidiEvent(message);
         View::render();
     }
 }
@@ -123,7 +123,7 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::KEY_ADD_DEL:
             if(event.data == EVENT_KEY_PRESSED) {
                 if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
-                    if(eventParameterView.getTickEvents() == NULL) {
+                    if(tickEventsParameterView.getTickEvents() == NULL) {
                         addEvent();
                     } else {
                         deleteEvent();
@@ -275,7 +275,7 @@ void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
             setSelectionMode(ParameterViewSelectionMode::SELECT_CHANNEL);
             break;
         case PARAM_MODE_EVENT:
-            visibleParameterView = &eventParameterView;
+            visibleParameterView = &tickEventsParameterView;
             sequenceMatrixView.setSelectionMode(SequenceMatrixSelectionMode::SELECT_EVENT);
             setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
             updateSelectedEventFields();
@@ -304,7 +304,7 @@ void ParameterView::updateSelectedEventFields() {
         selectedTickEvents = selectedPattern->getTickEvents(sequenceMatrixView.getSelectCursorTick());
     }
     
-    eventParameterView.setTickEvents(selectedTickEvents);
+    tickEventsParameterView.setTickEvents(selectedTickEvents);
     renderKeyLeds();
     queueRender(true);
 }
@@ -333,11 +333,11 @@ void ParameterView::clearPattern() {
 
 void ParameterView::copy() {
     if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
-        if(eventParameterView.getTickEvents() != NULL) {
+        if(tickEventsParameterView.getTickEvents() != NULL) {
             if(copiedEvent != NULL) {
                 delete copiedEvent;
             }
-            copiedEvent = new SequenceTickEvents(eventParameterView.getTickEvents());
+            copiedEvent = new SequenceTickEvents(tickEventsParameterView.getTickEvents());
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PASTE, LedColour::BLUE);
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
         }
@@ -354,8 +354,8 @@ void ParameterView::paste() {
 }
 
 void ParameterView::drag() {
-    if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT && eventParameterView.getTickEvents() != NULL) {
-        copiedEvent = new SequenceTickEvents(eventParameterView.getTickEvents());
+    if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT && tickEventsParameterView.getTickEvents() != NULL) {
+        copiedEvent = new SequenceTickEvents(tickEventsParameterView.getTickEvents());
         dragging = true;
         draggingFromBar = barIndex;
         draggingFromChannel = sequenceMatrixView.getSelectCursorChannel();

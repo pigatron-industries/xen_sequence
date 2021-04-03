@@ -15,7 +15,7 @@ public:
     SequenceTickEvents(SequenceTickEvents* sourceTickEvents);
     ~SequenceTickEvents();
 
-    SequenceEvent* getEvent(int index) { return events.get(index); }
+    SequenceEvent* getEvent(int index);
     int getSize() { return events.size(); }
 
     void addEvent(SequenceEvent* event);

@@ -14,6 +14,7 @@ public:
 
     uint8_t getHeight() { return height; }
     uint8_t getWidth() { return width; }
+    bool getVisibility() { return visible; }
 
     void setVisibility(bool visible) { this->visible = visible; }
 

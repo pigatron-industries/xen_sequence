@@ -17,19 +17,18 @@ class EventParameterView : public AbstractParameterView {
 
 public:
     EventParameterView();
-    void setTickEvents(SequenceTickEvents* tickEvents);
-    SequenceTickEvents* getTickEvents() { return tickEvents; }
+    void addFields(ListComponent* fields);
+    void setEvent(SequenceEvent* event);
+    SequenceEvent* getEvent() { return event; }
     void handleMidiEvent(MidiMessage message);
-
-protected:
-    virtual void updateDataFromField(ParameterField* field);
+    void updateDataFromField(ParameterField* field);
 
 private:
     RangeParameterField noteOnOffField = RangeParameterField("ON/OFF", 0, 100);
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
 
-    SequenceTickEvents* tickEvents;
+    SequenceEvent* event;
 
 };
 

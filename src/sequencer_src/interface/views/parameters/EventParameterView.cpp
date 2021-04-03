@@ -1,30 +1,31 @@
 #include "EventParameterView.h"
-
-EventParameterView::EventParameterView() {
-    fields.addComponent(&noteOnOffField);
-    fields.addComponent(&eventPitchField);
-    fields.addComponent(&eventVelocityField);
-    setSelectedField(0);
-}
-
 #include "model/event/NoteEvent.h"
 
-void EventParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
-    this->tickEvents = tickEvents;
-    if(tickEvents != NULL) {
-        NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); // TODO temporarily only use first event on list
+EventParameterView::EventParameterView() {
+}
 
-        noteOnOffField.setStartValue(event->getStart());
-        noteOnOffField.setStopValue(event->getStop());
-        eventPitchField.setValue(event->getPitch());
-        eventVelocityField.setValue(event->getVelocity());
-        
-        for(int i = 0; i < fields.getSize(); i++) {
-            fields.getComponent(i)->setVisibility(true);
-        }
-    } else {
-        for(int i = 0; i < fields.getSize(); i++) {
-            fields.getComponent(i)->setVisibility(false);
+void EventParameterView::addFields(ListComponent* fields) {
+    fields->addComponent(&noteOnOffField);
+    fields->addComponent(&eventPitchField);
+    fields->addComponent(&eventVelocityField);
+}
+
+void EventParameterView::setEvent(SequenceEvent* event) {
+    noteOnOffField.setVisibility(false);
+    eventPitchField.setVisibility(false);
+    eventVelocityField.setVisibility(false);
+
+    this->event = event;
+    if(event != NULL) {
+        if(event->getEventType() == EventType::NOTE_EVENT) {
+            NoteEvent* noteEvent = (NoteEvent*)event;
+            noteOnOffField.setStartValue(noteEvent->getStart());
+            noteOnOffField.setStopValue(noteEvent->getStop());
+            eventPitchField.setValue(noteEvent->getPitch());
+            eventVelocityField.setValue(noteEvent->getVelocity());
+            noteOnOffField.setVisibility(true);
+            eventPitchField.setVisibility(true);
+            eventVelocityField.setVisibility(true);
         }
     }
 }
@@ -41,17 +42,17 @@ void EventParameterView::handleMidiEvent(MidiMessage message) {
 }
 
 void EventParameterView::updateDataFromField(ParameterField* field) {
-    // TODO temporarily only use first event on list
-    NoteEvent* event = (NoteEvent*)tickEvents->getEvent(0); 
     if(event != NULL) {
-        if(field == &noteOnOffField) {
-            event->setStart(noteOnOffField.getStartValue());
-            event->setStop(noteOnOffField.getStopValue());
-        } else if(field == &eventPitchField) {
-            event->setPitch(eventPitchField.getValue());
-        } else if(field == &eventVelocityField) {
-            event->setVelocity(eventVelocityField.getValue());
+        if(event->getEventType() == EventType::NOTE_EVENT) {
+            NoteEvent* noteEvent = (NoteEvent*)event;
+            if(field == &noteOnOffField) {
+                noteEvent->setStart(noteOnOffField.getStartValue());
+                noteEvent->setStop(noteOnOffField.getStopValue());
+            } else if(field == &eventPitchField) {
+                noteEvent->setPitch(eventPitchField.getValue());
+            } else if(field == &eventVelocityField) {
+                noteEvent->setVelocity(eventVelocityField.getValue());
+            }
         }
-        tickEvents->setCompiled(false);
     }
 }

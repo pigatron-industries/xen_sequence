@@ -7,7 +7,7 @@
 #include "matrix/SequenceMatrixView.h"
 #include "parameters/BarParameterView.h"
 #include "parameters/ChannelParameterView.h"
-#include "parameters/EventParameterView.h"
+#include "parameters/TickEventsParameterView.h"
 #include "parameters/SongParameterView.h"
 #include "sequencer/midi/MidiEventHandler.h"
 
@@ -60,7 +60,7 @@ private:
     SongParameterView songParameterView;
     BarParameterView barParameterView;
     ChannelParameterView channelParameterView;
-    EventParameterView eventParameterView;
+    TickEventsParameterView tickEventsParameterView;
 
     // rendering
     void renderMode();

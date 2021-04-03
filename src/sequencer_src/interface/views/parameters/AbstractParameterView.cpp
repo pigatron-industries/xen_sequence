@@ -39,18 +39,31 @@ InterfaceEvent AbstractParameterView::handleEvent(InterfaceEvent event) {
 }
 
 void AbstractParameterView::prevParameter() {
-    int8_t newFieldIndex = selectedFieldIndex-1;
-    if(newFieldIndex < 0) {
-        newFieldIndex = fields.getSize()-1;
+    int8_t newFieldIndex = selectedFieldIndex;
+    boolean foundVisibleField = false;
+    while(!foundVisibleField) {
+        newFieldIndex--;
+        if(newFieldIndex < 0) {
+            newFieldIndex = fields.getSize()-1;
+        }
+        foundVisibleField = fields.getComponent(newFieldIndex)->getVisibility();
     }
+
     setSelectedField(newFieldIndex);
 }
 
 void AbstractParameterView::nextParameter() {
-    int8_t newFieldIndex = selectedFieldIndex+1;
-    if(newFieldIndex >= fields.getSize()) {
-        newFieldIndex = 0;
+    int8_t newFieldIndex = selectedFieldIndex;
+    boolean foundVisibleField = false;
+    while(!foundVisibleField) {
+        newFieldIndex++;
+        if(newFieldIndex >= fields.getSize()) {
+            newFieldIndex = 0;
+        }
+        foundVisibleField = fields.getComponent(newFieldIndex)->getVisibility();
+        Serial.println(foundVisibleField);
     }
+
     setSelectedField(newFieldIndex);
 }
 

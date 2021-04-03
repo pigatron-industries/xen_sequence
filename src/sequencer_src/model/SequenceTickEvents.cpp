@@ -19,6 +19,14 @@ void SequenceTickEvents::copy(SequenceTickEvents* sourceTickEvents) {
     compiled = false;
 }
 
+SequenceEvent* SequenceTickEvents::getEvent(int index) { 
+    if(index < events.size()) {
+        return events.get(index); 
+    } else {
+        return NULL;
+    }
+}
+
 void SequenceTickEvents::addEvent(SequenceEvent* event) {
     events.add(event);
     compiled = false;
