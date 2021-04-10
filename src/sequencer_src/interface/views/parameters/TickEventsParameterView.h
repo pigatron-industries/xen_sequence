@@ -24,6 +24,8 @@ protected:
 private:
     EventParameterView eventParametersViews[MAX_EVENTS];
 
+    
+
     SequenceTickEvents* tickEvents;
 
 };

@@ -339,7 +339,6 @@ void ParameterView::copy() {
             }
             copiedEvent = new SequenceTickEvents(tickEventsParameterView.getTickEvents());
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PASTE, LedColour::BLUE);
-            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
         }
     }
 }

@@ -223,7 +223,7 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
             }
             break;
 
-        case InterfaceEventType::KEY_COPY2:
+        case InterfaceEventType::KEY_COPY:
             if(event.data == EVENT_KEY_PRESSED) {
                 copy();
             } else if (event.data == EVENT_KEY_RELEASED) {
@@ -380,7 +380,7 @@ void SequenceView::copy() {
     SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
     if(pattern != NULL) {
         copiedPattern = AppData::data.copyPattern(pattern);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY2, LedColour::BLUE);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
         queueRender();
     }
 }
@@ -391,7 +391,7 @@ void SequenceView::paste() {
         AppData::data.setPattern(cursorBar, cursorChannel, copiedPattern);
         setSelectedPattern();
         renderKeyLedsPattern();
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY2, LedColour::OFF);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
         queueRender();
     }
 }

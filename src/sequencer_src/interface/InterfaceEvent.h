@@ -32,19 +32,19 @@ enum InterfaceEventType {
     KEY_HELP,
     //
     KEY_ADD_DEL,
-    KEY_COPY,
-    KEY_PASTE,
     KEY_PLACE_2,
-    //
-    KEY_FUNCTION,
     KEY_PLACE_3,
     KEY_PLACE_4,
+    //
+    KEY_FUNCTION,
     KEY_PLACE_5,
+    KEY_PLACE_6,
+    KEY_PLACE_7,
     //
     KEY_MOVE,
-    KEY_PLACE_6,
-    KEY_COPY2,
-    KEY_PLACE_7,
+    KEY_COPY,
+    KEY_PASTE,
+    KEY_PLACE_8,
     //
     SEQUENCER_TICK
 };
