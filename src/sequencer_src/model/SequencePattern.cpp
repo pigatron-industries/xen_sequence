@@ -29,6 +29,16 @@ void SequencePattern::addEvent(uint8_t index, SequenceEvent* event) {
     tickEvents->addEvent(event);
 }
 
+void SequencePattern::deleteEvent(uint8_t tickIndex, uint8_t eventIndex) {
+    SequenceTickEvents* tickEvents = events.get(tickIndex);
+    if(tickEvents != NULL) {
+        tickEvents->deleteEvent(eventIndex);
+        if(tickEvents->getSize() == 0) {
+            deleteTickEvents(tickIndex);
+        }
+    }
+}
+
 void SequencePattern::setTickEvents(uint8_t index, SequenceTickEvents* tickEvents) {
     while(events.size() <= index) {
         events.add(NULL);

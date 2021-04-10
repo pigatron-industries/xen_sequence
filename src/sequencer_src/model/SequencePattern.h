@@ -21,6 +21,7 @@ public:
     LinkedList<SequenceTickEvents*>& getEvents() { return events; }
     SequenceTickEvents* getTickEvents(uint8_t index) { return events.get(index); };
     void addEvent(uint8_t index, SequenceEvent* event);
+    void deleteEvent(uint8_t tickIndex, uint8_t eventIndex);
     void setTickEvents(uint8_t index, SequenceTickEvents* event);
     void deleteTickEvents(uint8_t index);
     void clear();

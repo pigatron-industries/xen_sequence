@@ -17,14 +17,13 @@ public:
     void setTickEvents(SequenceTickEvents* tickEvents);
     SequenceTickEvents* getTickEvents() { return tickEvents; }
     void handleMidiEvent(MidiMessage message);
+    int getSelectedEventIndex();
 
 protected:
     virtual void updateDataFromField(ParameterField* field);
 
 private:
     EventParameterView eventParametersViews[MAX_EVENTS];
-
-    
 
     SequenceTickEvents* tickEvents;
 

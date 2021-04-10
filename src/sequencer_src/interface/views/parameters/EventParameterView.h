@@ -24,6 +24,7 @@ public:
     SequenceEvent* getEvent() { return event; }
     void handleMidiEvent(MidiMessage message);
     void updateDataFromField(ParameterField* field);
+    bool containsField(ParameterField* field);
 
 private:
     static const char* EVENT_TYPE_NAMES[];

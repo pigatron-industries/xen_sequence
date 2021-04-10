@@ -48,16 +48,20 @@ void ParameterView::setDirtyScreen() {
 
 void ParameterView::renderKeyLeds() {
     if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD, LedColour::BLUE);
         if(tickEventsParameterView.getTickEvents() != NULL) {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
-            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_DEL, LedColour::RED);
         } else {
             Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
-            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
+            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_DEL, LedColour::OFF);
         }
     } else if (selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_DEL, LedColour::RED);
+    } else {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_DEL, LedColour::OFF);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD, LedColour::OFF);
     }
 }
 
@@ -120,14 +124,18 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
             }
             break;
 
-        case InterfaceEventType::KEY_ADD_DEL:
+        case InterfaceEventType::KEY_ADD:
             if(event.data == EVENT_KEY_PRESSED) {
                 if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
-                    if(tickEventsParameterView.getTickEvents() == NULL) {
-                        addEvent();
-                    } else {
-                        deleteEvent();
-                    }
+                    addEvent();
+                }
+            }
+            break;
+
+        case InterfaceEventType::KEY_DEL:
+            if(event.data == EVENT_KEY_PRESSED) {
+                if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
+                    deleteEvent();
                 } else if (selectionMode == ParameterViewSelectionMode::SELECT_CHANNEL) {
                     clearPattern();
                 }
@@ -320,7 +328,8 @@ void ParameterView::addEvent(SequenceTickEvents* copy) {
 }
 
 void ParameterView::deleteEvent() {
-    AppData::data.deleteTickEvents(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
+    int eventIndex = tickEventsParameterView.getSelectedEventIndex();
+    AppData::data.deleteEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick(), eventIndex);
     updateSelectedEventFields();
 }
 

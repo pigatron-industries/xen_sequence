@@ -64,3 +64,7 @@ void EventParameterView::updateDataFromField(ParameterField* field) {
         }
     }
 }
+
+bool EventParameterView::containsField(ParameterField* field) {
+    return field == &eventTypeField || field == &noteOnOffField || field == &eventPitchField || field == &eventVelocityField;
+}

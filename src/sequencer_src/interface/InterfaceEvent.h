@@ -31,8 +31,8 @@ enum InterfaceEventType {
     KEY_FILE,
     KEY_HELP,
     //
-    KEY_ADD_DEL,
-    KEY_PLACE_2,
+    KEY_ADD,
+    KEY_DEL,
     KEY_PLACE_3,
     KEY_PLACE_4,
     //

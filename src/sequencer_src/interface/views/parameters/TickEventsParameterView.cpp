@@ -21,6 +21,17 @@ void TickEventsParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
     }
 }
 
+int TickEventsParameterView::getSelectedEventIndex() {
+    if(tickEvents != NULL) {
+        for(int i = 0; i < MAX_EVENTS; i++) {
+            if(eventParametersViews[i].containsField(selectedField)) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 void TickEventsParameterView::handleMidiEvent(MidiMessage message) {
     if(message.command == COMMAND_NOTEON) {
         eventParametersViews[0].handleMidiEvent(message); //TODO decide which event to send midi to

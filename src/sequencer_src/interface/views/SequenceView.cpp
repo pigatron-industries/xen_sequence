@@ -144,12 +144,13 @@ void SequenceView::renderKeyLeds() {
 
 void SequenceView::renderKeyLedsPattern() {
     SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
+    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD, LedColour::OFF);
     if(pattern != NULL) {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::RED);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_DEL, LedColour::RED);
     } else {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
-        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD_DEL, LedColour::BLUE);
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_DEL, LedColour::OFF);
     }
 }
 
@@ -212,13 +213,11 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
             decrementPattern();
             break;
         
-        case InterfaceEventType::KEY_ADD_DEL:
+        case InterfaceEventType::KEY_DEL:
             if(event.data == EVENT_KEY_PRESSED) {
                 SequencePattern* selectedPattern = AppData::data.getPattern(cursorBar, cursorChannel);
                 if(selectedPattern != NULL) {
                     deletePattern();
-                } else {
-                    addPattern();
                 }
             }
             break;
