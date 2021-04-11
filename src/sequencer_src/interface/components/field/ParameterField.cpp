@@ -12,6 +12,7 @@ ParameterField::ParameterField(const char* _name) :
 
 void ParameterField::render(GraphicsContext& g) {
     DEBUG("ParameterField::render")
+    Component::render(g);
     if(!visible) {
         return;
     }

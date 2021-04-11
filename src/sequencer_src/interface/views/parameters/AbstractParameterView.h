@@ -17,6 +17,14 @@ public:
     virtual void init();
     virtual void render(GraphicsContext& g);
     virtual InterfaceEvent handleEvent(InterfaceEvent event);
+    void setHeight(uint8_t height) {
+        this->height = height;
+        fields.setHeight(height);
+    }
+    void setWidth(uint8_t width) {
+        this->width = width;
+        fields.setWidth(width);
+    }
 
 protected:
     ListComponent fields;

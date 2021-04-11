@@ -17,10 +17,15 @@ public:
     void addComponent(Component* component);
     int getSize() { return componentCount; }
     Component* getComponent(int index) { return components[index]; }
+    void setScrollPosition(uint16_t scrollPosition) { this->scrollPosition = scrollPosition; rerenderFull = true; }
+    uint16_t getScrollPosition() { return scrollPosition; }
+    void scrollToComponent(uint8_t index);
 
 private:
     Component* components[MAX_COMPONENTS];
     int componentCount = 0;
+
+    uint16_t scrollPosition = 0;
 
 };
 

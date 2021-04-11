@@ -19,6 +19,9 @@ void TickEventsParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
             eventParametersViews[i].setEvent(NULL);
         }
     }
+    if(selectedField != NULL && !selectedField->getVisibility() && fields.getComponent(0)->getVisibility()) {
+        setSelectedField(0);
+    }
 }
 
 int TickEventsParameterView::getSelectedEventIndex() {

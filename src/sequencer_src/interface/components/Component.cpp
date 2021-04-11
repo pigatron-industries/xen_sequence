@@ -2,6 +2,9 @@
 #include "interface/views/Org_01.h"
 #include "lib/util/debug.h"
 
+void Component::render(GraphicsContext& g) {
+    top = g.yPos;
+}
 
 void Component::render(bool full) { 
     DEBUG("Component::render")

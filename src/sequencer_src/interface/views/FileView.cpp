@@ -14,6 +14,8 @@ FileView::FileView() {
     titleComponent.setTextColour(Colour::WHITE);
     newFileComponent.setText(" [ NEW FILE ] ");
     newFileComponent.setTextColour(Colour::YELLOW);
+    listComponent.setHeight(DISPLAY_HEIGHT - FIELD_HEIGHT);
+    listComponent.setWidth(DISPLAY_WIDTH);
 }
 
 void FileView::init() {

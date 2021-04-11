@@ -2,11 +2,12 @@
 #include "lib/util/debug.h"
 
 void AbstractParameterView::init() {
-
+    fields.setScrollPosition(0);
 }
 
 void AbstractParameterView::render(GraphicsContext& g) {
     DEBUG("AbstractParameterView::render");
+    Component::render(g);
     fields.render(g);
 }
 
@@ -46,8 +47,8 @@ void AbstractParameterView::prevParameter() {
         if(newFieldIndex < 0) {
             newFieldIndex = fields.getSize()-1;
         }
-        foundSelectableField = fields.getComponent(newFieldIndex)->getVisibility() 
-                             & fields.getComponent(newFieldIndex)->getFocusable();
+        Component* field = fields.getComponent(newFieldIndex);
+        foundSelectableField = field->getVisibility() & field->getFocusable();
     }
 
     setSelectedField(newFieldIndex);
@@ -76,6 +77,7 @@ void AbstractParameterView::setSelectedField(int index) {
         
     selectedField = (ParameterField*)fields.getComponent(index);
     selectedField->setSelected(true);
+    fields.scrollToComponent(index);
 }
 
 void AbstractParameterView::fieldIncrement(int amount) {

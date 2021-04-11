@@ -7,6 +7,8 @@
 
 ParameterView::ParameterView(SequenceMatrixView& _sequenceMatrixView) :
     sequenceMatrixView(_sequenceMatrixView) {
+    tickEventsParameterView.setHeight(DISPLAY_HEIGHT - FIELD_HEIGHT);
+    tickEventsParameterView.setWidth(DISPLAY_WIDTH);
     Hardware::midiInputService.addEventHandler(this);
 }
 
