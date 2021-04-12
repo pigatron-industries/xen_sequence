@@ -320,7 +320,7 @@ void ParameterView::updateSelectedEventFields() {
 }
 
 void ParameterView::addEvent() {
-    AppData::data.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
+    AppData::data.newEvent(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick(), EventType::NOTE_EVENT);
     updateSelectedEventFields();
 }
 

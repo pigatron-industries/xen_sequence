@@ -1,6 +1,7 @@
 #ifndef ParameterField_h
 #define ParameterField_h
 
+#include "ParameterFieldListener.h"
 #include "lib/drivers/Display.h"
 #include "../Component.h"
 
@@ -28,6 +29,7 @@ public:
     virtual void changeSelectMode();
     virtual void render(GraphicsContext& graphicsContext);
 
+    void setListener(ParameterFieldListener* listener) { this->listener = listener; }
     void setSelected(bool _selected) { selected = _selected; dirtyValue = true; }
     void setDirty() { dirtyLabel = true; dirtyValue = true; }
 
@@ -38,7 +40,7 @@ protected:
     bool dirtyLabel = true;
     bool dirtyValue = true;
 
-
+    ParameterFieldListener* listener = NULL;
 
 };
 

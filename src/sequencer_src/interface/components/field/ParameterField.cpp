@@ -40,4 +40,7 @@ void ParameterField::render(GraphicsContext& g) {
 void ParameterField::changeSelectMode() {
     ParameterField::selectMode = ParameterField::selectMode == ParameterField::SelectMode::FIELD ? ParameterField::SelectMode::VALUE : ParameterField::SelectMode::FIELD;
     dirtyValue = true;
+    if(listener != NULL) {
+        listener->onSelectModeChange(this);
+    }
 }

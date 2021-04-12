@@ -20,7 +20,10 @@ public:
 
     void addEvent(SequenceEvent* event);
     void deleteEvent(int index);
+    void replaceEvent(int index, SequenceEvent* event);
     void clearEvents();
+
+    int findEvent(SequenceEvent* event);
 
     CompiledEvents& getCompiledEvents() { return compiledEvents; }
     bool isCompiled() { return compiled; }

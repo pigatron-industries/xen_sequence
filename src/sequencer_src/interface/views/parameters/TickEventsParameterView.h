@@ -14,6 +14,7 @@ class TickEventsParameterView : public AbstractParameterView {
 
 public:
     TickEventsParameterView();
+    //virtual InterfaceEvent handleEvent(InterfaceEvent event);
     void setTickEvents(SequenceTickEvents* tickEvents);
     SequenceTickEvents* getTickEvents() { return tickEvents; }
     void handleMidiEvent(MidiMessage message);
@@ -27,6 +28,7 @@ private:
 
     SequenceTickEvents* tickEvents;
 
+    EventParameterView* getSelectedEventParameters();
 };
 
 #endif

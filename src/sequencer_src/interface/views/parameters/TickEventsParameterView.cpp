@@ -8,15 +8,26 @@ TickEventsParameterView::TickEventsParameterView() {
     setSelectedField(0);
 }
 
+// InterfaceEvent TickEventsParameterView::handleEvent(InterfaceEvent event) {
+//     switch(event.eventType) {
+//         case InterfaceEventType::DATA_PRESS:
+
+//             EventParameterView* eventParameterView = getSelectedEventParameters();
+//             if(selectedField == eventParameterView->)
+//             break;
+//     }
+//     return AbstractParameterView::handleEvent(event);
+// }
+
 void TickEventsParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
     this->tickEvents = tickEvents;
     if(tickEvents != NULL) {
         for(int i = 0; i < MAX_EVENTS; i++) {
-            eventParametersViews[i].setEvent(tickEvents->getEvent(i));
+            eventParametersViews[i].setEvent(tickEvents, tickEvents->getEvent(i));
         }
     } else {
         for(int i = 0; i < MAX_EVENTS; i++) {
-            eventParametersViews[i].setEvent(NULL);
+            eventParametersViews[i].setEvent(NULL, NULL);
         }
     }
     if(selectedField != NULL && !selectedField->getVisibility() && fields.getComponent(0)->getVisibility()) {
@@ -33,6 +44,15 @@ int TickEventsParameterView::getSelectedEventIndex() {
         }
     }
     return -1;
+}
+
+EventParameterView* TickEventsParameterView::getSelectedEventParameters() {
+    int index = getSelectedEventIndex();
+    if(index != -1) {
+        return &eventParametersViews[index];
+    } else {
+        return NULL;
+    }
 }
 
 void TickEventsParameterView::handleMidiEvent(MidiMessage message) {

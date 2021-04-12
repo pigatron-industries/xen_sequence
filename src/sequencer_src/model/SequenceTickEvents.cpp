@@ -37,6 +37,20 @@ void SequenceTickEvents::deleteEvent(int index) {
     compiled = false;
 }
 
+void SequenceTickEvents::replaceEvent(int index, SequenceEvent* event) {
+    delete events.get(index);
+    events.set(index, event);
+}
+
+int SequenceTickEvents::findEvent(SequenceEvent* event) {
+    for(int i = 0; i < events.size(); i++) {
+        if(events.get(i) == event) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void SequenceTickEvents::clearEvents() {
     for(int i = 0; i < events.size(); i++) {
         delete events.get(i);

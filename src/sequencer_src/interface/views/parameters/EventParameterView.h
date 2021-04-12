@@ -9,22 +9,26 @@
 #include "interface/components/field/IntegerParameterField.h"
 #include "interface/components/field/BooleanParameterField.h"
 #include "interface/components/field/RangeParameterField.h"
+#include "interface/components/field/ParameterFieldListener.h"
 #include "interface/components/ListComponent.h"
 #include "interface/components/LineComponent.h"
 #include "sequencer/midi/MidiEventHandler.h"
 #include "model/SequenceTickEvents.h"
 
 
-class EventParameterView : public AbstractParameterView {
+class EventParameterView : public AbstractParameterView, ParameterFieldListener {
 
 public:
     EventParameterView();
     void addFields(ListComponent* fields);
-    void setEvent(SequenceEvent* event);
+    void setEvent(SequenceTickEvents* tickEvents, SequenceEvent* event);
     SequenceEvent* getEvent() { return event; }
     void handleMidiEvent(MidiMessage message);
     void updateDataFromField(ParameterField* field);
     bool containsField(ParameterField* field);
+
+    virtual void onSelectModeChange(ParameterField* field);
+    virtual void onValueChange(ParameterField* field);
 
 private:
     static const char* EVENT_TYPE_NAMES[];
@@ -33,8 +37,12 @@ private:
 
     RangeParameterField noteOnOffField = RangeParameterField("ON/OFF", 0, 100);
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
-    IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 128);
+    IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 127);
 
+    IntegerParameterField eventControlField = IntegerParameterField("CONTROL", 0, 31);
+    IntegerParameterField eventValueField = IntegerParameterField("VALUE", 0, 127);
+
+    SequenceTickEvents* tickEvents;
     SequenceEvent* event;
 
 };
