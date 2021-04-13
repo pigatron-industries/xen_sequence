@@ -38,9 +38,6 @@ void EventParameterView::setEvent(SequenceTickEvents* tickEvents, SequenceEvent*
         eventTypeField.setVisibility(true);
         lineComponent.setVisibility(true);
 
-        Serial.println(event->getEventType());
-        Serial.println(EventType::CONTROL_EVENT);
-
         switch(event->getEventType()) {
             case EventType::NOTE_EVENT: {
                 NoteEvent* noteEvent = (NoteEvent*)event;
@@ -115,7 +112,6 @@ void EventParameterView::onSelectModeChange(ParameterField* field) {
             SequenceEvent* newEvent = SequenceEventFactory::create(static_cast<EventType>(eventTypeField.getValue()));
             tickEvents->replaceEvent(index, newEvent);
             setEvent(tickEvents, newEvent);
-            Serial.println("push event");
             InterfaceEventQueue::q.doRender(true);
         }
     }

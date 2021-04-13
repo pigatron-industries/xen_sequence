@@ -86,7 +86,7 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
     }
 }
 
-InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
+void ParameterView::handleEvent(InterfaceEvent event) {
     DEBUG("ParameterView::handleEvent");
     switch(event.eventType) {
         case InterfaceEventType::STICK_UP:
@@ -103,13 +103,6 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
 
         case InterfaceEventType::STICK_RIGHT:
             cursorRight();
-            break;
-
-        //TODO allow queue render to work from sub components
-        case InterfaceEventType::DATA_PRESS:
-        case InterfaceEventType::DATA_INCREMENT:
-        case InterfaceEventType::DATA_DECREMENT:
-            InterfaceEventQueue::q.doRender();
             break;
 
         case InterfaceEventType::KEY_RECORD: 
@@ -180,7 +173,6 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
     }
 
     visibleParameterView->handleEvent(event);
-    return InterfaceEvent::NONE;
 }
 
 void ParameterView::record(bool value) {

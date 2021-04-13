@@ -23,7 +23,7 @@ public:
     FileView();
     virtual void init();
     virtual void render(GraphicsContext& g);
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
+    virtual void handleEvent(InterfaceEvent event);
 
 private:
     String currentDirectory = String("/");

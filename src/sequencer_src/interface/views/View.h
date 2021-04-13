@@ -8,7 +8,7 @@
 class View : public Component {
     public:
         virtual void init() = 0;
-        virtual InterfaceEvent handleEvent(InterfaceEvent event) = 0;
+        virtual void handleEvent(InterfaceEvent event) = 0;
 };
 
 #endif

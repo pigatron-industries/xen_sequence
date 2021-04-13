@@ -45,7 +45,7 @@ void FileView::render(GraphicsContext& g) {
     Hardware::display.updateScreen();
 }
 
-InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
+void FileView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::STICK_DOWN:
             cancelDialog();
@@ -72,7 +72,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::KEY_RECORD: //SAVE
             if(event.data == EVENT_KEY_PRESSED) {
                 if(confirmSave()) {
-                    return InterfaceEvent(InterfaceEventType::KEY_VIEW);
+                    InterfaceEventQueue::q.pushEvent(InterfaceEvent(InterfaceEventType::KEY_VIEW));
                 }
             }
             break;
@@ -80,7 +80,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::KEY_PLAY_STOP: //LOAD
             if(event.data == EVENT_KEY_PRESSED) {
                 if(confirmLoad()) {
-                    return InterfaceEvent(InterfaceEventType::KEY_VIEW);
+                    InterfaceEventQueue::q.pushEvent(InterfaceEvent(InterfaceEventType::KEY_VIEW));
                 }
             }
             break;
@@ -94,7 +94,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::KEY_NEXT: //CLEAR
             if(event.data == EVENT_KEY_PRESSED) {
                 if(confirmClear()) {
-                    return InterfaceEvent(InterfaceEventType::KEY_VIEW);
+                    InterfaceEventQueue::q.pushEvent(InterfaceEvent(InterfaceEventType::KEY_VIEW));
                 }
             }
             break;
@@ -103,8 +103,6 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
         default:
             break;
     }
-
-    return InterfaceEvent::NONE;
 }
 
 void FileView::listFiles() {

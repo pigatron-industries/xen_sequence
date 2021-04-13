@@ -163,7 +163,7 @@ void SequenceView::renderKeyLedsMoveMode() {
     Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_MOVE, moveModeColour);
 }
 
-InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
+void SequenceView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::KEY_FUNCTION:
             if(event.data == EVENT_KEY_PRESSED) {
@@ -251,8 +251,6 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
         default:
             break;
     }
-
-    return InterfaceEvent::NONE;
 }
 
 void SequenceView::loopStart() {

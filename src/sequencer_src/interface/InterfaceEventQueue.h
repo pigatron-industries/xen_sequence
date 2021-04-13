@@ -8,7 +8,7 @@ class InterfaceEventQueue {
         static InterfaceEventQueue q;
 
         InterfaceEventQueue() {}
-        void doRender(bool full = false) { pushEvent(InterfaceEvent(InterfaceEventType::RENDER, full)); }
+        void doRender(bool full = false);
         void pushEvent(InterfaceEvent event);
         InterfaceEvent& popEvent();
         int getSize() { return size; }

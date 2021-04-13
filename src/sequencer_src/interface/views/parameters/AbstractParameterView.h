@@ -16,7 +16,7 @@ class AbstractParameterView : public View {
 public:
     virtual void init();
     virtual void render(GraphicsContext& g);
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
+    virtual void handleEvent(InterfaceEvent event);
     void setHeight(uint8_t height) {
         this->height = height;
         fields.setHeight(height);

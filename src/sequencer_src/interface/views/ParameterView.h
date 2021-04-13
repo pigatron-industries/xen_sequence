@@ -31,7 +31,7 @@ public:
     ParameterView(SequenceMatrixView& _sequenceMatrixView);
     virtual void init();
     virtual void render(GraphicsContext& g);
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
+    virtual void handleEvent(InterfaceEvent event);
     virtual void handleMidiEvent(MidiMessage message);
 
     void setBar(uint16_t _barIndex);

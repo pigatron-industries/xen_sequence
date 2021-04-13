@@ -20,7 +20,7 @@ public:
     SequenceView(SequenceMatrixView& _sequenceMatrixView);
     virtual void init();
     virtual void render(GraphicsContext& g);
-    virtual InterfaceEvent handleEvent(InterfaceEvent event);
+    virtual void handleEvent(InterfaceEvent event);
     uint16_t getCursorBar() { return cursorBar; }
 
 private:

@@ -34,7 +34,7 @@ void HelpView::render(GraphicsContext& g) {
     Hardware::display.updateScreen();
 }
 
-InterfaceEvent HelpView::handleEvent(InterfaceEvent event) {
+void HelpView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::KEY_RECORD:
         case InterfaceEventType::KEY_PLAY_STOP:
@@ -44,8 +44,6 @@ InterfaceEvent HelpView::handleEvent(InterfaceEvent event) {
         default:
             break;
     }
-
-    return InterfaceEvent::NONE;
 }
 
 void HelpView::renderPage(InterfaceEventType eventType) {

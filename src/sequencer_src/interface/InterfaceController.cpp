@@ -127,10 +127,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
 
     }
 
-    InterfaceEvent responseEvent = currentView->handleEvent(event);
-    if(responseEvent.eventType != InterfaceEventType::NONE) {
-        handleEvent(responseEvent); //TODO push event onto queue instead of calling recursively
-    }
+    currentView->handleEvent(event);
 }
 
 void InterfaceController::onTick() {

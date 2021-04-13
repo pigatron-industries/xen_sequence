@@ -11,10 +11,11 @@ void AbstractParameterView::render(GraphicsContext& g) {
     fields.render(g);
 }
 
-InterfaceEvent AbstractParameterView::handleEvent(InterfaceEvent event) {
+void AbstractParameterView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::DATA_PRESS:
             selectedField->changeSelectMode();
+            InterfaceEventQueue::q.doRender();
             break;
 
         case InterfaceEventType::DATA_INCREMENT:
@@ -23,6 +24,7 @@ InterfaceEvent AbstractParameterView::handleEvent(InterfaceEvent event) {
             } else {
                 nextParameter();
             }
+            InterfaceEventQueue::q.doRender();
             break;
 
         case InterfaceEventType::DATA_DECREMENT:
@@ -31,12 +33,12 @@ InterfaceEvent AbstractParameterView::handleEvent(InterfaceEvent event) {
             } else {
                 prevParameter();
             }
+            InterfaceEventQueue::q.doRender();
             break;
 
         default:
             break;
     }
-    return InterfaceEvent::NONE;
 }
 
 void AbstractParameterView::prevParameter() {
