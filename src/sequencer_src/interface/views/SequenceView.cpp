@@ -258,14 +258,14 @@ InterfaceEvent SequenceView::handleEvent(InterfaceEvent event) {
 void SequenceView::loopStart() {
     if(Sequencer::sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
         Sequencer::sequencer.setLoopStart(cursorBar);
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
 void SequenceView::loopEnd() {
     if(Sequencer::sequencer.getPlayMode() == SequencePlayMode::PLAY_LOOP_SELECTION) {
         Sequencer::sequencer.setLoopEnd(cursorBar);
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
@@ -274,7 +274,7 @@ void SequenceView::cursorUp() {
         cursorChannel--;
         setSelectedPattern();
         renderKeyLedsPattern();
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
@@ -283,7 +283,7 @@ void SequenceView::cursorDown() {
         cursorChannel++;
         setSelectedPattern();
         renderKeyLedsPattern();
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
@@ -298,7 +298,7 @@ void SequenceView::cursorLeft() {
         }
         setSelectedPattern();
         renderKeyLedsPattern();
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
@@ -314,7 +314,7 @@ void SequenceView::cursorRight() {
         }
         setSelectedPattern();
         renderKeyLedsPattern();
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
@@ -333,7 +333,7 @@ void SequenceView::incrementPattern() {
         if(pattern != NULL) {
             AppData::data.setPattern(cursorBar, cursorChannel, pattern);
             setSelectedPattern();
-            queueRender();
+            InterfaceEventQueue::q.doRender();
         }
     }
 }
@@ -348,7 +348,7 @@ void SequenceView::decrementPattern() {
             if(pattern != NULL) {
                 AppData::data.setPattern(cursorBar, cursorChannel, pattern);
                 setSelectedPattern();
-                queueRender();
+                InterfaceEventQueue::q.doRender();
             }
         } else {
             deletePattern();
@@ -364,14 +364,14 @@ void SequenceView::addPattern() {
     }
     setSelectedPattern();
     renderKeyLedsPattern();
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void SequenceView::deletePattern() {
     AppData::data.setPattern(cursorBar, cursorChannel, NULL);
     setSelectedPattern();
     renderKeyLedsPattern();
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void SequenceView::copy() {
@@ -380,7 +380,7 @@ void SequenceView::copy() {
     if(pattern != NULL) {
         copiedPattern = AppData::data.copyPattern(pattern);
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::BLUE);
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
@@ -391,7 +391,7 @@ void SequenceView::paste() {
         setSelectedPattern();
         renderKeyLedsPattern();
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_COPY, LedColour::OFF);
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 
@@ -405,7 +405,7 @@ void SequenceView::cycleMoveMode() {
 void SequenceView::setMoveMode(MoveMode moveMode) {
     this->moveMode = moveMode;
     renderKeyLedsMoveMode();
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void SequenceView::moveStart() {
@@ -419,14 +419,14 @@ void SequenceView::patternMoveEnd() {
     AppData::data.setPattern(movingFromBar, movingFromChannel, NULL);
     AppData::data.setPattern(cursorBar, cursorChannel, pattern);
     moving = false;
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void SequenceView::patternCopyEnd() {
     SequencePattern* pattern = AppData::data.getPattern(movingFromBar, movingFromChannel);
     AppData::data.setPattern(cursorBar, cursorChannel, pattern);
     moving = false;
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void SequenceView::barMoveEnd() {
@@ -443,7 +443,7 @@ void SequenceView::barMoveEnd() {
     }
 
     moving = false;
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void SequenceView::barCopyEnd() {
@@ -461,5 +461,5 @@ void SequenceView::barCopyEnd() {
     }
 
     moving = false;
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }

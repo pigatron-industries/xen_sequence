@@ -109,7 +109,7 @@ InterfaceEvent ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::DATA_PRESS:
         case InterfaceEventType::DATA_INCREMENT:
         case InterfaceEventType::DATA_DECREMENT:
-            queueRender();
+            InterfaceEventQueue::q.doRender();
             break;
 
         case InterfaceEventType::KEY_RECORD: 
@@ -218,14 +218,14 @@ void ParameterView::nextBar() {
     barIndex = Sequencer::sequencer.nextBar();
     updateSelectedBarFields();
     updateSelectedEventFields();
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void ParameterView::prevBar() {
     barIndex = Sequencer::sequencer.prevBar();
     updateSelectedBarFields();
     updateSelectedEventFields();
-    queueRender();
+    InterfaceEventQueue::q.doRender();
 }
 
 void ParameterView::setBar(uint16_t _barIndex) {
@@ -292,7 +292,7 @@ void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
             break;
     };
     renderKeyLeds();
-    queueRender(true);
+    InterfaceEventQueue::q.doRender(true);
 }
 
 void ParameterView::updateSelectedBarFields() {
@@ -316,7 +316,7 @@ void ParameterView::updateSelectedEventFields() {
     
     tickEventsParameterView.setTickEvents(selectedTickEvents);
     renderKeyLeds();
-    queueRender(true);
+    InterfaceEventQueue::q.doRender(true);
 }
 
 void ParameterView::addEvent() {
@@ -338,7 +338,7 @@ void ParameterView::deleteEvent() {
 void ParameterView::clearPattern() {
     if(selectedPattern != NULL) {
         selectedPattern->clear();
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 

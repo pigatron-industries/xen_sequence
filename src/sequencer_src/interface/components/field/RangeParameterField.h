@@ -1,8 +1,8 @@
 #ifndef RangeParameterField_h
 #define RangeParameterField_h
 
+#include <util/RangeScale.h>
 #include "ParameterField.h"
-#include "lib/util/RangeScale.h"
 
 class RangeParameterField : public ParameterField {
 

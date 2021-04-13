@@ -53,7 +53,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
             if(selectedIndex >= listComponent.getSize()) {
                 selectedIndex = 0;
             }
-            queueRender();
+            InterfaceEventQueue::q.doRender();
             break;
 
         case InterfaceEventType::STICK_UP:
@@ -62,7 +62,7 @@ InterfaceEvent FileView::handleEvent(InterfaceEvent event) {
             if(selectedIndex < 0) {
                 selectedIndex = listComponent.getSize()-1;
             }
-            queueRender();
+            InterfaceEventQueue::q.doRender();
             break;
 
         case InterfaceEventType::STICK_PRESS:
@@ -143,7 +143,7 @@ void FileView::remove() {
     String path = getSelectedFilePath();
     DataRepository::data.removeSequence(path);
     init();
-    queueRender(true);
+    InterfaceEventQueue::q.doRender(true);
 }
 
 void FileView::clear() {
@@ -212,7 +212,7 @@ void FileView::cancelDialog() {
         saveConfirmation = false;
         loadConfirmation = false;
         removeConfirmation = false;
-        queueRender(true);
+        InterfaceEventQueue::q.doRender(true);
     }
 }
 
@@ -221,7 +221,7 @@ void FileView::navigate() {
     if(DataRepository::data.loadFileList(path)) {
         currentDirectory = path;
         //TODO
-        queueRender();
+        InterfaceEventQueue::q.doRender();
     }
 }
 

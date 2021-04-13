@@ -131,13 +131,6 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
     if(responseEvent.eventType != InterfaceEventType::NONE) {
         handleEvent(responseEvent); //TODO push event onto queue instead of calling recursively
     }
-
-    // TODO use render event instead of this
-    if(currentView->rerender) {
-        currentView->render(currentView->rerenderFull);
-        currentView->rerender = false;
-        currentView->rerenderFull = false;
-    }
 }
 
 void InterfaceController::onTick() {
@@ -183,5 +176,5 @@ void InterfaceController::setLoopMode(SequencePlayMode loopMode) {
                                                                     loopMode == PLAY_LOOP_SELECTION ? LedColour::CYAN :
                                                                     loopMode == PLAY_LOOP_SONG ?      LedColour::YELLOW : 
                                                                                                       LedColour::OFF);
-    currentView->queueRender();
+    InterfaceEventQueue::q.doRender();
 }
