@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include "interface/graphics/GraphicsContext.h"
 #include "interface/Hardware.h"
+#include "interface/InterfaceEventQueue.h"
 
 class Component : public Focusable {
 

@@ -6,6 +6,8 @@
 
 enum InterfaceEventType {
     NONE,
+    RENDER,
+    //
     STICK_LEFT,
     STICK_RIGHT,
     STICK_UP,

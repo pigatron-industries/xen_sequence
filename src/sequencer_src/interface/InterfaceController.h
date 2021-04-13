@@ -21,6 +21,7 @@ public:
     InterfaceController();
     void init();
     void render();
+    void update();
     void handleEvent(InterfaceEvent event);
     virtual void onTick();
 

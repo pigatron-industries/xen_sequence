@@ -79,7 +79,7 @@ void EventParameterView::handleMidiEvent(MidiMessage message) {
 void EventParameterView::updateDataFromField(ParameterField* field) {
     if(event != NULL) {
         switch(event->getEventType()) {
-            case EventType::NOTE_EVENT:
+            case EventType::NOTE_EVENT: {
                 NoteEvent* noteEvent = (NoteEvent*)event;
                 if(field == &noteOnOffField) {
                     noteEvent->setStart(noteOnOffField.getStartValue());
@@ -90,7 +90,8 @@ void EventParameterView::updateDataFromField(ParameterField* field) {
                     noteEvent->setVelocity(eventVelocityField.getValue());
                 }
                 break;
-            case EventType::CONTROL_EVENT:
+            }
+            case EventType::CONTROL_EVENT: {
                 ControlEvent* controlEvent = (ControlEvent*)event;
                 if(field == &eventControlField) {
                     controlEvent->setControl(eventControlField.getValue());
@@ -98,6 +99,7 @@ void EventParameterView::updateDataFromField(ParameterField* field) {
                     controlEvent->setValue(eventValueField.getValue());
                 }
                 break;
+            }
         }
     }
 }
@@ -113,6 +115,8 @@ void EventParameterView::onSelectModeChange(ParameterField* field) {
             SequenceEvent* newEvent = SequenceEventFactory::create(static_cast<EventType>(eventTypeField.getValue()));
             tickEvents->replaceEvent(index, newEvent);
             setEvent(tickEvents, newEvent);
+            Serial.println("push event");
+            InterfaceEventQueue::q.doRender(true);
         }
     }
 }

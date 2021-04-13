@@ -1,6 +1,7 @@
 #include "InterfaceController.h"
 
 #include "Hardware.h"
+#include "InterfaceEventQueue.h"
 #include "model/AppData.h"
 
 #include "graphics/GraphicsContext.h"
@@ -26,10 +27,19 @@ void InterfaceController::render() {
     currentView->render();
 }
 
+void InterfaceController::update() {
+    while(InterfaceEventQueue::q.getSize() > 0) {
+        handleEvent(InterfaceEventQueue::q.popEvent());
+    }
+}
+
 void InterfaceController::handleEvent(InterfaceEvent event) {
     DEBUG("InterfaceController::handleEvent")
-    
-    if(isSequenceView()) {
+
+    if(event.eventType == InterfaceEventType::RENDER) {
+        currentView->render(event.data);
+
+    } else if(isSequenceView()) {
 
         switch(event.eventType) {
 
@@ -122,6 +132,7 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
         handleEvent(responseEvent); //TODO push event onto queue instead of calling recursively
     }
 
+    // TODO use render event instead of this
     if(currentView->rerender) {
         currentView->render(currentView->rerenderFull);
         currentView->rerender = false;

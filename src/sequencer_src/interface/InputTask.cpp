@@ -63,4 +63,6 @@ void InputTask::execute() {
     }
 
     Hardware::midiInputService.update();
+
+    interface.update();
 }
