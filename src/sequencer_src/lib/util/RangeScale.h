@@ -10,16 +10,16 @@ class RangeScale {
             this->toMax = toMax;
             fromRange = fromMax - fromMin;
             toRange = toMax - toMin;
-            fromRangeRecip = 1 / fromRange;
+            factor = toRange / fromRange;
         }
 
         int convert(int fromValue) {
-            return (((fromValue - fromMin) * toRange) / fromRange) + toMin;
+            return ((fromValue - fromMin) * factor) + toMin;
         }
 
     private:
         int fromMin, fromMax, toMin, toMax;
-        int fromRange, toRange, fromRangeRecip;
+        int fromRange, toRange, factor;
 
 };
 
