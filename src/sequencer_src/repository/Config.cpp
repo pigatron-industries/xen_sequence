@@ -3,7 +3,7 @@
 Config Config::config;
 
 Config::Config() {
-    lastFile[0] = "\0";
+    lastFile[0] = '\0';
 }
 
 void Config::serialize(JsonObject doc) {

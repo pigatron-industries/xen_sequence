@@ -16,6 +16,8 @@ void EventCompiler::compileTickEvents(SequenceTickEvents* tickEvents, uint8_t ch
         event->compile(messages, channel);
     }
 
+    messages.messages.sort(EventCompiler::comparator);
+
     tickEvents->setCompiled(true);
 }
 
@@ -24,4 +26,8 @@ void EventCompiler::clearCompiledEvent(CompiledEvents& event) {
         MidiMessage* message = event.messages.pop();
         delete message;
     }
+}
+
+int EventCompiler::comparator(MidiMessage*& m1, MidiMessage*& m2) {
+    return m1->pulse == m2->pulse ? 0 : m1->pulse > m2->pulse ? 1 : -1;
 }

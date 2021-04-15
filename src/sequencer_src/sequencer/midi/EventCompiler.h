@@ -13,6 +13,7 @@ public:
 
 private:
     void clearCompiledEvent(CompiledEvents& event);
+    static int comparator(MidiMessage*& m1, MidiMessage*& m2);
 
 };
 

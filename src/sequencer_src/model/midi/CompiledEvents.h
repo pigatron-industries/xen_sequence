@@ -15,7 +15,7 @@ public:
     void reset() { pointerIndex = 0; }
 
     void add(MidiMessage* message) {
-        messages.add(message); //TODO order messages by time
+        messages.add(message);
     }
 
     MidiMessage* getNextMessageAtPulse(uint8_t pulse) {
