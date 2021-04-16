@@ -65,7 +65,7 @@ SequencePattern* AppData::newPattern(uint16_t barIndex, uint8_t channelIndex) {
 }
 
 SequencePattern* AppData::copyPattern(SequencePattern* sourcePattern) {
-    DEBUG("SequenceView::copyPattern")
+    DEBUGINFO
     SequencePattern* pattern = newPattern();
     pattern->copy(sourcePattern);
     return pattern;

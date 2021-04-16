@@ -7,7 +7,7 @@ void Component::render(GraphicsContext& g) {
 }
 
 void Component::render(bool full) { 
-    DEBUG("Component::render")
+    DEBUGINFO
     GraphicsContext g = GraphicsContext(full); 
     if(full) {
         Hardware::display.fillScreen(Colour::BLACK);

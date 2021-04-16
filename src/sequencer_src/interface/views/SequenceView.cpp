@@ -29,7 +29,7 @@ SequenceView::SequenceView(SequenceMatrixView& _sequenceMatrixView) :
 }
 
 void SequenceView::init() {
-    DEBUG("SequenceView::init");
+    DEBUGINFO
 
     Sequencer::sequencer.setBar(cursorBar);
     setSelectedPattern();
@@ -38,7 +38,7 @@ void SequenceView::init() {
 }
 
 void SequenceView::render(GraphicsContext& g) {
-    DEBUG("SequenceView::render");
+    DEBUGINFO
 
     renderStatusBar();
     renderGrid();
@@ -373,7 +373,7 @@ void SequenceView::deletePattern() {
 }
 
 void SequenceView::copy() {
-    DEBUG("SequenceView::copy")
+    DEBUGINFO
     SequencePattern* pattern = AppData::data.getPattern(cursorBar, cursorChannel);
     if(pattern != NULL) {
         copiedPattern = AppData::data.copyPattern(pattern);
@@ -383,7 +383,7 @@ void SequenceView::copy() {
 }
 
 void SequenceView::paste() {
-    DEBUG("SequenceView::paste")
+    DEBUGINFO
     if(copiedPattern != NULL) {
         AppData::data.setPattern(cursorBar, cursorChannel, copiedPattern);
         setSelectedPattern();

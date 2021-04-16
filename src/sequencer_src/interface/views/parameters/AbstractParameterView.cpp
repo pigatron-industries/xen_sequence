@@ -6,7 +6,7 @@ void AbstractParameterView::init() {
 }
 
 void AbstractParameterView::render(GraphicsContext& g) {
-    DEBUG("AbstractParameterView::render");
+    DEBUGINFO
     Component::render(g);
     fields.render(g);
 }

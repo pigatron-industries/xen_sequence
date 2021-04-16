@@ -59,7 +59,7 @@ void Sequencer::pulseClockEvent() {
 }
 
 void Sequencer::play() {
-    DEBUG("Sequencer::play")
+    DEBUGINFO
     tickIndex = 0;
     playing = true;
     clock.reset();
@@ -82,7 +82,7 @@ void Sequencer::reset() {
 }
 
 uint16_t Sequencer::setBar(uint16_t _barIndex) {
-    DEBUG("Sequencer::setBar");
+    DEBUGINFO
     barIndex = _barIndex;
     currentBar = AppData::data.getBar(barIndex);
     updateBarSpeed();

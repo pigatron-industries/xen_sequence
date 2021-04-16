@@ -8,13 +8,15 @@ DataRepository DataRepository::data;
 const String DataRepository::ROOT_DIRECTORY = String("/sequence");
 
 void DataRepository::init() {
+    DEBUGINFO
+
     if (!sd.begin(SdioConfig(FIFO_SDIO))) {
         ERROR("SD card init failed");
         return;
     }
 
     if(!sd.exists(ROOT_DIRECTORY)) {
-        DEBUG("Creating sequence directory");
+        DEBUGLN("Creating sequence directory");
         sd.mkdir(ROOT_DIRECTORY, true);
     }
 
@@ -25,7 +27,7 @@ void DataRepository::init() {
 }
 
 bool DataRepository::loadFileList(String directoryName) {
-    DEBUG("DataRepository::loadFileList");
+    DEBUGINFO
     File dir = sd.open(String(ROOT_DIRECTORY).concat(directoryName));
     if(dir.isDirectory()) {
         int i = 0;
@@ -49,13 +51,14 @@ bool DataRepository::loadFileList(String directoryName) {
 }
 
 void DataRepository::saveSequence(String path) {
+    DEBUGINFO
     String fullpath = String(ROOT_DIRECTORY).concat(path);
     INFO("Saving to");
     INFO(fullpath);
 
     char jsonBuffer[JSON_BUF_SIZE];
     size_t jsonSize = serializeSequence(jsonBuffer, JSON_BUF_SIZE);
-    DEBUG(jsonBuffer);
+    DEBUGLN(jsonBuffer);
     INFO("Writing bytes"); 
     INFO(jsonSize);
 
@@ -125,7 +128,7 @@ void DataRepository::deserializeSequence(char* buffer, size_t size) {
 }
 
 void DataRepository::loadConfig() {
-    DEBUG("DataRepository::loadConfig");
+    DEBUGINFO
 
     SdFile file;
     if(!file.open(CONFIG_FILE, FILE_READ)) {
@@ -141,11 +144,11 @@ void DataRepository::loadConfig() {
 }
 
 void DataRepository::saveConfig() {
-    DEBUG("DataRepository::saveConfig");
+    DEBUGINFO
 
     char jsonBuffer[JSON_BUF_SIZE];
     size_t jsonSize = serializeConfig(jsonBuffer, JSON_BUF_SIZE);
-    DEBUG(jsonBuffer);
+    DEBUGLN(jsonBuffer);
     INFO("Writing bytes"); 
     INFO(jsonSize);
 

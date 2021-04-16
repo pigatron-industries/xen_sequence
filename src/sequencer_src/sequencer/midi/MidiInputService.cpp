@@ -37,8 +37,7 @@ void MidiInputService::notify(MidiMessage midiMessage) {
 
 void MidiInputService::update() {
     while(_midiSerial.available()) {
-
-        DEBUG("MidiInputService::execute")
+        DEBUGINFO
 
         uint8_t messageBuffer[3];
         messageBuffer[0] = getByte();
@@ -60,15 +59,10 @@ void MidiInputService::update() {
                     length = 2;
                 }
 
-                DEBUG("");
-                DEBUG("Command");
-                DEBUG(command);
-                DEBUG("Channel");
-                DEBUG(channel);
-                DEBUG("Data 1");
-                DEBUG(messageBuffer[1]);
-                DEBUG("Data 2");
-                DEBUG(messageBuffer[2]);
+                DEBUG("command=");DEBUG(command);
+                DEBUG("channel=");DEBUG(channel);
+                DEBUG("data1=");DEBUG(messageBuffer[1]);
+                DEBUG("data2=");DEBUGLN(messageBuffer[2]);
 
                 notify(MidiMessage(channel, command, messageBuffer[1], messageBuffer[2]));
 
@@ -87,13 +81,12 @@ void MidiInputService::handleSysex() {
     memset(sysexBuffer, 0, SYSEX_BUFFER_SIZE);
     size_t size = _midiSerial.readBytesUntil(SYSTEM_EXCLUSIVE_END, sysexBuffer, SYSEX_BUFFER_SIZE);
 
-    Serial.println("System config message recieved:");
-    Serial.print("     ");
+    INFO("System config message recieved:");
     for(unsigned int i = 0; i < size; i++) {
-        Serial.print((char)sysexBuffer[i]);
+        INFO((char)sysexBuffer[i]);
     }
-    Serial.println();
-    Serial.println();
+    INFO();
+    INFO();
 
     // int decodedSize = base64_decode((char*)sysexBufferDecoded, (char*)sysexBuffer, size);
     // _midiEventProcessor.eventSystemConfig(sysexBufferDecoded, decodedSize);

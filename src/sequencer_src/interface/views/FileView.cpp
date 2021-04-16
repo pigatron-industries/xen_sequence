@@ -19,7 +19,7 @@ FileView::FileView() {
 }
 
 void FileView::init() {
-    DEBUG("FileView::init");
+    DEBUGINFO
     listFiles();
 
     saveConfirmation = false;
@@ -34,7 +34,7 @@ void FileView::init() {
 }
 
 void FileView::render(GraphicsContext& g) {
-    DEBUG("FileView::render")
+    DEBUGINFO
     g.focus = listComponent.getComponent(selectedIndex);
     if(g.full) {
         titleComponent.render(g);
@@ -106,7 +106,7 @@ void FileView::handleEvent(InterfaceEvent event) {
 }
 
 void FileView::listFiles() {
-    DEBUG("FileView::listFiles")
+    DEBUGINFO
 
     selectedIndex = 0;
     DataRepository::data.loadFileList(currentDirectory);
@@ -118,8 +118,7 @@ void FileView::listFiles() {
         fileComponents[i].setText(fileList.file[i].filename);
         listComponent.addComponent(&fileComponents[i]);
 
-        DEBUG(fileList.file[i].filepath)
-        DEBUG(Config::config.lastFile)
+        DEBUGLN(fileList.file[i].filepath)
 
         if(strcmp(fileList.file[i].filepath, Config::config.lastFile) == 0) {
             selectedIndex = i+1;

@@ -34,7 +34,7 @@ void InterfaceController::update() {
 }
 
 void InterfaceController::handleEvent(InterfaceEvent event) {
-    DEBUG("InterfaceController::handleEvent")
+    DEBUGINFO
 
     if(event.eventType == InterfaceEventType::RENDER) {
         currentView->render(event.data);
@@ -135,14 +135,14 @@ void InterfaceController::onTick() {
 }
 
 void InterfaceController::switchToParameterView() {
-    DEBUG("InterfaceController::switchToParameterView");
+    DEBUGINFO
     currentView = &parameterView;
     parameterView.init();
     render();
 }
 
 void InterfaceController::switchToSequenceView() {
-    DEBUG("InterfaceController::switchToSequenceView");
+    DEBUGINFO
     currentView = &sequenceView;
     sequenceView.init();
     render();

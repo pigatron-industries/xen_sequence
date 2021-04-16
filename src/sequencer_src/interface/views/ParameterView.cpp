@@ -13,7 +13,7 @@ ParameterView::ParameterView(SequenceMatrixView& _sequenceMatrixView) :
 }
 
 void ParameterView::init() {
-    DEBUG("ParameterView::init")
+    DEBUGINFO
     barIndex = Sequencer::sequencer.getBarIndex();
     songParameterView.init();
     updateSelectedBarFields();
@@ -21,7 +21,7 @@ void ParameterView::init() {
 }
 
 void ParameterView::render(GraphicsContext& g) {
-    DEBUG("ParameterView::render");
+    DEBUGINFO
     renderMode();
 
     g.yPos += FIELD_HEIGHT;
@@ -68,8 +68,8 @@ void ParameterView::renderKeyLeds() {
 }
 
 void ParameterView::handleMidiEvent(MidiMessage message) {
+    DEBUGINFO
     if(recording && parameterViewMode == PARAM_MODE_EVENT) {
-        DEBUG("ParameterView::handleMidiEvent");
         //TODO advance to next tick depending on recoding mode
 
         if(message.command == COMMAND_NOTEON) {
@@ -87,7 +87,7 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
 }
 
 void ParameterView::handleEvent(InterfaceEvent event) {
-    DEBUG("ParameterView::handleEvent");
+    DEBUGINFO
     switch(event.eventType) {
         case InterfaceEventType::STICK_UP:
             cursorUp();
@@ -257,8 +257,7 @@ void ParameterView::cycleParameterViewMode() {
 }
 
 void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
-    DEBUG("ParameterView::setParameterViewMode"); 
-    DEBUG(parameterViewMode);
+    DEBUGINFO
     this->parameterViewMode = parameterViewMode;
     switch(parameterViewMode) {
         case PARAM_MODE_SONG:
