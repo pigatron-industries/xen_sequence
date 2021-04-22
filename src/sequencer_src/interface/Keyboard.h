@@ -32,6 +32,7 @@ class Keyboard {
         bool update();
         Key* getKeys();
         int getNumKeys();
+        KeyState getKeyState(char key);
 
         void clear();
         void setKeyLed(InterfaceEventType key, LedColour colour);

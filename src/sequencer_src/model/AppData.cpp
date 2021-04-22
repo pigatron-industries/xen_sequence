@@ -34,6 +34,26 @@ SequencePattern* AppData::getPattern(uint16_t barIndex, uint8_t channel) {
     return NULL;
 }
 
+SequencePattern* AppData::getOrCreatePattern(uint16_t barIndex, uint8_t channelIndex) {
+    SequenceBar* bar = getBar(barIndex);
+    if(bar == NULL) {
+        bar = newBar(barIndex);
+    }
+    SequencePattern* pattern = bar->getPattern(channelIndex);
+    if(pattern == NULL) {
+        pattern = newPattern(barIndex, channelIndex);
+    }
+    return pattern;
+}
+
+SequenceTickEvents* AppData::getTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
+    SequencePattern* pattern = getPattern(barIndex, channelIndex);
+    if(pattern != NULL) {
+        return pattern->getTickEvents(tickIndex);
+    }
+    return NULL;
+}
+
 uint16_t AppData::getAbsoluteSpeed(SequenceBar* bar) {
     return sequence.getSpeed() + bar->getSpeedDiff();
 }
@@ -94,28 +114,21 @@ uint8_t AppData::getUnusedPatternId() {
 }
 
 SequenceEvent* AppData::newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, EventType eventType) {
-    SequenceBar* bar = getBar(barIndex);
-    if(bar == NULL) {
-        bar = newBar(barIndex);
-    }
-    SequencePattern* pattern = bar->getPattern(channelIndex);
-    if(pattern == NULL) {
-        pattern = newPattern(barIndex, channelIndex);
-    }
+    SequencePattern* pattern = getOrCreatePattern(barIndex, channelIndex);
     SequenceEvent* event = SequenceEventFactory::create(eventType);
     pattern->addEvent(tickIndex, event);
     return event;
 }
 
+SequenceTickEvents* AppData::newTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
+    SequencePattern* pattern = getOrCreatePattern(barIndex, channelIndex);
+    SequenceTickEvents* tickEvents = new SequenceTickEvents();
+    pattern->setTickEvents(tickIndex, tickEvents);
+    return tickEvents;
+}
+
 SequenceTickEvents* AppData::newTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceTickEvents* copy) {
-    SequenceBar* bar = getBar(barIndex);
-    if(bar == NULL) {
-        bar = newBar(barIndex);
-    }
-    SequencePattern* pattern = bar->getPattern(channelIndex);
-    if(pattern == NULL) {
-        pattern = newPattern(barIndex, channelIndex);
-    }
+    SequencePattern* pattern = getOrCreatePattern(barIndex, channelIndex);
     SequenceTickEvents* tickEvents = new SequenceTickEvents(copy);
     pattern->setTickEvents(tickIndex, tickEvents);
     return tickEvents;

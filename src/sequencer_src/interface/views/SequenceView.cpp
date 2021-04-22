@@ -167,11 +167,9 @@ void SequenceView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::KEY_FUNCTION:
             if(event.data == EVENT_KEY_PRESSED) {
-                function = true;
-                Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_FUNCTION, LedColour::GREEN);
-            } else if (event.data == EVENT_KEY_RELEASED) {
-                function = false;
-                Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_FUNCTION, LedColour::OFF);
+                //TODO highlight which keys can be pressed in function mode
+            } else {
+                renderKeyLeds();
             }
             break;
 
@@ -231,11 +229,11 @@ void SequenceView::handleEvent(InterfaceEvent event) {
             break;
 
         case InterfaceEventType::KEY_MOVE:
-            if(function && event.data == EVENT_KEY_PRESSED) {
+            if(event.data == EVENT_KEY_FUNCTION) {
                 cycleMoveMode();
-            } else if (!function && event.data == EVENT_KEY_PRESSED) {
+            } else if (event.data == EVENT_KEY_PRESSED) {
                 moveStart();
-            } else if (!function && event.data == EVENT_KEY_RELEASED) {
+            } else if (event.data == EVENT_KEY_RELEASED) {
                 if(moveMode == MoveMode::PATTERN_MOVE) {
                     patternMoveEnd();
                 } else if(moveMode == MoveMode::PATTERN_COPY) {

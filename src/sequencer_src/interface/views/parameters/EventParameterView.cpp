@@ -69,7 +69,8 @@ void EventParameterView::handleMidiEvent(MidiMessage message) {
         updateDataFromField(&eventPitchField);
         updateDataFromField(&eventVelocityField);
     } else if (message.command == COMMAND_CONTROL_CHANGE) {
-        //TODO
+        eventValueField.setValue(message.data2);
+        updateDataFromField(&eventValueField);
     }
 }
 

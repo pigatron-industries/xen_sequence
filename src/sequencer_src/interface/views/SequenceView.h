@@ -38,8 +38,6 @@ private:
 
     SequencePattern* copiedPattern = NULL;
 
-    bool function = false;
-
     //rendering
     void renderStatusBar();
     void renderGrid();

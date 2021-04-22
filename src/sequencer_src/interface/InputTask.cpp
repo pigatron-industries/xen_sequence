@@ -4,6 +4,7 @@
 #include "InterfaceEvent.h"
 
 #include "hwconfig.h"
+#include "lib/util/debug.h"
 
 InputTask::InputTask(InterfaceController& _interface) :
     interface(_interface),
@@ -55,9 +56,21 @@ void InputTask::execute() {
         for(int i = 0; i < Hardware::keyboard.getNumKeys(); i++) {
             Key key = Hardware::keyboard.getKeys()[i];
             if(key.stateChanged && key.kstate == PRESSED) {
-                interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key.kchar), EVENT_KEY_PRESSED));
+
+                interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key.kchar), function ? EVENT_KEY_FUNCTION : EVENT_KEY_PRESSED));
+                if(key.kchar == InterfaceEventType::KEY_FUNCTION) {
+                    function = true;
+                    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_FUNCTION, LedColour::GREEN);
+                }
+
             } else if (key.stateChanged && key.kstate == RELEASED) {
+
+                if(key.kchar == InterfaceEventType::KEY_FUNCTION) {
+                    function = false;
+                    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_FUNCTION, LedColour::OFF);
+                }
                 interface.handleEvent(InterfaceEvent(static_cast<InterfaceEventType>(key.kchar), EVENT_KEY_RELEASED));
+
             }
         }
     }

@@ -17,7 +17,7 @@ void ParameterView::init() {
     barIndex = Sequencer::sequencer.getBarIndex();
     songParameterView.init();
     updateSelectedBarFields();
-    setParameterViewMode(parameterViewMode);
+    setParameterViewMode(parameterViewMode.value);
 }
 
 void ParameterView::render(GraphicsContext& g) {
@@ -36,16 +36,13 @@ void ParameterView::renderMode() {
     uint8_t top = 0;
     Hardware::display.setTextColour(Colour::WHITE);
     Hardware::display.setCursor(0, top+TEXT_HEIGHT);
-    Hardware::display.print(parameterViewMode == PARAM_MODE_SONG ? "SONG" : 
-                            parameterViewMode == PARAM_MODE_BAR ? "BAR" : 
-                            parameterViewMode == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
+    Hardware::display.print(parameterViewMode.value == PARAM_MODE_SONG ? "SONG" : 
+                            parameterViewMode.value == PARAM_MODE_BAR ? "BAR" : 
+                            parameterViewMode.value == PARAM_MODE_CHANNEL ? "CHANNEL" : "EVENT");
 }
 
 void ParameterView::setDirtyScreen() {
     dirtyScreen = true;
-    // for(int i = 0; i < visibleFields->size(); i++) {
-    //     visibleFields->get(i)->setDirty();
-    // }
 }
 
 void ParameterView::renderKeyLeds() {
@@ -65,30 +62,44 @@ void ParameterView::renderKeyLeds() {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_DEL, LedColour::OFF);
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD, LedColour::OFF);
     }
+
+    renderRecordModeKeyLeds();
+}
+
+void ParameterView::renderRecordModeKeyLeds() {
+    if(recording) {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, recordMode.value == RecordMode::STATIC ? LedColour::YELLOW : 
+                                                                     recordMode.value == RecordMode::ADANCE_ON_MESSAGE ? LedColour::MAGENTA : LedColour::RED);
+    } else {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
+    }
 }
 
 void ParameterView::handleMidiEvent(MidiMessage message) {
     DEBUGINFO
-    if(recording && parameterViewMode == PARAM_MODE_EVENT) {
-        //TODO advance to next tick depending on recoding mode
+    if(recording && parameterViewMode.value == PARAM_MODE_EVENT) {
 
-        if(message.command == COMMAND_NOTEON) {
-            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
-            if(tickEventsParameterView.getTickEvents() == NULL) {
-                addEvent();
-            }
-        } else if (message.command == COMMAND_NOTEOFF) {
-            Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::RED);
+        //TODO advance to next tick depending on recording mode
+
+        if(tickEventsParameterView.handleMidiEvent(message)) {
+            updateSelectedEventFields();
+        } else {
+            InterfaceEventQueue::q.doRender(false);
         }
-
-        tickEventsParameterView.handleMidiEvent(message);
-        View::render();
     }
 }
 
 void ParameterView::handleEvent(InterfaceEvent event) {
     DEBUGINFO
     switch(event.eventType) {
+        case InterfaceEventType::KEY_FUNCTION:
+            if(event.data == EVENT_KEY_PRESSED) {
+                //TODO highlight which keys can be pressed in function mode
+            } else {
+                renderKeyLeds();
+            }
+            break;
+
         case InterfaceEventType::STICK_UP:
             cursorUp();
             break;
@@ -108,6 +119,8 @@ void ParameterView::handleEvent(InterfaceEvent event) {
         case InterfaceEventType::KEY_RECORD: 
             if(event.data == EVENT_KEY_PRESSED) {
                 record(!recording);
+            } else if(event.data == EVENT_KEY_FUNCTION) {
+                cycleRecordMode();
             }
             break;
 
@@ -177,7 +190,7 @@ void ParameterView::handleEvent(InterfaceEvent event) {
 
 void ParameterView::record(bool value) {
     recording = value;
-    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, value ? LedColour::RED : LedColour::OFF);
+    renderRecordModeKeyLeds();
 }
 
 void ParameterView::cursorUp() {
@@ -227,15 +240,15 @@ void ParameterView::setBar(uint16_t _barIndex) {
 };
 
 void ParameterView::cycleSelectionMode() {
-    switch(parameterViewMode) {
-        case PARAM_MODE_SONG:
-        case PARAM_MODE_BAR:
+    switch(parameterViewMode.value) {
+        case ParameterViewMode::PARAM_MODE_SONG:
+        case ParameterViewMode::PARAM_MODE_BAR:
             setSelectionMode(ParameterViewSelectionMode::SELECT_NONE);
             break;
-        case PARAM_MODE_CHANNEL:
+        case ParameterViewMode::PARAM_MODE_CHANNEL:
             setSelectionMode(ParameterViewSelectionMode::SELECT_CHANNEL);
             break;
-        case PARAM_MODE_EVENT:
+        case ParameterViewMode::PARAM_MODE_EVENT:
             setSelectionMode(ParameterViewSelectionMode::SELECT_EVENT);
             break;
     }
@@ -251,14 +264,13 @@ void ParameterView::setSelectionMode(ParameterViewSelectionMode _selectionMode) 
 }
 
 void ParameterView::cycleParameterViewMode() {
-    setParameterViewMode(parameterViewMode == PARAM_MODE_SONG ? PARAM_MODE_BAR :
-                         parameterViewMode == PARAM_MODE_BAR ? PARAM_MODE_CHANNEL :
-                         parameterViewMode == PARAM_MODE_CHANNEL ? PARAM_MODE_EVENT : PARAM_MODE_SONG);
+    parameterViewMode.cycle(1);
+    setParameterViewMode(parameterViewMode.value);
 }
 
 void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
     DEBUGINFO
-    this->parameterViewMode = parameterViewMode;
+    this->parameterViewMode.value = parameterViewMode;
     switch(parameterViewMode) {
         case PARAM_MODE_SONG:
             visibleParameterView = &songParameterView;
@@ -286,6 +298,16 @@ void ParameterView::setParameterViewMode(ParameterViewMode parameterViewMode) {
     InterfaceEventQueue::q.doRender(true);
 }
 
+void ParameterView::cycleRecordMode() {
+    recordMode.cycle(1);
+    setRecordMode(recordMode.value);
+}
+
+void ParameterView::setRecordMode(RecordMode recordMode) {
+    this->recordMode.value = recordMode;
+    renderRecordModeKeyLeds();
+}
+
 void ParameterView::updateSelectedBarFields() {
     SequenceBar* bar = AppData::data.getBar(barIndex);
     barParameterView.setBar(bar);
@@ -305,7 +327,7 @@ void ParameterView::updateSelectedEventFields() {
         selectedTickEvents = selectedPattern->getTickEvents(sequenceMatrixView.getSelectCursorTick());
     }
     
-    tickEventsParameterView.setTickEvents(selectedTickEvents);
+    tickEventsParameterView.setTickEvents(selectedTickEvents, barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
     renderKeyLeds();
     InterfaceEventQueue::q.doRender(true);
 }
@@ -317,6 +339,11 @@ void ParameterView::addEvent() {
 
 void ParameterView::addEvent(SequenceTickEvents* copy) {
     AppData::data.newTickEvents(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick(), copy);
+    updateSelectedEventFields();
+}
+
+void ParameterView::addTickEvents() {
+    AppData::data.newTickEvents(barIndex, sequenceMatrixView.getSelectCursorChannel(), sequenceMatrixView.getSelectCursorTick());
     updateSelectedEventFields();
 }
 

@@ -15,9 +15,9 @@ class TickEventsParameterView : public AbstractParameterView {
 public:
     TickEventsParameterView();
     //virtual InterfaceEvent handleEvent(InterfaceEvent event);
-    void setTickEvents(SequenceTickEvents* tickEvents);
+    void setTickEvents(SequenceTickEvents* tickEvents, uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
     SequenceTickEvents* getTickEvents() { return tickEvents; }
-    void handleMidiEvent(MidiMessage message);
+    bool handleMidiEvent(const MidiMessage& message);
     int getSelectedEventIndex();
 
 protected:
@@ -27,8 +27,14 @@ private:
     EventParameterView eventParametersViews[MAX_EVENTS];
 
     SequenceTickEvents* tickEvents;
+    uint16_t barIndex;
+    uint8_t channelIndex;
+    uint8_t tickIndex;
 
     EventParameterView* getSelectedEventParameters();
+    bool handleMidiMessage(const MidiMessage& message, EventType eventType);
+    int getMatchingEventIndex(EventType eventType);
+    int createEvent(EventType eventType);
 };
 
 #endif

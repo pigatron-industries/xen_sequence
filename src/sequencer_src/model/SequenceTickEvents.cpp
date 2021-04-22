@@ -27,6 +27,15 @@ SequenceEvent* SequenceTickEvents::getEvent(int index) {
     }
 }
 
+int SequenceTickEvents::getEventIndex(SequenceEvent* event) {
+    for(int i = 0; i < events.size(); i++) {
+        if(events.get(i) == event) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void SequenceTickEvents::addEvent(SequenceEvent* event) {
     events.add(event);
     compiled = false;

@@ -21,6 +21,7 @@ public:
 
 private:
     InterfaceController& interface;
+    bool function = false;
 
     AnalogStick analogStick;
     Switch analogStickSwitch;

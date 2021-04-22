@@ -38,6 +38,16 @@ int Keyboard::getNumKeys() {
     return keypad.numKeys();
 }
 
+KeyState Keyboard::getKeyState(char key) {
+    for(int i = 0; i < getNumKeys(); i++) {
+        Key thisKey = getKeys()[i];
+        if(thisKey.kchar == key) {
+            return thisKey.kstate;
+        }
+    }
+    return KeyState::IDLE;
+}
+
 void Keyboard::clear() {
     for(int x = 0; x < KEY_ROWS; x++) {
         for(int y = 0; y < KEY_COLS; y++) {

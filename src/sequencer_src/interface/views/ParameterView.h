@@ -2,6 +2,7 @@
 #define ParameterView_h
 
 #include <inttypes.h>
+#include <eurorack.h>
 
 #include "View.h"
 #include "matrix/SequenceMatrixView.h"
@@ -11,23 +12,29 @@
 #include "parameters/SongParameterView.h"
 #include "sequencer/midi/MidiEventHandler.h"
 
-enum ParameterViewMode {
-    PARAM_MODE_SONG,
-    PARAM_MODE_BAR, // Track length
-    PARAM_MODE_CHANNEL, // Edit entire channel: Mute, length
-    PARAM_MODE_EVENT //Edit note parameters
-};
-
-enum class ParameterViewSelectionMode {
-    SELECT_NONE,
-    SELECT_CHANNEL,
-    SELECT_EVENT
-};
-
-
 class ParameterView : public View, public MidiEventHandler {
 
 public:
+
+    enum ParameterViewMode {
+        PARAM_MODE_SONG,
+        PARAM_MODE_BAR, // Track length
+        PARAM_MODE_CHANNEL, // Edit entire channel: Mute, length
+        PARAM_MODE_EVENT //Edit note parameters
+    };
+
+    enum ParameterViewSelectionMode {
+        SELECT_NONE,
+        SELECT_CHANNEL,
+        SELECT_EVENT
+    };
+
+    enum RecordMode {
+        STATIC,
+        ADANCE_ON_MESSAGE,
+        REAL_TIME
+    };
+
     ParameterView(SequenceMatrixView& _sequenceMatrixView);
     virtual void init();
     virtual void render(GraphicsContext& g);
@@ -40,6 +47,7 @@ private:
     SequenceMatrixView& sequenceMatrixView;
 
     bool recording;
+    CycleEnum<RecordMode> recordMode = CycleEnum<RecordMode>(RecordMode::STATIC, RecordMode::REAL_TIME);
 
     bool dirtyScreen = true;
 
@@ -52,7 +60,7 @@ private:
     int draggingFromChannel;
     int draggingFromTick;
 
-    ParameterViewMode parameterViewMode = PARAM_MODE_EVENT;
+    CycleEnum<ParameterViewMode> parameterViewMode = CycleEnum<ParameterViewMode>(ParameterViewMode::PARAM_MODE_SONG, ParameterViewMode::PARAM_MODE_EVENT);
     ParameterViewSelectionMode selectionMode = ParameterViewSelectionMode::SELECT_EVENT;
 
     AbstractParameterView* visibleParameterView;
@@ -65,8 +73,8 @@ private:
     // rendering
     void renderMode();
     void setDirtyScreen();
-
     void renderKeyLeds();
+    void renderRecordModeKeyLeds();
 
     // events
     void record(bool value);
@@ -86,6 +94,9 @@ private:
     void setSelectionMode(ParameterViewSelectionMode _selectionMode);
     void cycleParameterViewMode();
     void setParameterViewMode(ParameterViewMode _parameterViewMode);
+    void cycleRecordMode();
+    void setRecordMode(RecordMode recordMode);
+
     ParameterField* getSelectedField();
     void nextParameter();
     void prevParameter();
@@ -96,6 +107,7 @@ private:
 
     void addEvent();
     void addEvent(SequenceTickEvents* copy);
+    void addTickEvents();
     void deleteEvent();
     void clearPattern();
 

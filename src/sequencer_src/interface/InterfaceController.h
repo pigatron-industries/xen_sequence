@@ -28,6 +28,7 @@ public:
 private:
     View* currentView;
     View* previousView;
+    bool function = false;
 
     SequenceMatrixView sequenceMatrixView;
     SequenceView sequenceView;

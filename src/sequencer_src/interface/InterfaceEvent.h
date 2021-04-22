@@ -3,6 +3,7 @@
 
 #define EVENT_KEY_RELEASED 0
 #define EVENT_KEY_PRESSED 1
+#define EVENT_KEY_FUNCTION 2
 
 enum InterfaceEventType {
     NONE,

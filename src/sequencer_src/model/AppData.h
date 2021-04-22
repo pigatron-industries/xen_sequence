@@ -17,6 +17,8 @@ public:
     SequencePattern* getPatternById(uint8_t id);
     SequencePattern* getPattern(uint16_t barIndex, uint8_t channel);
     SequenceChannel& getChannel(uint8_t index);
+    SequenceTickEvents* getTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
+
     uint16_t getAbsoluteSpeed(SequenceBar* bar);
     uint8_t getAbsoluteSpeedMult(SequenceBar* bar);
 
@@ -26,6 +28,7 @@ public:
     SequencePattern* newPattern();
     SequencePattern* newPattern(uint16_t barIndex, uint8_t channel);
     SequenceEvent* newEvent(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, EventType eventType);
+    SequenceTickEvents* newTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
     SequenceTickEvents* newTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex, SequenceTickEvents* copy);
 
     void deleteTickEvents(uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex);
@@ -49,6 +52,7 @@ private:
     LinkedList<SequencePattern*> patterns;
 
     uint8_t getUnusedPatternId();
+    SequencePattern* getOrCreatePattern(uint16_t barIndex, uint8_t channelIndex);
 
 };
 

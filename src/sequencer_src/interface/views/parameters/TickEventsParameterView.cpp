@@ -1,5 +1,6 @@
 #include "TickEventsParameterView.h"
 #include "model/event/NoteEvent.h"
+#include "model/AppData.h"
 
 TickEventsParameterView::TickEventsParameterView() {
     for(int i = 0; i < MAX_EVENTS; i++) {
@@ -19,8 +20,12 @@ TickEventsParameterView::TickEventsParameterView() {
 //     return AbstractParameterView::handleEvent(event);
 // }
 
-void TickEventsParameterView::setTickEvents(SequenceTickEvents* tickEvents) {
+void TickEventsParameterView::setTickEvents(SequenceTickEvents* tickEvents, uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
     this->tickEvents = tickEvents;
+    this->barIndex = barIndex;
+    this->channelIndex = channelIndex;
+    this->tickIndex = tickIndex;
+
     if(tickEvents != NULL) {
         for(int i = 0; i < MAX_EVENTS; i++) {
             eventParametersViews[i].setEvent(tickEvents, tickEvents->getEvent(i));
@@ -55,11 +60,16 @@ EventParameterView* TickEventsParameterView::getSelectedEventParameters() {
     }
 }
 
-void TickEventsParameterView::handleMidiEvent(MidiMessage message) {
-    if(message.command == COMMAND_NOTEON) {
-        eventParametersViews[0].handleMidiEvent(message); //TODO decide which event to send midi to
-    } else if (message.command == COMMAND_CONTROL_CHANGE) {
-        eventParametersViews[0].handleMidiEvent(message);
+bool TickEventsParameterView::handleMidiEvent(const MidiMessage& message) {
+    switch(message.command) {
+        case COMMAND_NOTEON:
+            return handleMidiMessage(message, EventType::NOTE_EVENT);
+            break;
+        case COMMAND_CONTROL_CHANGE:
+            return handleMidiMessage(message, EventType::CONTROL_EVENT);
+            break;
+        default:
+            return false;
     }
 }
 
@@ -70,4 +80,35 @@ void TickEventsParameterView::updateDataFromField(ParameterField* field) {
         }
         tickEvents->setCompiled(false);
     }
+}
+
+bool TickEventsParameterView::handleMidiMessage(const MidiMessage& message, EventType eventType) {
+    bool newEvent = false;
+    int eventIndex = getMatchingEventIndex(eventType);
+    if(eventIndex == -1) {
+        eventIndex = createEvent(eventType);
+        newEvent = true;
+    }
+    eventParametersViews[eventIndex].handleMidiEvent(message);
+    return newEvent;
+}
+
+int TickEventsParameterView::getMatchingEventIndex(EventType eventType) {
+    if(tickEvents != NULL) {
+        for(int i = 0; i < tickEvents->getSize(); i++) {
+            SequenceEvent* event = tickEvents->getEvent(i);
+            if(event->getEventType() == eventType) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+int TickEventsParameterView::createEvent(EventType eventType) {
+    SequenceEvent* event = AppData::data.newEvent(barIndex, channelIndex, tickIndex, eventType);
+    if(tickEvents == NULL) {
+        tickEvents = AppData::data.getTickEvents(barIndex, channelIndex, tickIndex);
+    }
+    return tickEvents->getEventIndex(event);
 }
