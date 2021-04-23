@@ -16,6 +16,10 @@ SequenceEvent* NoteEvent::clone() const {
     return event;
 }
 
+bool NoteEvent::matchMessage(const MidiMessage& message) {
+    return message.command == COMMAND_NOTEON;
+}
+
 void NoteEvent::compile(CompiledEvents& messages, uint8_t channel) {
     uint8_t startPulse = start;
     messages.add(new MidiMessage(startPulse, channel, COMMAND_NOTEON, pitch, velocity));

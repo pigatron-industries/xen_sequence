@@ -26,6 +26,8 @@ public:
     uint8_t getStart() { return start; }
     uint16_t getValue() { return value; }
 
+    virtual bool matchMessage(const MidiMessage& message);
+
     virtual void compile(CompiledEvents& messages, uint8_t channel);
     virtual void serialize(JsonObject doc);
     virtual void deserialize(JsonObject doc);

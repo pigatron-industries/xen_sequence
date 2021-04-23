@@ -9,17 +9,6 @@ TickEventsParameterView::TickEventsParameterView() {
     setSelectedField(0);
 }
 
-// InterfaceEvent TickEventsParameterView::handleEvent(InterfaceEvent event) {
-//     switch(event.eventType) {
-//         case InterfaceEventType::DATA_PRESS:
-
-//             EventParameterView* eventParameterView = getSelectedEventParameters();
-//             if(selectedField == eventParameterView->)
-//             break;
-//     }
-//     return AbstractParameterView::handleEvent(event);
-// }
-
 void TickEventsParameterView::setTickEvents(SequenceTickEvents* tickEvents, uint16_t barIndex, uint8_t channelIndex, uint8_t tickIndex) {
     this->tickEvents = tickEvents;
     this->barIndex = barIndex;
@@ -84,7 +73,7 @@ void TickEventsParameterView::updateDataFromField(ParameterField* field) {
 
 bool TickEventsParameterView::handleMidiMessage(const MidiMessage& message, EventType eventType) {
     bool newEvent = false;
-    int eventIndex = getMatchingEventIndex(eventType);
+    int eventIndex = getMatchingEventIndex(message);
     if(eventIndex == -1) {
         eventIndex = createEvent(eventType);
         newEvent = true;
@@ -93,11 +82,11 @@ bool TickEventsParameterView::handleMidiMessage(const MidiMessage& message, Even
     return newEvent;
 }
 
-int TickEventsParameterView::getMatchingEventIndex(EventType eventType) {
+int TickEventsParameterView::getMatchingEventIndex(const MidiMessage& message) {
     if(tickEvents != NULL) {
         for(int i = 0; i < tickEvents->getSize(); i++) {
             SequenceEvent* event = tickEvents->getEvent(i);
-            if(event->getEventType() == eventType) {
+            if(event->matchMessage(message)) {
                 return i;
             }
         }

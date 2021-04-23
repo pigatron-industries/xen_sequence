@@ -33,7 +33,7 @@ private:
 
     EventParameterView* getSelectedEventParameters();
     bool handleMidiMessage(const MidiMessage& message, EventType eventType);
-    int getMatchingEventIndex(EventType eventType);
+    int getMatchingEventIndex(const MidiMessage& message);
     int createEvent(EventType eventType);
 };
 

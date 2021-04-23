@@ -13,6 +13,10 @@ SequenceEvent* ControlEvent::clone() const {
     return event;
 }
 
+bool ControlEvent::matchMessage(const MidiMessage& message) {
+    return message.command == COMMAND_CONTROL_CHANGE && message.data1 == control;
+}
+
 void ControlEvent::compile(CompiledEvents& messages, uint8_t channel) {
     uint8_t startPulse = start;
     messages.add(new MidiMessage(startPulse, channel, COMMAND_CONTROL_CHANGE, control, value));

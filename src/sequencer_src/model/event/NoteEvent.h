@@ -21,6 +21,8 @@ public:
     uint8_t getPitch() { return pitch; }
     uint8_t getVelocity() { return velocity; }
 
+    virtual bool matchMessage(const MidiMessage& message);
+
     virtual void compile(CompiledEvents& messages, uint8_t channel);
     virtual void serialize(JsonObject doc);
     virtual void deserialize(JsonObject doc);
