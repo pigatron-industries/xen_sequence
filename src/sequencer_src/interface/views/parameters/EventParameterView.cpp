@@ -37,6 +37,7 @@ void EventParameterView::setEvent(SequenceTickEvents* tickEvents, SequenceEvent*
     if(event != NULL) {
         eventTypeField.setVisibility(true);
         lineComponent.setVisibility(true);
+        eventTypeField.setValue(event->getEventType());
 
         switch(event->getEventType()) {
             case EventType::NOTE_EVENT: {
