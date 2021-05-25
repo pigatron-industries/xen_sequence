@@ -66,7 +66,9 @@ void MidiInputService::update() {
 
                 MidiChannelState& channelState = MidiState::midiState.getChannelState(channel);
                 if(command == COMMAND_NOTEON) {
-                    channelState.noteOn(messageBuffer[1]);
+                    if(!channelState.noteOn(messageBuffer[1])) {
+                        break;
+                    }
                 } else if (command == COMMAND_NOTEOFF) {
                     channelState.noteOff(messageBuffer[1]);
                 }

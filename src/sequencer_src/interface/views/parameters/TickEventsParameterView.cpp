@@ -1,6 +1,7 @@
 #include "TickEventsParameterView.h"
 #include "model/event/NoteEvent.h"
 #include "model/AppData.h"
+#include "lib/util/debug.h"
 
 TickEventsParameterView::TickEventsParameterView() {
     for(int i = 0; i < MAX_EVENTS; i++) {
@@ -74,6 +75,19 @@ void TickEventsParameterView::updateDataFromField(ParameterField* field) {
 bool TickEventsParameterView::handleMidiMessage(const MidiMessage& message, EventType eventType) {
     bool newEvent = false;
     int eventIndex = getMatchingEventIndex(message);
+    if(message.command == COMMAND_NOTEON) { 
+        if(MidiState::midiState.getChannelState(message.channel).getNoteOnCount() == 1) {
+            int nextEventIndex;
+            while((nextEventIndex = getMatchingEventIndex(message, eventIndex+1)) != -1) {
+                Serial.println(nextEventIndex);
+                tickEvents->deleteEvent(nextEventIndex);
+                newEvent = true;
+            }
+        } else {
+            eventIndex = -1;
+        }
+    }
+
     if(eventIndex == -1) {
         eventIndex = createEvent(eventType);
         newEvent = true;
@@ -82,9 +96,9 @@ bool TickEventsParameterView::handleMidiMessage(const MidiMessage& message, Even
     return newEvent;
 }
 
-int TickEventsParameterView::getMatchingEventIndex(const MidiMessage& message) {
+int TickEventsParameterView::getMatchingEventIndex(const MidiMessage& message, int startIndex) {
     if(tickEvents != NULL) {
-        for(int i = 0; i < tickEvents->getSize(); i++) {
+        for(int i = startIndex; i < tickEvents->getSize(); i++) {
             SequenceEvent* event = tickEvents->getEvent(i);
             if(event->matchMessage(message)) {
                 return i;
