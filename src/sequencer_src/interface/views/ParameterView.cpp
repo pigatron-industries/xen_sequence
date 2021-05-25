@@ -70,7 +70,7 @@ void ParameterView::renderKeyLeds(bool mode) {
 void ParameterView::renderRecordModeKeyLeds(bool mode) {
     if(recording || mode) {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, recordMode.value == RecordMode::STATIC ? LedColour::YELLOW : 
-                                                                     recordMode.value == RecordMode::ADANCE_ON_MESSAGE ? LedColour::MAGENTA : LedColour::RED);
+                                                                     recordMode.value == RecordMode::ADVANCE_ON_MESSAGE ? LedColour::MAGENTA : LedColour::RED);
     } else {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, LedColour::OFF);
     }
@@ -86,6 +86,11 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
             updateSelectedEventFields();
         } else {
             InterfaceEventQueue::q.doRender(false);
+        }
+
+        if(recordMode.value == RecordMode::ADVANCE_ON_MESSAGE && message.command == COMMAND_NOTEOFF) {
+            cursorRight();
+            InterfaceEventQueue::q.doRender(true);
         }
     }
 }

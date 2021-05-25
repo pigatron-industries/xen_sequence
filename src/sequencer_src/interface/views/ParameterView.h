@@ -31,7 +31,7 @@ public:
 
     enum RecordMode {
         STATIC,
-        ADANCE_ON_MESSAGE,
+        ADVANCE_ON_MESSAGE,
         REAL_TIME
     };
 

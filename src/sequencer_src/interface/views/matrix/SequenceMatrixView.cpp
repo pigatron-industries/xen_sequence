@@ -107,11 +107,15 @@ void SequenceMatrixView::cursorDown() {
 void SequenceMatrixView::cursorLeft() {
     if(selectCursorTick > 0) {
         selectCursorTick--;
+    } else {
+        selectCursorTick = MATRIX_COLS-1;
     }
 }
 
 void SequenceMatrixView::cursorRight() {
     if(selectCursorTick < MATRIX_COLS-1) {
         selectCursorTick++;
+    } else {
+        selectCursorTick = 0;
     }
 }

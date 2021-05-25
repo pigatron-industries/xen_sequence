@@ -99,5 +99,7 @@ int TickEventsParameterView::createEvent(EventType eventType) {
     if(tickEvents == NULL) {
         tickEvents = AppData::data.getTickEvents(barIndex, channelIndex, tickIndex);
     }
-    return tickEvents->getEventIndex(event);
+    int eventIndex = tickEvents->getEventIndex(event);
+    eventParametersViews[eventIndex].setEvent(tickEvents, event);
+    return eventIndex;
 }
