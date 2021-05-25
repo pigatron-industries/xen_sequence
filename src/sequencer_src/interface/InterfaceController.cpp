@@ -19,12 +19,29 @@ void InterfaceController::init() {
     Sequencer::sequencer.addEventListener(this);
     Hardware::display.fillScreen(Colour(0, 0, 0));
     sequenceView.init();
-    render();
     setLoopMode(Sequencer::sequencer.getPlayMode());
+    render();
+    renderKeyLeds(false);
 }
 
 void InterfaceController::render() {
     currentView->render();
+}
+
+void InterfaceController::renderKeyLeds(bool mode) {
+    renderPlayModeKeyLeds(mode);
+}
+
+void InterfaceController::renderPlayModeKeyLeds(bool mode) {
+    if(Sequencer::sequencer.isPlaying() || mode) {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, Sequencer::sequencer.getPlayMode() == PLAY_SONG ?           LedColour::GREEN :
+                                                                        Sequencer::sequencer.getPlayMode() == PLAY_LOOP_BAR ?       LedColour::MAGENTA :
+                                                                        Sequencer::sequencer.getPlayMode() == PLAY_LOOP_SELECTION ? LedColour::CYAN :
+                                                                        Sequencer::sequencer.getPlayMode() == PLAY_LOOP_SONG ?      LedColour::YELLOW : 
+                                                                                                                                     LedColour::OFF);
+    } else {
+        Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_PLAY_STOP, LedColour::OFF);
+    }
 }
 
 void InterfaceController::update() {
@@ -42,6 +59,14 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
     } else if(isSequenceView()) {
 
         switch(event.eventType) {
+
+            case InterfaceEventType::KEY_FUNCTION:
+                if(event.data == EVENT_KEY_PRESSED) {
+                    renderKeyLeds(true);
+                } else {
+                    renderKeyLeds(false);
+                }
+                break;
 
             case InterfaceEventType::STICK_PRESS:
                 if(currentView == &sequenceView) {
@@ -70,18 +95,14 @@ void InterfaceController::handleEvent(InterfaceEvent event) {
                 break;
 
             case InterfaceEventType::KEY_PLAY_STOP:
-                if(event.data == EVENT_KEY_PRESSED) {
+                if(event.data == EVENT_KEY_FUNCTION) {
+                    cycleLoopMode();
+                } else if(event.data == EVENT_KEY_PRESSED) {
                     if(Sequencer::sequencer.isPlaying()) {
                         stop();
                     } else {
                         play();
                     }
-                }
-                break;
-
-            case InterfaceEventType::KEY_LOOP_MODE:
-                if(event.data == EVENT_KEY_PRESSED) {
-                    cycleLoopMode();
                 }
                 break;
 
@@ -168,10 +189,6 @@ void InterfaceController::cycleLoopMode() {
 
 void InterfaceController::setLoopMode(SequencePlayMode loopMode) {
     Sequencer::sequencer.setPlayMode(loopMode);
-    Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_LOOP_MODE, loopMode == PLAY_SONG ?           LedColour::GREEN :
-                                                                    loopMode == PLAY_LOOP_BAR ?       LedColour::MAGENTA :
-                                                                    loopMode == PLAY_LOOP_SELECTION ? LedColour::CYAN :
-                                                                    loopMode == PLAY_LOOP_SONG ?      LedColour::YELLOW : 
-                                                                                                      LedColour::OFF);
+    renderPlayModeKeyLeds(true);
     InterfaceEventQueue::q.doRender();
 }

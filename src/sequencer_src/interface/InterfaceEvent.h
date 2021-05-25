@@ -24,10 +24,10 @@ enum InterfaceEventType {
     KEY_PREV,
     KEY_NEXT,
     //
-    KEY_LOOP_MODE,
     KEY_LOOP_START,
     KEY_LOOP_END,
     KEY_PLACE_1,
+    KEY_PLACE_2,
     //
     KEY_VIEW,
     KEY_SELECTION,

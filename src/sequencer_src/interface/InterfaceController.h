@@ -36,6 +36,9 @@ private:
     FileView fileView;
     HelpView helpView;
 
+    void renderKeyLeds(bool mode = false);
+    void renderPlayModeKeyLeds(bool mode = false);
+
     void switchToParameterView();
     void switchToSequenceView();
 

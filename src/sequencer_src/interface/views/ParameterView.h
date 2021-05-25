@@ -73,8 +73,8 @@ private:
     // rendering
     void renderMode();
     void setDirtyScreen();
-    void renderKeyLeds();
-    void renderRecordModeKeyLeds();
+    void renderKeyLeds(bool mode = false);
+    void renderRecordModeKeyLeds(bool mode = false);
 
     // events
     void record(bool value);

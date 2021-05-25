@@ -45,7 +45,7 @@ void ParameterView::setDirtyScreen() {
     dirtyScreen = true;
 }
 
-void ParameterView::renderKeyLeds() {
+void ParameterView::renderKeyLeds(bool mode) {
     if(selectionMode == ParameterViewSelectionMode::SELECT_EVENT) {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD, LedColour::BLUE);
         if(tickEventsParameterView.getTickEvents() != NULL) {
@@ -63,11 +63,11 @@ void ParameterView::renderKeyLeds() {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_ADD, LedColour::OFF);
     }
 
-    renderRecordModeKeyLeds();
+    renderRecordModeKeyLeds(mode);
 }
 
-void ParameterView::renderRecordModeKeyLeds() {
-    if(recording) {
+void ParameterView::renderRecordModeKeyLeds(bool mode) {
+    if(recording || mode) {
         Hardware::keyboard.setKeyLed(InterfaceEventType::KEY_RECORD, recordMode.value == RecordMode::STATIC ? LedColour::YELLOW : 
                                                                      recordMode.value == RecordMode::ADANCE_ON_MESSAGE ? LedColour::MAGENTA : LedColour::RED);
     } else {
@@ -94,9 +94,9 @@ void ParameterView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::KEY_FUNCTION:
             if(event.data == EVENT_KEY_PRESSED) {
-                //TODO highlight which keys can be pressed in function mode
+                renderKeyLeds(true);
             } else {
-                renderKeyLeds();
+                renderKeyLeds(false);
             }
             break;
 
@@ -305,7 +305,7 @@ void ParameterView::cycleRecordMode() {
 
 void ParameterView::setRecordMode(RecordMode recordMode) {
     this->recordMode.value = recordMode;
-    renderRecordModeKeyLeds();
+    renderRecordModeKeyLeds(true);
 }
 
 void ParameterView::updateSelectedBarFields() {

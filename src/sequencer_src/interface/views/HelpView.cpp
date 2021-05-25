@@ -16,7 +16,7 @@ void HelpView::render(GraphicsContext& g) {
     Hardware::display.setTextColour(Colour(255, 255, 255));
     Hardware::display.println("RCRD PLAY PREV NEXT");
     Hardware::display.println();
-    Hardware::display.println("VIEW SLCT X    X");
+    Hardware::display.println("VIEW SLCT FILE HELP");
     Hardware::display.println("X    X    X    X");
     Hardware::display.println();
     Hardware::display.println();
@@ -26,10 +26,10 @@ void HelpView::render(GraphicsContext& g) {
     Hardware::display.println();
 
     Hardware::display.setTextColour(Colour(255, 255, 255));
-    Hardware::display.println("LOOP X    X    X");
+    Hardware::display.println("STRT END  X    X");
     Hardware::display.println();
-    Hardware::display.println("EVNT COPY PSTE X");
-    Hardware::display.println("X    X    X    HELP");
+    Hardware::display.println("ADD  DEL  X    X");
+    Hardware::display.println("MOVE COPY PSTE X");
 
     Hardware::display.updateScreen();
 }
@@ -38,7 +38,6 @@ void HelpView::handleEvent(InterfaceEvent event) {
     switch(event.eventType) {
         case InterfaceEventType::KEY_RECORD:
         case InterfaceEventType::KEY_PLAY_STOP:
-        case InterfaceEventType::KEY_LOOP_MODE:
             renderPage(event.eventType);
             break;
         default:
@@ -57,20 +56,15 @@ void HelpView::renderPage(InterfaceEventType eventType) {
             break;
         case InterfaceEventType::KEY_PLAY_STOP:
             Hardware::display.println("PLAY / STOP");
-            break;
-        case InterfaceEventType::KEY_LOOP_MODE:
-            Hardware::display.println("PLAYBACK/RECORD MODE");
             Hardware::display.println();
             Hardware::display.setTextColour(Colour::GREEN);
-            Hardware::display.println("GREEN  - PLAY SONG");
+            Hardware::display.println("GREEN   - PLAY SONG");
             Hardware::display.setTextColour(Colour::YELLOW);
-            Hardware::display.println("YELLOW - LOOP SONG");
+            Hardware::display.println("YELLOW  - LOOP SONG");
             Hardware::display.setTextColour(Colour::PURPLE);
-            Hardware::display.println("PURPLE - LOOP BAR");
+            Hardware::display.println("MAGENTA - LOOP BAR");
             Hardware::display.setTextColour(Colour::CYAN);
-            Hardware::display.println("CYAN   - LOOP SELECTION");
-            Hardware::display.setTextColour(Colour::BLUE);
-            Hardware::display.println("BLUE   - ON MIDI");
+            Hardware::display.println("CYAN    - LOOP SELECTION");
             break;
         default:
             break;
