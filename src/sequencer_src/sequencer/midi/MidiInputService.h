@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include "model/midi/MidiMessage.h"
 #include "MidiEventHandler.h"
+#include "MidiState.h"
 
 #define SYSEX_BUFFER_SIZE 100
 #define MESSAGE_BUFFER_SIZE 10
@@ -35,7 +36,7 @@ private:
     uint8_t getByte();
     void handleControlChange(uint8_t midiChannel, int8_t controlNumber, int8_t msbValue, int8_t lsbValue);
     void handleSysex();
-    void notify(MidiMessage midiMessage);
+    void notify(MidiMessage& midiMessage);
 
 };
 

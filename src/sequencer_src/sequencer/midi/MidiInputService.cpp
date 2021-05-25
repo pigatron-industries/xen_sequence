@@ -29,7 +29,7 @@ byte MidiInputService::getByte() {
     return _midiSerial.read();
 }
 
-void MidiInputService::notify(MidiMessage midiMessage) {
+void MidiInputService::notify(MidiMessage& midiMessage) {
     for(size_t i = 0; i < eventHandlerCount; i++) {
         eventHandlers[i]->handleMidiEvent(midiMessage);
     }
@@ -64,11 +64,20 @@ void MidiInputService::update() {
                 DEBUG("data1=");DEBUG(messageBuffer[1]);
                 DEBUG("data2=");DEBUGLN(messageBuffer[2]);
 
-                notify(MidiMessage(channel, command, messageBuffer[1], messageBuffer[2]));
+                MidiChannelState& channelState = MidiState::midiState.getChannelState(channel);
+                if(command == COMMAND_NOTEON) {
+                    channelState.noteOn(messageBuffer[1]);
+                } else if (command == COMMAND_NOTEOFF) {
+                    channelState.noteOff(messageBuffer[1]);
+                }
+
+                MidiMessage midiMessage = MidiMessage(channel, command, messageBuffer[1], messageBuffer[2]);
+                notify(midiMessage);
 
             } else { // command == COMMAND_SYSTEM
                 if(channel != SYSTEM_EXCLUSIVE) {
-                    notify(MidiMessage(channel, command, 0, 0));
+                    MidiMessage midiMessage = MidiMessage(channel, command, 0, 0);
+                    notify(midiMessage);
                 } else {
                     handleSysex();
                 }

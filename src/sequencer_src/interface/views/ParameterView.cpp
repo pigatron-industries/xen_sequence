@@ -1,6 +1,7 @@
 #include "ParameterView.h"
 #include "interface/Hardware.h"
 #include "model/AppData.h"
+#include "sequencer/midi/MidiState.h"
 #include "lib/util/debug.h"
 
 #include "Org_01.h"
@@ -80,15 +81,14 @@ void ParameterView::handleMidiEvent(MidiMessage message) {
     DEBUGINFO
     if(recording && parameterViewMode.value == PARAM_MODE_EVENT) {
 
-        //TODO advance to next tick depending on recording mode
-
         if(tickEventsParameterView.handleMidiEvent(message)) {
             updateSelectedEventFields();
         } else {
             InterfaceEventQueue::q.doRender(false);
         }
 
-        if(recordMode.value == RecordMode::ADVANCE_ON_MESSAGE && message.command == COMMAND_NOTEOFF) {
+        if(recordMode.value == RecordMode::ADVANCE_ON_MESSAGE && message.command == COMMAND_NOTEOFF && 
+           MidiState::midiState.getChannelState(message.channel).getNoteOnCount() == 0) {
             cursorRight();
             InterfaceEventQueue::q.doRender(true);
         }
