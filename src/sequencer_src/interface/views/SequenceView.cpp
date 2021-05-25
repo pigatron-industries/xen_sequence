@@ -62,6 +62,11 @@ void SequenceView::renderStatusBar() {
                             moveMode == PATTERN_COPY ? "PTN-CP" :
                             moveMode == BAR_MOVE     ? "BAR-MV" :
                             moveMode == BAR_COPY     ? "BAR-CP" : "");
+    Hardware::display.setCursor(50, DISPLAY_HEIGHT-9);
+    Hardware::display.print(Sequencer::sequencer.getPlayMode() == PLAY_SONG           ? "SNG-PL" :
+                            Sequencer::sequencer.getPlayMode() == PLAY_LOOP_BAR       ? "BAR-LP" :
+                            Sequencer::sequencer.getPlayMode() == PLAY_LOOP_SELECTION ? "SEL-LP" :
+                            Sequencer::sequencer.getPlayMode() == PLAY_LOOP_SONG      ? "SNG-LP" : "");
 
     // bottom row
     Hardware::display.setCursor(1, DISPLAY_HEIGHT-1);
