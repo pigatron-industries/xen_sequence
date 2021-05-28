@@ -79,7 +79,6 @@ bool TickEventsParameterView::handleMidiMessage(const MidiMessage& message, Even
         if(MidiState::midiState.getChannelState(message.channel).getNoteOnCount() == 1) {
             int nextEventIndex;
             while((nextEventIndex = getMatchingEventIndex(message, eventIndex+1)) != -1) {
-                Serial.println(nextEventIndex);
                 tickEvents->deleteEvent(nextEventIndex);
                 newEvent = true;
             }

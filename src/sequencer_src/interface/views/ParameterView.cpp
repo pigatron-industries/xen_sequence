@@ -10,6 +10,9 @@ ParameterView::ParameterView(SequenceMatrixView& _sequenceMatrixView) :
     sequenceMatrixView(_sequenceMatrixView) {
     tickEventsParameterView.setHeight(DISPLAY_HEIGHT - FIELD_HEIGHT);
     tickEventsParameterView.setWidth(DISPLAY_WIDTH);
+    songParameterView.setHeight(DISPLAY_HEIGHT - FIELD_HEIGHT);
+    barParameterView.setHeight(DISPLAY_HEIGHT - FIELD_HEIGHT);
+    channelParameterView.setHeight(DISPLAY_HEIGHT - FIELD_HEIGHT);
     Hardware::midiInputService.addEventHandler(this);
     parameterViewMode.value = ParameterViewMode::PARAM_MODE_EVENT;
 }
