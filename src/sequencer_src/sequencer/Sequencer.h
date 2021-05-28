@@ -64,8 +64,8 @@ private:
 
     uint8_t midiPulseDivider = 4; //convert 96ppm to 24ppm
 
-    void tick();
-    void pulse();
+    void tick(); // Tick is called for every event of the sequence
+    void pulse(); // Pulse is called 96 times per tick
     void pulseClockEvent();
     void notifyTickEvent();
 

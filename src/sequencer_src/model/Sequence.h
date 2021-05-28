@@ -12,6 +12,7 @@ public:
     SequenceBar* getBar(uint16_t index) { return bars.get(index); }
     void addBar(uint16_t index, SequenceBar* bar) { bars.set(index, bar); }
     void deleteBar(uint16_t index);
+    void clear();
 
     int getLength();
     uint16_t getSpeed() { return speed; }

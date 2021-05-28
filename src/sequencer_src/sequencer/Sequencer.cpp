@@ -40,10 +40,13 @@ void Sequencer::pulse() {
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         SequencePattern* pattern = currentBar->getPattern(channel);
         if(pattern != NULL) {
+            // TODO this could be more efficient if only fetched every tick and stored 
             SequenceTickEvents* tickEvents = pattern->getTickEvents(tickIndex);
             if(tickEvents != NULL) {
+                // Compile to midi event before sending if needed
                 if(clock.getPulseCount() == 0 && !tickEvents->isCompiled()) {
-                    eventCompiler.compileTickEvents(tickEvents, channel);
+                    uint8_t midiChannel = AppData::data.getChannel(channel).getMidiChannel();
+                    eventCompiler.compileTickEvents(tickEvents, midiChannel);
                 }
                 
                 eventOutputService.event(channel, clock.getPulseCount(), tickEvents);

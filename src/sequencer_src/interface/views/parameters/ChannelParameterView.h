@@ -22,6 +22,7 @@ protected:
     virtual void updateDataFromField(ParameterField* field);
 
 private:
+    IntegerParameterField midiChannelField = IntegerParameterField("MIDI CHANNEL", 0, 15);
     BooleanParameterField channelMuteField = BooleanParameterField("MUTE");
 
     SequenceChannel* channel;

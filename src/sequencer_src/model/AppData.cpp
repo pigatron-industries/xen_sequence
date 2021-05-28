@@ -163,12 +163,7 @@ SequenceChannel& AppData::getChannel(uint8_t index) {
 }
 
 void AppData::clear() {
-    LinkedList<SequenceBar*>& bars = sequence.getBars();
-    for(int i = 0; i < bars.size(); i++) {
-        sequence.deleteBar(i);
-    }
-    bars.clear();
-
+    sequence.clear();
     for(int i = 0; i < patterns.size(); i++) {
         SequencePattern* pattern = patterns.get(i);
         delete pattern;

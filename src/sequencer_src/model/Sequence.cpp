@@ -14,6 +14,16 @@ void Sequence::deleteBar(uint16_t index) {
     delete bar;
 }
 
+void Sequence::clear() {
+    for(int i = 0; i < bars.size(); i++) {
+        deleteBar(i);
+    }
+    bars.clear();
+    for(int channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
+        channels[channel].setMidiChannel(channel);
+    }
+}
+
 void Sequence::serialize(JsonObject doc) {
     doc["speed"] = speed;
     doc["speedMult"] = speedMult;

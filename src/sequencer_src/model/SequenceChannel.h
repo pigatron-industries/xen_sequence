@@ -8,12 +8,16 @@ class SequenceChannel {
 
 public:
     bool getMute() { return mute; }
-    void setMute(bool _mute) { mute = _mute; }
+    uint8_t getMidiChannel() { return midiChannel; }
+
+    void setMute(bool mute) { this->mute = mute; }
+    void setMidiChannel(uint8_t midiChannel) { this->midiChannel = midiChannel; }
 
     void serialize(JsonObject doc);
     void deserialize(JsonObject doc);
 
 private:
+    uint8_t midiChannel;
     bool mute;
 
 };
