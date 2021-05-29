@@ -35,7 +35,7 @@ private:
     LineComponent lineComponent = LineComponent(Colour::YELLOW, 1);
     EnumParameterField eventTypeField = EnumParameterField("TYPE", EVENT_TYPE_NAMES, 2);
 
-    RangeParameterField noteOnOffField = RangeParameterField("ON/OFF", 0, 100);
+    RangeParameterField noteOnOffField = RangeParameterField("ON/OFF", 0, 24);
     PitchParameterField eventPitchField = PitchParameterField("PITCH");
     IntegerParameterField eventVelocityField = IntegerParameterField("VELOCITY", 0, 127);
 

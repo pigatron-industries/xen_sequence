@@ -5,7 +5,7 @@
 
 #include "lib/drivers/Timer.h"
 
-#define MAX_PULSES_PER_TICK 96
+#define MAX_PULSES_PER_TICK 24
 
 class Clock {
 

@@ -2,7 +2,7 @@
 
 NoteEvent::NoteEvent() : SequenceEvent(EventType::NOTE_EVENT) {
     start = 0;
-    stop = 48;
+    stop = 12;
     pitch = 64;
     velocity = 64;
 }
