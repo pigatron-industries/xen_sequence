@@ -19,16 +19,11 @@ void Clock::setPulsesPerTick(uint16_t pulsesPerTick) {
 }
 
 bool Clock::update() {
-    if(running && !clockTimer.isRunning()) {
-        clockTimer.start();
-        pulseCount++;
-        if(pulseCount >= pulsesPerTick) {
-            pulseCount = 0;
-        }
-        return true;
+    pulseCount++;
+    if(pulseCount >= PULSES_PER_TICK) {
+        pulseCount = 0;
     }
-
-    return false;
+    return true;
 }
 
 bool Clock::tick() {

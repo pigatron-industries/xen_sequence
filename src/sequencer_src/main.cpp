@@ -41,6 +41,5 @@ void setup() {
 }
 
 void loop() {
-    Sequencer::sequencer.execute();
     inputTask.execute();
 }

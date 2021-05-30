@@ -5,7 +5,7 @@
 
 #include "lib/drivers/Timer.h"
 
-#define MAX_PULSES_PER_TICK 24
+#define PULSES_PER_TICK 24
 
 class Clock {
 
@@ -22,7 +22,7 @@ public:
 
 private:
     float ticksPerMinute;
-    uint16_t pulsesPerTick = MAX_PULSES_PER_TICK;
+    uint16_t pulsesPerTick = PULSES_PER_TICK;
     long pulseTime;
 
     Timer clockTimer;

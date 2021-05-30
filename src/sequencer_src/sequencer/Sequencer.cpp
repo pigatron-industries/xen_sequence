@@ -21,16 +21,19 @@ void Sequencer::addEventListener(SequencerEventListener* eventListener) {
     eventListeners.add(eventListener);
 }
 
+void Sequencer::interrupt() {
+    Sequencer::sequencer.execute();
+}
+
 void Sequencer::execute() {
-    if(clock.update()) {
-        bool isTick = clock.tick();
-        if(isTick) {
-            tick();
-        }
-        pulse();
-        if(isTick) {
-            notifyTickEvent();
-        }
+    clock.update();
+    bool isTick = clock.tick();
+    if(isTick) {
+        tick();
+    }
+    pulse();
+    if(isTick) {
+        notifyTickEvent();
     }
 }
 
@@ -38,27 +41,46 @@ void Sequencer::pulse() {
     pulseClockEvent();
 
     for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
+        SequenceTickEvents* tickEvents = currentTickEvents[channel];
+        if(tickEvents != NULL) {
+            // Compile to midi event before sending if needed
+            if(clock.getPulseCount() == 0 && !tickEvents->isCompiled()) {
+                uint8_t midiChannel = AppData::data.getChannel(channel).getMidiChannel();
+                eventCompiler.compileTickEvents(tickEvents, midiChannel);
+            }
+            
+            eventOutputService.event(channel, clock.getPulseCount(), tickEvents);
+        }
+    }
+}
+
+void Sequencer::tick() {
+    tickIndex++;
+    if(tickIndex == currentBar->getLength()) {
+        tickIndex = 0;
+        barIndex++;
+        if(barIndex <= loopEnd) {
+            setBar(barIndex);
+        } else {
+            reset();
+            if(playMode == PLAY_SONG) {
+                clock.stop();
+            }
+        }
+    }
+
+    for(uint8_t channel = 0; channel < SEQUENCE_CHANNELS; channel++) {
         SequencePattern* pattern = currentBar->getPattern(channel);
         if(pattern != NULL) {
-            // TODO this could be more efficient if only fetched every tick and stored 
-            SequenceTickEvents* tickEvents = pattern->getTickEvents(tickIndex);
-            if(tickEvents != NULL) {
-                // Compile to midi event before sending if needed
-                if(clock.getPulseCount() == 0 && !tickEvents->isCompiled()) {
-                    uint8_t midiChannel = AppData::data.getChannel(channel).getMidiChannel();
-                    eventCompiler.compileTickEvents(tickEvents, midiChannel);
-                }
-                
-                eventOutputService.event(channel, clock.getPulseCount(), tickEvents);
-            }
+            currentTickEvents[channel] = pattern->getTickEvents(tickIndex);
+        } else {
+            currentTickEvents[channel] = NULL;
         }
     }
 }
 
 void Sequencer::pulseClockEvent() {
-    if(clock.getPulseCount() % midiPulseDivider == 0) {
-        eventOutputService.system(SYSTEM_CLOCK);
-    }
+    eventOutputService.system(SYSTEM_CLOCK);
 }
 
 void Sequencer::play() {
@@ -69,6 +91,8 @@ void Sequencer::play() {
     clock.start();
     eventOutputService.system(SYSTEM_START);
     pulse();
+    interruptTimer.priority(0);
+    interruptTimer.begin(Sequencer::interrupt, calculatePulseInterval());
 }
 
 void Sequencer::stop() {
@@ -76,6 +100,7 @@ void Sequencer::stop() {
     clock.stop();
     eventOutputService.system(SYSTEM_STOP);
     reset();
+    interruptTimer.end();
 }
 
 void Sequencer::reset() {
@@ -97,9 +122,13 @@ uint16_t Sequencer::setBar(uint16_t _barIndex) {
 }
 
 void Sequencer::updateBarSpeed() {
-    uint8_t multiplier = AppData::data.getAbsoluteSpeedMult(currentBar);
-    clock.setTicksPerMinute(AppData::data.getAbsoluteSpeed(currentBar) * multiplier);
-    //clock.setPulsesPerTick(MAX_PULSES_PER_TICK / multiplier);
+    interruptTimer.update(calculatePulseInterval());
+}
+
+int Sequencer::calculatePulseInterval() {
+    int multiplier = AppData::data.getAbsoluteSpeedMult(currentBar);
+    int ticksPerMinute = AppData::data.getAbsoluteSpeed(currentBar) * multiplier;
+    return (60000000/PULSES_PER_TICK)/ticksPerMinute;
 }
 
 uint16_t Sequencer::nextBar() {
@@ -115,22 +144,6 @@ uint16_t Sequencer::prevBar() {
         return barIndex;
     } else {
         return setBar(barIndex-1);
-    }
-}
-
-void Sequencer::tick() {
-    tickIndex++;
-    if(tickIndex == currentBar->getLength()) {
-        tickIndex = 0;
-        barIndex++;
-        if(barIndex <= loopEnd) {
-            setBar(barIndex);
-        } else {
-            reset();
-            if(playMode == PLAY_SONG) {
-                clock.stop();
-            }
-        }
     }
 }
 
@@ -152,6 +165,7 @@ void Sequencer::setPlayMode(SequencePlayMode playMode) {
 }
 
 void Sequencer::notifyTickEvent() {
+    //TODO put event on queue instead
     for(uint8_t i = 0; i < eventListeners.size(); i++) {
         eventListeners.get(i)->onTick();
     }
