@@ -26,7 +26,6 @@ void Sequencer::interrupt() {
 }
 
 void Sequencer::execute() {
-    clock.update();
     bool isTick = clock.tick();
     if(isTick) {
         tick();
@@ -35,6 +34,8 @@ void Sequencer::execute() {
     if(isTick) {
         notifyTickEvent();
     }
+
+    clock.update();
 }
 
 void Sequencer::pulse() {
@@ -55,7 +56,6 @@ void Sequencer::pulse() {
 }
 
 void Sequencer::tick() {
-    tickIndex++;
     if(tickIndex == currentBar->getLength()) {
         tickIndex = 0;
         barIndex++;
@@ -77,6 +77,8 @@ void Sequencer::tick() {
             currentTickEvents[channel] = NULL;
         }
     }
+
+    tickIndex++;
 }
 
 void Sequencer::pulseClockEvent() {
