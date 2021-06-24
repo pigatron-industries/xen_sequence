@@ -87,7 +87,7 @@ void Sequencer::pulseClockEvent() {
 
 void Sequencer::play() {
     DEBUGINFO
-    tickIndex = 0;
+    reset();
     playing = true;
     clock.reset();
     clock.start();
